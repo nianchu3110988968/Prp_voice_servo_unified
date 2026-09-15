@@ -12,9 +12,9 @@
 - 已验证：Python语法检查通过；服务端5项新离线回归与2项既有数据测试共7项通过；MSVC编译真实`voice_trace.cc`的主机模拟通过，覆盖写入透传、分块、错误、任务隔离、重试和缺失阶段。无真实ASR/LLM/TTS请求、无串口/硬件测试。
 - 最终`platformio run`通过（RAM48,604/327,680字节，14.8%；Flash1,478,107/2,048,000字节，72.2%）。建空Git仓库曾触发ESP-IDF读取未出生HEAD失败，初始化提交后重建成功。已通过ELF反汇编确认`esp_http_client_write`实际调用`__wrap_esp_transport_write`，原`esp_transport_write`仍保留。本轮未烧录；板上版本未重新读取，不推断已更新。
 - 已新增`docs/项目指南/voice_latency_logging.md`，更新文档索引、结构地图、录音端点说明；根`AGENTS.md`与工作记忆记录每阶段验证、提交、推送规范。
-- 用户确认项目Git身份`nianchu3110988968 <nianchu3110988968@gmail.com>`，仅配置本项目。已验证GCM登录账号一致，并经用户确认创建私有仓库`https://github.com/nianchu3110988968/Prp_voice_servo_unified`，origin已配置。初始化提交`dd52dc1`；功能阶段提交/推送尚待最终构建后执行。
+- 用户确认项目Git身份`nianchu3110988968 <nianchu3110988968@gmail.com>`，仅配置本项目。已验证GCM登录账号一致，并经用户确认创建私有仓库`https://github.com/nianchu3110988968/Prp_voice_servo_unified`，origin已配置。初始化提交`dd52dc1`；功能阶段提交`c62c8e3`已推送至origin/main，包含现有项目基线与新增延迟观测代码。
 - `.gitignore`排除真实网络配置、录音、模型、构建/运行缓存；保留原本地文件，不删除。新增`main/network_config.example.h`供克隆后填写，不更改现有`network_config.h`。项目外GPT-SoVITS安装目录和模型不在此Git仓库范围内，需另外备份。
-- 下一步：保存并同步本阶段提交；经用户另行确认烧录后，采集首轮/连续轮次及失败分支，确认VOICE_CORRELATION match=1、每轮事件完整、时序单调，再做20～50轮P50/P90统计。当前8000/9880没有监听，本轮没有启动或重启它们，服务器新日志也未做真实模型联调；不能把本轮模拟测试记成真实端到端性能结果。
+- 下一步：经用户另行确认烧录后，采集首轮/连续轮次及失败分支，确认VOICE_CORRELATION match=1、每轮事件完整、时序单调，再做20～50轮P50/P90统计。当前8000/9880没有监听，本轮没有启动或重启它们，服务器新日志也未做真实模型联调；不能把本轮模拟测试记成真实端到端性能结果。
 
 ## 2026-09-15：manbo 数据收敛与工作规范（最新状态）
 
