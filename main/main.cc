@@ -63,7 +63,7 @@ extern "C"
 
 static const char *TAG = "舵机控制"; // 日志标签
 static const char *FIRMWARE_NAME = "PRP voice-servo AI bridge";
-static const char *FIRMWARE_VERSION = "2026-09-15-latency-v1";
+static const char *FIRMWARE_VERSION = "2026-09-15-audio-v1";
 
 // 系统状态定义
 typedef enum
@@ -209,7 +209,7 @@ static void serial_command_task(void *arg)
     (void)arg;
     char line[96];
 
-    ESP_LOGI(TAG, "Serial commands ready: machine control/log, motion <name>, servo <name> <angle>, AI bridge status/retry");
+    ESP_LOGI(TAG, "Serial commands ready: test audio, machine control/log, motion <name>, servo <name> <angle>, AI bridge status/retry");
 
     while (1)
     {
@@ -244,6 +244,19 @@ static void serial_command_task(void *arg)
             machine_control_enabled = false;
             robot_motions.cancelPendingAndReset();
             ESP_LOGI(TAG, "Machine control disabled");
+        }
+        else if (strcmp(line, "test audio") == 0)
+        {
+            ESP_LOGI(TAG, "Local audio self-test started: built-in welcome prompt, no server involved");
+            esp_err_t audio_ret = bsp_play_audio(welcome, welcome_len);
+            if (audio_ret == ESP_OK)
+            {
+                ESP_LOGI(TAG, "Local audio self-test completed: I2S write succeeded");
+            }
+            else
+            {
+                ESP_LOGE(TAG, "Local audio self-test failed: %s", esp_err_to_name(audio_ret));
+            }
         }
         else if (strcmp(line, "motion reset") == 0 || strcmp(line, "motion shy") == 0 ||
                  strcmp(line, "motion happy") == 0 || strcmp(line, "motion curious") == 0)

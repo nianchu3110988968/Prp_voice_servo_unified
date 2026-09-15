@@ -81,7 +81,10 @@ esp_err_t bsp_audio_init(uint32_t sample_rate, int channel_format, int bits_per_
 esp_err_t bsp_play_audio(const uint8_t *audio_data, size_t data_len);
 
 /**
- * @brief Stop I2S audio output to prevent noise
+ * @brief Explicitly stop I2S output for shutdown or fault recovery
+ *
+ * Normal playback leaves the channel running with auto-cleared silent DMA
+ * buffers, so this is not called after every prompt.
  *
  * @return
  *    - ESP_OK: Success

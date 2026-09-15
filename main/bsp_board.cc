@@ -25,6 +25,8 @@
 #include "esp_err.h"
 #include "esp_log.h"
 #include "esp_check.h"
+#include "freertos/FreeRTOS.h"
+#include "freertos/task.h"
 
 // INMP441 I2S 引脚配置
 // INMP441 是一个数字 MEMS 麦克风，通过 I2S 接口与 ESP32-S3 通信
@@ -45,6 +47,14 @@
 #define BITS_PER_SAMPLE 16    // 每个采样点 16 位
 #define CHANNELS 1            // 单声道配置
 
+// i2s_channel_write() only guarantees that data was copied into DMA buffers.
+// Keep the DMA geometry explicit so playback can wait until the final buffers
+// have physically reached the I2S pins before returning.
+static const uint32_t I2S_TX_DMA_DESC_NUM = 6;
+static const uint32_t I2S_TX_DMA_FRAME_NUM = 240;
+static const uint32_t I2S_TX_AMP_WAKE_MS = 20;
+static const uint32_t I2S_TX_DRAIN_MARGIN_MS = 20;
+
 static const char *TAG = "bsp_board";
 
 // I2S 接收通道句柄，用于管理音频数据接收
@@ -53,6 +63,7 @@ static i2s_chan_handle_t rx_handle = nullptr;
 static i2s_chan_handle_t tx_handle = nullptr;
 // I2S 发送通道状态标志
 static bool tx_channel_enabled = false;
+static uint32_t tx_sample_rate_hz = SAMPLE_RATE;
 
 /**
  * @brief 初始化 I2S 接口用于 INMP441 麦克风
@@ -248,6 +259,11 @@ esp_err_t bsp_audio_init(uint32_t sample_rate, int channel_format, int bits_per_
     // 创建 I2S 发送通道配置
     // 设置为主模式，ESP32-S3 作为时钟源
     i2s_chan_config_t chan_cfg = I2S_CHANNEL_DEFAULT_CONFIG(I2S_PORT_TX, I2S_ROLE_MASTER);
+    chan_cfg.dma_desc_num = I2S_TX_DMA_DESC_NUM;
+    chan_cfg.dma_frame_num = I2S_TX_DMA_FRAME_NUM;
+    // Recycled buffers become digital silence. This avoids replaying stale
+    // samples while keeping BCLK/WS stable between prompts.
+    chan_cfg.auto_clear_after_cb = true;
     ret = i2s_new_channel(&chan_cfg, &tx_handle, nullptr);
     if (ret != ESP_OK)
     {
@@ -298,6 +314,7 @@ esp_err_t bsp_audio_init(uint32_t sample_rate, int channel_format, int bits_per_
 
     // 设置通道状态标志
     tx_channel_enabled = true;
+    tx_sample_rate_hz = sample_rate;
 
     ESP_LOGI(TAG, "I2S 音频播放初始化成功");
     return ESP_OK;
@@ -341,10 +358,13 @@ esp_err_t bsp_play_audio(const uint8_t *audio_data, size_t data_len)
             return ret;
         }
         tx_channel_enabled = true;
-        ESP_LOGD(TAG, "I2S 发送通道已重新启用");
+        // Give MAX98357A stable clocks before sending non-zero samples.
+        vTaskDelay(pdMS_TO_TICKS(I2S_TX_AMP_WAKE_MS));
+        ESP_LOGI(TAG, "I2S 发送通道已重新启用并完成稳定等待");
     }
 
     // 将音频数据写入 I2S 发送通道
+    ESP_LOGI(TAG, "I2S 音频写入开始: %u 字节", (unsigned)data_len);
     ret = i2s_channel_write(tx_handle, audio_data, data_len, &bytes_written, portMAX_DELAY);
 
     if (ret != ESP_OK)
@@ -357,25 +377,28 @@ esp_err_t bsp_play_audio(const uint8_t *audio_data, size_t data_len)
     if (bytes_written != data_len)
     {
         ESP_LOGW(TAG, "预期写入 %d 字节，实际写入 %d 字节", data_len, bytes_written);
+        return ESP_FAIL;
     }
 
-    // 播放完成后停止I2S输出以防止噪音
-    esp_err_t stop_ret = bsp_audio_stop();
-    if (stop_ret != ESP_OK)
-    {
-        ESP_LOGW(TAG, "停止音频输出时出现警告: %s", esp_err_to_name(stop_ret));
-    }
+    // The final samples may still be queued in DMA when write returns. Wait for
+    // one complete DMA ring plus a small margin. Auto-clear then sends zeros.
+    const uint32_t drain_ms =
+        (I2S_TX_DMA_DESC_NUM * I2S_TX_DMA_FRAME_NUM * 1000U + tx_sample_rate_hz - 1U) /
+            tx_sample_rate_hz +
+        I2S_TX_DRAIN_MARGIN_MS;
+    vTaskDelay(pdMS_TO_TICKS(drain_ms));
 
-    ESP_LOGI(TAG, "音频播放完成，播放了 %d 字节", bytes_written);
+    ESP_LOGI(TAG, "I2S 音频播放完成: 写入=%u 字节, 排空等待=%u ms, 通道保持静音运行",
+             (unsigned)bytes_written, (unsigned)drain_ms);
     return ESP_OK;
 }
 
 /**
  * @brief 停止 I2S 音频输出以防止噪音
  *
- * 这个函数会暂时禁用 I2S 发送通道，停止向 MAX98357A 发送数据，
- * 从而消除播放完成后的噪音。当需要再次播放音频时，
- * 可以重新启用通道。
+ * 这个函数用于显式关闭或故障恢复，不再在每段音频结束后调用。
+ * 正常空闲时由 auto_clear_after_cb 持续输出数字静音，避免频繁停启
+ * MAX98357A 导致开头丢失或后续无声。
  *
  * @return esp_err_t 停止结果
  */

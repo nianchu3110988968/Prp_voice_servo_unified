@@ -20,6 +20,7 @@ pio device monitor -p COM7 -b 115200
 | `end log machine` | - | 关闭机器控制模块日志。 |
 | `start machine control` | 关闭 | 启用串口、语音与 AI 的舵机控制入口；当前台架固件不启用触摸输入。 |
 | `end machine control` | - | 关闭机器控制，并清空队列中尚未执行的动作，随后请求复位。 |
+| `test audio` | 无需服务器或机器控制 | 播放固件内置欢迎音频，单独检查 ESP32→I2S→MAX98357A→扬声器链路。 |
 | `motion reset` | 需先启用机器控制 | 五路舵机缓动回到 90° 主页。 |
 | `motion shy` | 需先启用机器控制 | 执行保守幅度的害羞动作，然后复位。 |
 | `motion happy` | 需先启用机器控制 | 四脚交替、尾巴摆动，然后复位。 |
@@ -60,6 +61,22 @@ end machine control
 - 机器控制默认关闭，方便单独测试语音模块；串口、触摸、本地命令词和 AI 返回的动作意图都受该开关约束。
 - 当前 `TOUCH_INPUTS_ENABLED=false`。GPIO8/9/10 尚未接触摸模块时禁止轮询，避免悬空电平反复触发动作；接入真实触摸硬件并完成电平、上下拉和消抖测试后才能启用。
 - 机器日志默认关闭，避免未连接触摸和 PCA9685 时产生噪声日志。
+
+## 音频输出自检
+
+新版固件可在串口直接输入：
+
+```text
+test audio
+```
+
+该指令只播放编译进固件的欢迎音频，不访问 Wi-Fi、AI bridge 或 GPT-SoVITS：
+
+- 能完整播放：ESP32、I2S、功放和扬声器基本正常，应继续检查服务器回复 WAV 的下载日志。
+- 日志出现 `Local audio self-test failed`：根据同一行的 ESP-IDF 错误排查 I2S 驱动状态。
+- 日志显示 `I2S write succeeded` 但完全无声：软件已经把数据交给 I2S，优先检查 MAX98357A 的 VIN/GND、DIN/BCLK/LRC、扬声器接线和供电能力。
+
+当前输出引脚固定为 `DIN→GPIO7`、`BCLK→GPIO15`、`LRC→GPIO16`，ESP32 与 MAX98357A 必须共地。测试时先断开舵机电源或停止舵机动作，排除大电流负载导致的电压跌落。
 
 ## AI Bridge Commands And Setup
 
