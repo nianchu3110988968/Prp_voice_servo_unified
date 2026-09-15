@@ -2,6 +2,8 @@
 
 ## 当前统一工程入口（2026-09-15）
 
+本地三处项目已集中到本根目录：导航见`项目入口.md`，编辑器入口`PRP.code-workspace`。原`E:\Projects2026\Prp`已迁入`legacy/Prp_servo_arduino`，原`E:\college\毛绒治愈机器人PRP`已迁入`archive/PRP_原始项目资料`。旧资料完整保留，不混入现行源码；归档暂不上传Git。
+
 当前进度以`docs/README.md`、`docs/工作留档/task_progress.md`和`docs/项目指南/project_structure_map.md`为准；下方早期示例说明不代表最新实测状态。
 
 私有仓库：`https://github.com/nianchu3110988968/Prp_voice_servo_unified`。每阶段验证后提交和推送；不提交Wi-Fi密码、真实录音、模型、生成日志或构建缓存。项目外GPT-SoVITS安装及其权重需另外保留，Git代码仓库不等于全电脑备份。

@@ -40,3 +40,8 @@ server/logs/
 server/voice_models/
 *.tmp
 *.bak
+
+# Consolidated local archives retain their original Git history and private data.
+/legacy/
+/archive/
+/.local_migration/

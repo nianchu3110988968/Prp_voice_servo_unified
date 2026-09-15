@@ -20,6 +20,16 @@ docs/assets/project_structure_map_snapshot_20260915.png
 
 ## 当前目录地图
 
+2026-09-15 本地目录集中（已实际迁移，现行根目录未改名）：
+
+- `E:\Projects2026\Prp_voice_servo_unified\项目入口.md`：现行代码/论文/素材与旧资料的唯一导航。
+- `E:\Projects2026\Prp_voice_servo_unified\PRP.code-workspace`：只打开当前根目录的VS Code入口。
+- `E:\Projects2026\Prp_voice_servo_unified\legacy\Prp_servo_arduino`：原`E:\Projects2026\Prp`，182文件，保留旧Git与未提交状态；历史工程，不与main源码合并。
+- `E:\Projects2026\Prp_voice_servo_unified\archive\PRP_原始项目资料`：原`E:\college\毛绒治愈机器人PRP`，1046文件，保留原PPT/调研/发票/旧语音源码/固件备份。
+- `E:\Projects2026\Prp_voice_servo_unified\tools\consolidate_project_folders.ps1`：已执行的一次性安全迁移与断点续迁工具，需PowerShell7；不要当日常启动脚本或重复执行。
+- `E:\Projects2026\Prp_voice_servo_unified\.local_migration\20260915\files.json`：本地逐文件SHA256审计。legacy/archive/审计目录不推送Git，当前私有仓库保存整理工具和目录说明；不等于归档资料已做云备份。
+- 原两个顶层目录已移除；当前main/server/voice_data/论文初稿保持原位。外部GPT-SoVITS安装仍在E:\AI下，未迁移。
+
 2026-09-15 分段延迟与Git新增（均在 `E:\Projects2026\Prp_voice_servo_unified`）：
 
 - `main\voice_trace.h/.cc`：单轮请求ID、单调时钟事件与汇总、任务隔离的上传写入观察；由`main\CMakeLists.txt`连接transport write包装。

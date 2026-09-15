@@ -4,6 +4,7 @@
 
 ## 用户工作偏好
 
+- 本地项目唯一根目录为`E:\Projects2026\Prp_voice_servo_unified`。原`E:\Projects2026\Prp`迁入`legacy\Prp_servo_arduino`，原`E:\college\毛绒治愈机器人PRP`迁入`archive\PRP_原始项目资料`；旧Git/未提交修改/原资料完整保留，勿把历史文档里的旧绝对路径当现行入口。当前开发用main/server，不混入归档代码。归档含发票与旧独立仓库，暂不整包推送Git。
 - 2026-09-15起，每完成一个阶段都要保存到Git：先验证、更新进度和结构地图、检查差异与敏感文件，再提交；本地提交与远程推送必须分开说明。GitHub默认账号`nianchu3110988968`，本项目提交身份`nianchu3110988968 <nianchu3110988968@gmail.com>`，已得到用户确认，不重复询问。具体远程地址/可见性和推送授权以实际配置为准，不把浏览器登录当成Git凭据。
 - 已经用户确认创建并配置私有origin：`https://github.com/nianchu3110988968/Prp_voice_servo_unified.git`。后续正常阶段验证后提交并推送该远程，不重复询问账号，不改为公开、不强推；推送失败如实记录。模型/录音/真实网络配置及项目外GPT-SoVITS不在Git备份范围。
 - manbo当前唯一数据目录：`E:\Projects2026\Prp_voice_servo_unified\voice_data\manbo`。实验名`manbo`，启动器`server\tools\start_manbo_training.ps1`预填9874；由0d按需开9871。旧manbo素材/权重已在2026-09-15经用户授权移入回收站；新实验未训练。不要再用历史相似命名目录。保存当前`clips.list`时同步`full_text.txt`；只有此启动器派生的校对服务带有同步环境变量。
