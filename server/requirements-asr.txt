@@ -1,0 +1,2 @@
+faster-whisper
+opencc-python-reimplemented

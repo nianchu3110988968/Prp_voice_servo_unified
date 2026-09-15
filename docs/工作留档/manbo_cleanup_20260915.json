@@ -1,0 +1,3924 @@
+{
+  "created": "2026-09-15T10:30:20.0393036+08:00",
+  "mode": "recycle_bin_only",
+  "protected": [
+    "E:\\Projects2026\\Prp_voice_servo_unified\\voice_data\\manbo",
+    "E:\\Projects2026\\Prp_voice_servo_unified\\server\\voice_models",
+    "E:\\Projects2026\\Prp_voice_servo_unified\\server\\configs",
+    "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\GPT_SoVITS\\pretrained_models",
+    "C:\\Users\\ASUS\\Downloads\\三月七"
+  ],
+  "targets": [
+    {
+      "path": "C:\\Users\\ASUS\\Downloads\\11_曼波10分钟台词(1)",
+      "status": "recycled",
+      "files": [
+        {
+          "path": "C:\\Users\\ASUS\\Downloads\\11_曼波10分钟台词(1)\\taici.MP3",
+          "bytes": 12540079,
+          "utc_ticks": 639249071917709842
+        }
+      ],
+      "bytes": 12540079.0
+    },
+    {
+      "path": "C:\\Users\\ASUS\\Downloads\\曼波配音视频傻瓜式教学.mp4",
+      "status": "recycled",
+      "files": [
+        {
+          "path": "C:\\Users\\ASUS\\Downloads\\曼波配音视频傻瓜式教学.mp4",
+          "bytes": 5253765,
+          "utc_ticks": 639249089300841381
+        }
+      ],
+      "bytes": 5253765.0
+    },
+    {
+      "path": "C:\\Users\\ASUS\\Downloads\\audio.wav",
+      "status": "recycled",
+      "files": [
+        {
+          "path": "C:\\Users\\ASUS\\Downloads\\audio.wav",
+          "bytes": 247084,
+          "utc_ticks": 639249983164010103
+        }
+      ],
+      "bytes": 247084.0
+    },
+    {
+      "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\GPT_weights_v2ProPlus\\manbo_narrator_zh_v1-e5.ckpt",
+      "status": "recycled",
+      "files": [
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\GPT_weights_v2ProPlus\\manbo_narrator_zh_v1-e5.ckpt",
+          "bytes": 155312502,
+          "utc_ticks": 639249955569473838
+        }
+      ],
+      "bytes": 155312502.0
+    },
+    {
+      "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\GPT_weights_v2ProPlus\\manbo_narrator_zh_v2_corrected-e5.ckpt",
+      "status": "recycled",
+      "files": [
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\GPT_weights_v2ProPlus\\manbo_narrator_zh_v2_corrected-e5.ckpt",
+          "bytes": 155312758,
+          "utc_ticks": 639249977433219633
+        }
+      ],
+      "bytes": 155312758.0
+    },
+    {
+      "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1",
+      "status": "recycled",
+      "files": [
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\2-name2text.txt",
+          "bytes": 13663,
+          "utc_ticks": 639249945274548548
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\3-bert\\mambo_tutorial_audio_44100hz_mono.wav_0000000000_0000201600.wav.pt",
+          "bytes": 135951,
+          "utc_ticks": 639249945244121301
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\3-bert\\mambo_tutorial_audio_44100hz_mono.wav_0000201600_0000351360.wav.pt",
+          "bytes": 109321,
+          "utc_ticks": 639249945244593499
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\3-bert\\mambo_tutorial_audio_44100hz_mono.wav_0000351360_0000523200.wav.pt",
+          "bytes": 58127,
+          "utc_ticks": 639249945244913015
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\3-bert\\mambo_tutorial_audio_44100hz_mono.wav_0000523200_0000664960.wav.pt",
+          "bytes": 86799,
+          "utc_ticks": 639249945245246626
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\3-bert\\mambo_tutorial_audio_44100hz_mono.wav_0000664960_0000793280.wav.pt",
+          "bytes": 115471,
+          "utc_ticks": 639249945245707254
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\3-bert\\mambo_tutorial_audio_44100hz_mono.wav_0000793280_0000954560.wav.pt",
+          "bytes": 97039,
+          "utc_ticks": 639249945246080315
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\3-bert\\mambo_tutorial_audio_44100hz_mono.wav_0000954560_0001085440.wav.pt",
+          "bytes": 97036,
+          "utc_ticks": 639249945246454957
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\3-bert\\mambo_tutorial_audio_44100hz_mono.wav_0001085440_0001226240.wav.pt",
+          "bytes": 88847,
+          "utc_ticks": 639249945246913004
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\3-bert\\mambo_tutorial_audio_44100hz_mono.wav_0001226240_0001355840.wav.pt",
+          "bytes": 97039,
+          "utc_ticks": 639249945247406237
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\3-bert\\mambo_tutorial_audio_44100hz_mono.wav_0001355840_0001525440.wav.pt",
+          "bytes": 92943,
+          "utc_ticks": 639249945247949625
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\3-bert\\mambo_tutorial_audio_44100hz_mono.wav_0001525440_0001736640.wav.pt",
+          "bytes": 135951,
+          "utc_ticks": 639249945248331187
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\3-bert\\mambo_tutorial_audio_44100hz_mono.wav_0001736640_0001907520.wav.pt",
+          "bytes": 109327,
+          "utc_ticks": 639249945248663146
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\3-bert\\mambo_tutorial_audio_44100hz_mono.wav_0001907520_0002027520.wav.pt",
+          "bytes": 58127,
+          "utc_ticks": 639249945248997764
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\3-bert\\mambo_tutorial_audio_44100hz_mono.wav_0002027520_0002155520.wav.pt",
+          "bytes": 86799,
+          "utc_ticks": 639249945249288165
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\3-bert\\mambo_tutorial_audio_44100hz_mono.wav_0002155520_0002334400.wav.pt",
+          "bytes": 111375,
+          "utc_ticks": 639249945249580474
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\3-bert\\mambo_tutorial_audio_44100hz_mono.wav_0002334400_0002492160.wav.pt",
+          "bytes": 97039,
+          "utc_ticks": 639249945249913403
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\3-bert\\mambo_tutorial_audio_44100hz_mono.wav_0002492160_0002659200.wav.pt",
+          "bytes": 94985,
+          "utc_ticks": 639249945250205300
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\3-bert\\mambo_tutorial_audio_44100hz_mono.wav_0002659200_0002804160.wav.pt",
+          "bytes": 88844,
+          "utc_ticks": 639249945250621480
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\3-bert\\mambo_tutorial_audio_44100hz_mono.wav_0002804160_0002953600.wav.pt",
+          "bytes": 101132,
+          "utc_ticks": 639249945250954850
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\3-bert\\mambo_tutorial_audio_44100hz_mono.wav_0002953600_0003108480.wav.pt",
+          "bytes": 92943,
+          "utc_ticks": 639249945251329956
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\3-bert\\mambo_tutorial_audio_44100hz_mono.wav_0003108480_0003262720.wav.pt",
+          "bytes": 88847,
+          "utc_ticks": 639249945251741139
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\3-bert\\mambo_tutorial_audio_44100hz_mono.wav_0003262720_0003386880.wav.pt",
+          "bytes": 82703,
+          "utc_ticks": 639249945252065243
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\3-bert\\mambo_tutorial_audio_44100hz_mono.wav_0003386880_0003541760.wav.pt",
+          "bytes": 99087,
+          "utc_ticks": 639249945252363894
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\3-bert\\mambo_tutorial_audio_44100hz_mono.wav_0003541760_0003734400.wav.pt",
+          "bytes": 121615,
+          "utc_ticks": 639249945252718956
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\3-bert\\mambo_tutorial_audio_44100hz_mono.wav_0003734400_0003854080.wav.pt",
+          "bytes": 74511,
+          "utc_ticks": 639249945252978956
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\3-bert\\mambo_tutorial_audio_44100hz_mono.wav_0003854080_0004003520.wav.pt",
+          "bytes": 101132,
+          "utc_ticks": 639249945253291331
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\3-bert\\mambo_tutorial_audio_44100hz_mono.wav_0004003520_0004186240.wav.pt",
+          "bytes": 127759,
+          "utc_ticks": 639249945253712523
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\3-bert\\mambo_tutorial_audio_44100hz_mono.wav_0004186240_0004321600.wav.pt",
+          "bytes": 86799,
+          "utc_ticks": 639249945254020983
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\3-bert\\mambo_tutorial_audio_44100hz_mono.wav_0004321600_0004452480.wav.pt",
+          "bytes": 84751,
+          "utc_ticks": 639249945254288779
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\3-bert\\mambo_tutorial_audio_44100hz_mono.wav_0004452480_0004577920.wav.pt",
+          "bytes": 74511,
+          "utc_ticks": 639249945254580386
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\3-bert\\mambo_tutorial_audio_44100hz_mono.wav_0004577920_0004747520.wav.pt",
+          "bytes": 117519,
+          "utc_ticks": 639249945255000803
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\3-bert\\mambo_tutorial_audio_44100hz_mono.wav_0004747520_0004907840.wav.pt",
+          "bytes": 111375,
+          "utc_ticks": 639249945255363924
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\3-bert\\mambo_tutorial_audio_44100hz_mono.wav_0004907840_0005092800.wav.pt",
+          "bytes": 117519,
+          "utc_ticks": 639249945255762493
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\3-bert\\mambo_tutorial_audio_44100hz_mono.wav_0005092800_0005242560.wav.pt",
+          "bytes": 68367,
+          "utc_ticks": 639249945256150236
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\3-bert\\mambo_tutorial_audio_44100hz_mono.wav_0005242560_0005379520.wav.pt",
+          "bytes": 90895,
+          "utc_ticks": 639249945256539114
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\3-bert\\mambo_tutorial_audio_44100hz_mono.wav_0005379520_0005529920.wav.pt",
+          "bytes": 88844,
+          "utc_ticks": 639249945256872251
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\3-bert\\mambo_tutorial_audio_44100hz_mono.wav_0005529920_0005705280.wav.pt",
+          "bytes": 107279,
+          "utc_ticks": 639249945257288737
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\3-bert\\mambo_tutorial_audio_44100hz_mono.wav_0005705280_0005846080.wav.pt",
+          "bytes": 92943,
+          "utc_ticks": 639249945257663627
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\3-bert\\mambo_tutorial_audio_44100hz_mono.wav_0005846080_0006019200.wav.pt",
+          "bytes": 105231,
+          "utc_ticks": 639249945257953581
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\4-cnhubert\\mambo_tutorial_audio_44100hz_mono.wav_0000000000_0000201600.wav.pt",
+          "bytes": 483087,
+          "utc_ticks": 639249945412704322
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\4-cnhubert\\mambo_tutorial_audio_44100hz_mono.wav_0000201600_0000351360.wav.pt",
+          "bytes": 358668,
+          "utc_ticks": 639249945414537962
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\4-cnhubert\\mambo_tutorial_audio_44100hz_mono.wav_0000351360_0000523200.wav.pt",
+          "bytes": 412431,
+          "utc_ticks": 639249945416538984
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\4-cnhubert\\mambo_tutorial_audio_44100hz_mono.wav_0000523200_0000664960.wav.pt",
+          "bytes": 340239,
+          "utc_ticks": 639249945418287326
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\4-cnhubert\\mambo_tutorial_audio_44100hz_mono.wav_0000664960_0000793280.wav.pt",
+          "bytes": 307980,
+          "utc_ticks": 639249945420039739
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\4-cnhubert\\mambo_tutorial_audio_44100hz_mono.wav_0000793280_0000954560.wav.pt",
+          "bytes": 386319,
+          "utc_ticks": 639249945422164079
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\4-cnhubert\\mambo_tutorial_audio_44100hz_mono.wav_0000954560_0001085440.wav.pt",
+          "bytes": 314127,
+          "utc_ticks": 639249945424176270
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\4-cnhubert\\mambo_tutorial_audio_44100hz_mono.wav_0001085440_0001226240.wav.pt",
+          "bytes": 337167,
+          "utc_ticks": 639249945426538604
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\4-cnhubert\\mambo_tutorial_audio_44100hz_mono.wav_0001226240_0001355840.wav.pt",
+          "bytes": 311052,
+          "utc_ticks": 639249945428705918
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\4-cnhubert\\mambo_tutorial_audio_44100hz_mono.wav_0001355840_0001525440.wav.pt",
+          "bytes": 406287,
+          "utc_ticks": 639249945431055683
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\4-cnhubert\\mambo_tutorial_audio_44100hz_mono.wav_0001525440_0001736640.wav.pt",
+          "bytes": 506127,
+          "utc_ticks": 639249945433747140
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\4-cnhubert\\mambo_tutorial_audio_44100hz_mono.wav_0001736640_0001907520.wav.pt",
+          "bytes": 409359,
+          "utc_ticks": 639249945435997139
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\4-cnhubert\\mambo_tutorial_audio_44100hz_mono.wav_0001907520_0002027520.wav.pt",
+          "bytes": 288015,
+          "utc_ticks": 639249945437872054
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\4-cnhubert\\mambo_tutorial_audio_44100hz_mono.wav_0002027520_0002155520.wav.pt",
+          "bytes": 306447,
+          "utc_ticks": 639249945439872288
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\4-cnhubert\\mambo_tutorial_audio_44100hz_mono.wav_0002155520_0002334400.wav.pt",
+          "bytes": 429327,
+          "utc_ticks": 639249945442357724
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\4-cnhubert\\mambo_tutorial_audio_44100hz_mono.wav_0002334400_0002492160.wav.pt",
+          "bytes": 378639,
+          "utc_ticks": 639249945444661580
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\4-cnhubert\\mambo_tutorial_audio_44100hz_mono.wav_0002492160_0002659200.wav.pt",
+          "bytes": 400143,
+          "utc_ticks": 639249945447122219
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\4-cnhubert\\mambo_tutorial_audio_44100hz_mono.wav_0002659200_0002804160.wav.pt",
+          "bytes": 347919,
+          "utc_ticks": 639249945449290853
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\4-cnhubert\\mambo_tutorial_audio_44100hz_mono.wav_0002804160_0002953600.wav.pt",
+          "bytes": 358671,
+          "utc_ticks": 639249945451474174
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\4-cnhubert\\mambo_tutorial_audio_44100hz_mono.wav_0002953600_0003108480.wav.pt",
+          "bytes": 370959,
+          "utc_ticks": 639249945453580238
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\4-cnhubert\\mambo_tutorial_audio_44100hz_mono.wav_0003108480_0003262720.wav.pt",
+          "bytes": 369420,
+          "utc_ticks": 639249945455539193
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\4-cnhubert\\mambo_tutorial_audio_44100hz_mono.wav_0003262720_0003386880.wav.pt",
+          "bytes": 297228,
+          "utc_ticks": 639249945457402542
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\4-cnhubert\\mambo_tutorial_audio_44100hz_mono.wav_0003386880_0003541760.wav.pt",
+          "bytes": 370959,
+          "utc_ticks": 639249945459580096
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\4-cnhubert\\mambo_tutorial_audio_44100hz_mono.wav_0003541760_0003734400.wav.pt",
+          "bytes": 461580,
+          "utc_ticks": 639249945462122240
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\4-cnhubert\\mambo_tutorial_audio_44100hz_mono.wav_0003734400_0003854080.wav.pt",
+          "bytes": 286479,
+          "utc_ticks": 639249945464288737
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\4-cnhubert\\mambo_tutorial_audio_44100hz_mono.wav_0003854080_0004003520.wav.pt",
+          "bytes": 358671,
+          "utc_ticks": 639249945466584633
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\4-cnhubert\\mambo_tutorial_audio_44100hz_mono.wav_0004003520_0004186240.wav.pt",
+          "bytes": 438543,
+          "utc_ticks": 639249945469167309
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\4-cnhubert\\mambo_tutorial_audio_44100hz_mono.wav_0004186240_0004321600.wav.pt",
+          "bytes": 324879,
+          "utc_ticks": 639249945471466146
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\4-cnhubert\\mambo_tutorial_audio_44100hz_mono.wav_0004321600_0004452480.wav.pt",
+          "bytes": 314127,
+          "utc_ticks": 639249945473716664
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\4-cnhubert\\mambo_tutorial_audio_44100hz_mono.wav_0004452480_0004577920.wav.pt",
+          "bytes": 300303,
+          "utc_ticks": 639249945475965904
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\4-cnhubert\\mambo_tutorial_audio_44100hz_mono.wav_0004577920_0004747520.wav.pt",
+          "bytes": 406287,
+          "utc_ticks": 639249945478671432
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\4-cnhubert\\mambo_tutorial_audio_44100hz_mono.wav_0004747520_0004907840.wav.pt",
+          "bytes": 384783,
+          "utc_ticks": 639249945481276857
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\4-cnhubert\\mambo_tutorial_audio_44100hz_mono.wav_0004907840_0005092800.wav.pt",
+          "bytes": 443151,
+          "utc_ticks": 639249945484455571
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\4-cnhubert\\mambo_tutorial_audio_44100hz_mono.wav_0005092800_0005242560.wav.pt",
+          "bytes": 358671,
+          "utc_ticks": 639249945486876552
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\4-cnhubert\\mambo_tutorial_audio_44100hz_mono.wav_0005242560_0005379520.wav.pt",
+          "bytes": 327951,
+          "utc_ticks": 639249945489418555
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\4-cnhubert\\mambo_tutorial_audio_44100hz_mono.wav_0005379520_0005529920.wav.pt",
+          "bytes": 360204,
+          "utc_ticks": 639249945491776259
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\4-cnhubert\\mambo_tutorial_audio_44100hz_mono.wav_0005529920_0005705280.wav.pt",
+          "bytes": 420108,
+          "utc_ticks": 639249945494568649
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\4-cnhubert\\mambo_tutorial_audio_44100hz_mono.wav_0005705280_0005846080.wav.pt",
+          "bytes": 337167,
+          "utc_ticks": 639249945496919954
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\4-cnhubert\\mambo_tutorial_audio_44100hz_mono.wav_0005846080_0006019200.wav.pt",
+          "bytes": 415500,
+          "utc_ticks": 639249945499635058
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\5-wav32k\\mambo_tutorial_audio_44100hz_mono.wav_0000000000_0000201600.wav",
+          "bytes": 403244,
+          "utc_ticks": 639249945412704322
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\5-wav32k\\mambo_tutorial_audio_44100hz_mono.wav_0000201600_0000351360.wav",
+          "bytes": 299564,
+          "utc_ticks": 639249945414529308
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\5-wav32k\\mambo_tutorial_audio_44100hz_mono.wav_0000351360_0000523200.wav",
+          "bytes": 343724,
+          "utc_ticks": 639249945416538984
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\5-wav32k\\mambo_tutorial_audio_44100hz_mono.wav_0000523200_0000664960.wav",
+          "bytes": 283564,
+          "utc_ticks": 639249945418287326
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\5-wav32k\\mambo_tutorial_audio_44100hz_mono.wav_0000664960_0000793280.wav",
+          "bytes": 256684,
+          "utc_ticks": 639249945420022140
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\5-wav32k\\mambo_tutorial_audio_44100hz_mono.wav_0000793280_0000954560.wav",
+          "bytes": 322604,
+          "utc_ticks": 639249945422164079
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\5-wav32k\\mambo_tutorial_audio_44100hz_mono.wav_0000954560_0001085440.wav",
+          "bytes": 261804,
+          "utc_ticks": 639249945424176270
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\5-wav32k\\mambo_tutorial_audio_44100hz_mono.wav_0001085440_0001226240.wav",
+          "bytes": 281644,
+          "utc_ticks": 639249945426538604
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\5-wav32k\\mambo_tutorial_audio_44100hz_mono.wav_0001226240_0001355840.wav",
+          "bytes": 259244,
+          "utc_ticks": 639249945428663689
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\5-wav32k\\mambo_tutorial_audio_44100hz_mono.wav_0001355840_0001525440.wav",
+          "bytes": 339244,
+          "utc_ticks": 639249945431055683
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\5-wav32k\\mambo_tutorial_audio_44100hz_mono.wav_0001525440_0001736640.wav",
+          "bytes": 422444,
+          "utc_ticks": 639249945433747140
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\5-wav32k\\mambo_tutorial_audio_44100hz_mono.wav_0001736640_0001907520.wav",
+          "bytes": 341804,
+          "utc_ticks": 639249945435997139
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\5-wav32k\\mambo_tutorial_audio_44100hz_mono.wav_0001907520_0002027520.wav",
+          "bytes": 240044,
+          "utc_ticks": 639249945437872054
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\5-wav32k\\mambo_tutorial_audio_44100hz_mono.wav_0002027520_0002155520.wav",
+          "bytes": 256044,
+          "utc_ticks": 639249945439872288
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\5-wav32k\\mambo_tutorial_audio_44100hz_mono.wav_0002155520_0002334400.wav",
+          "bytes": 357804,
+          "utc_ticks": 639249945442348644
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\5-wav32k\\mambo_tutorial_audio_44100hz_mono.wav_0002334400_0002492160.wav",
+          "bytes": 315564,
+          "utc_ticks": 639249945444648937
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\5-wav32k\\mambo_tutorial_audio_44100hz_mono.wav_0002492160_0002659200.wav",
+          "bytes": 334124,
+          "utc_ticks": 639249945447122219
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\5-wav32k\\mambo_tutorial_audio_44100hz_mono.wav_0002659200_0002804160.wav",
+          "bytes": 289964,
+          "utc_ticks": 639249945449290853
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\5-wav32k\\mambo_tutorial_audio_44100hz_mono.wav_0002804160_0002953600.wav",
+          "bytes": 298924,
+          "utc_ticks": 639249945451464176
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\5-wav32k\\mambo_tutorial_audio_44100hz_mono.wav_0002953600_0003108480.wav",
+          "bytes": 309804,
+          "utc_ticks": 639249945453580238
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\5-wav32k\\mambo_tutorial_audio_44100hz_mono.wav_0003108480_0003262720.wav",
+          "bytes": 308524,
+          "utc_ticks": 639249945455515810
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\5-wav32k\\mambo_tutorial_audio_44100hz_mono.wav_0003262720_0003386880.wav",
+          "bytes": 248364,
+          "utc_ticks": 639249945457390720
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\5-wav32k\\mambo_tutorial_audio_44100hz_mono.wav_0003386880_0003541760.wav",
+          "bytes": 309804,
+          "utc_ticks": 639249945459580096
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\5-wav32k\\mambo_tutorial_audio_44100hz_mono.wav_0003541760_0003734400.wav",
+          "bytes": 385324,
+          "utc_ticks": 639249945462122240
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\5-wav32k\\mambo_tutorial_audio_44100hz_mono.wav_0003734400_0003854080.wav",
+          "bytes": 239404,
+          "utc_ticks": 639249945464288737
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\5-wav32k\\mambo_tutorial_audio_44100hz_mono.wav_0003854080_0004003520.wav",
+          "bytes": 298924,
+          "utc_ticks": 639249945466576562
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\5-wav32k\\mambo_tutorial_audio_44100hz_mono.wav_0004003520_0004186240.wav",
+          "bytes": 365484,
+          "utc_ticks": 639249945469167309
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\5-wav32k\\mambo_tutorial_audio_44100hz_mono.wav_0004186240_0004321600.wav",
+          "bytes": 270764,
+          "utc_ticks": 639249945471456147
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\5-wav32k\\mambo_tutorial_audio_44100hz_mono.wav_0004321600_0004452480.wav",
+          "bytes": 261804,
+          "utc_ticks": 639249945473591442
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\5-wav32k\\mambo_tutorial_audio_44100hz_mono.wav_0004452480_0004577920.wav",
+          "bytes": 250924,
+          "utc_ticks": 639249945475920342
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\5-wav32k\\mambo_tutorial_audio_44100hz_mono.wav_0004577920_0004747520.wav",
+          "bytes": 339244,
+          "utc_ticks": 639249945478671432
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\5-wav32k\\mambo_tutorial_audio_44100hz_mono.wav_0004747520_0004907840.wav",
+          "bytes": 320684,
+          "utc_ticks": 639249945481261257
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\5-wav32k\\mambo_tutorial_audio_44100hz_mono.wav_0004907840_0005092800.wav",
+          "bytes": 369964,
+          "utc_ticks": 639249945484455571
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\5-wav32k\\mambo_tutorial_audio_44100hz_mono.wav_0005092800_0005242560.wav",
+          "bytes": 299564,
+          "utc_ticks": 639249945486876552
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\5-wav32k\\mambo_tutorial_audio_44100hz_mono.wav_0005242560_0005379520.wav",
+          "bytes": 273964,
+          "utc_ticks": 639249945489418555
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\5-wav32k\\mambo_tutorial_audio_44100hz_mono.wav_0005379520_0005529920.wav",
+          "bytes": 300844,
+          "utc_ticks": 639249945491771032
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\5-wav32k\\mambo_tutorial_audio_44100hz_mono.wav_0005529920_0005705280.wav",
+          "bytes": 350764,
+          "utc_ticks": 639249945494562060
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\5-wav32k\\mambo_tutorial_audio_44100hz_mono.wav_0005705280_0005846080.wav",
+          "bytes": 281644,
+          "utc_ticks": 639249945496919954
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\5-wav32k\\mambo_tutorial_audio_44100hz_mono.wav_0005846080_0006019200.wav",
+          "bytes": 346284,
+          "utc_ticks": 639249945499635058
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\6-name2semantic.tsv",
+          "bytes": 20908,
+          "utc_ticks": 639249945822513306
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\7-sv_cn\\mambo_tutorial_audio_44100hz_mono.wav_0000000000_0000201600.wav.pt",
+          "bytes": 41743,
+          "utc_ticks": 639249945610373024
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\7-sv_cn\\mambo_tutorial_audio_44100hz_mono.wav_0000201600_0000351360.wav.pt",
+          "bytes": 41743,
+          "utc_ticks": 639249945612144396
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\7-sv_cn\\mambo_tutorial_audio_44100hz_mono.wav_0000351360_0000523200.wav.pt",
+          "bytes": 41743,
+          "utc_ticks": 639249945613831418
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\7-sv_cn\\mambo_tutorial_audio_44100hz_mono.wav_0000523200_0000664960.wav.pt",
+          "bytes": 41743,
+          "utc_ticks": 639249945615706038
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\7-sv_cn\\mambo_tutorial_audio_44100hz_mono.wav_0000664960_0000793280.wav.pt",
+          "bytes": 41743,
+          "utc_ticks": 639249945617791060
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\7-sv_cn\\mambo_tutorial_audio_44100hz_mono.wav_0000793280_0000954560.wav.pt",
+          "bytes": 41743,
+          "utc_ticks": 639249945619873663
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\7-sv_cn\\mambo_tutorial_audio_44100hz_mono.wav_0000954560_0001085440.wav.pt",
+          "bytes": 41743,
+          "utc_ticks": 639249945621910647
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\7-sv_cn\\mambo_tutorial_audio_44100hz_mono.wav_0001085440_0001226240.wav.pt",
+          "bytes": 41743,
+          "utc_ticks": 639249945623522355
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\7-sv_cn\\mambo_tutorial_audio_44100hz_mono.wav_0001226240_0001355840.wav.pt",
+          "bytes": 41743,
+          "utc_ticks": 639249945625299124
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\7-sv_cn\\mambo_tutorial_audio_44100hz_mono.wav_0001355840_0001525440.wav.pt",
+          "bytes": 41743,
+          "utc_ticks": 639249945627290100
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\7-sv_cn\\mambo_tutorial_audio_44100hz_mono.wav_0001525440_0001736640.wav.pt",
+          "bytes": 41743,
+          "utc_ticks": 639249945629291269
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\7-sv_cn\\mambo_tutorial_audio_44100hz_mono.wav_0001736640_0001907520.wav.pt",
+          "bytes": 41743,
+          "utc_ticks": 639249945630943224
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\7-sv_cn\\mambo_tutorial_audio_44100hz_mono.wav_0001907520_0002027520.wav.pt",
+          "bytes": 41743,
+          "utc_ticks": 639249945632698935
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\7-sv_cn\\mambo_tutorial_audio_44100hz_mono.wav_0002027520_0002155520.wav.pt",
+          "bytes": 41743,
+          "utc_ticks": 639249945633956075
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\7-sv_cn\\mambo_tutorial_audio_44100hz_mono.wav_0002155520_0002334400.wav.pt",
+          "bytes": 41743,
+          "utc_ticks": 639249945636352691
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\7-sv_cn\\mambo_tutorial_audio_44100hz_mono.wav_0002334400_0002492160.wav.pt",
+          "bytes": 41743,
+          "utc_ticks": 639249945638478112
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\7-sv_cn\\mambo_tutorial_audio_44100hz_mono.wav_0002492160_0002659200.wav.pt",
+          "bytes": 41740,
+          "utc_ticks": 639249945640172127
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\7-sv_cn\\mambo_tutorial_audio_44100hz_mono.wav_0002659200_0002804160.wav.pt",
+          "bytes": 41743,
+          "utc_ticks": 639249945641873411
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\7-sv_cn\\mambo_tutorial_audio_44100hz_mono.wav_0002804160_0002953600.wav.pt",
+          "bytes": 41743,
+          "utc_ticks": 639249945642915209
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\7-sv_cn\\mambo_tutorial_audio_44100hz_mono.wav_0002953600_0003108480.wav.pt",
+          "bytes": 41743,
+          "utc_ticks": 639249945644976186
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\7-sv_cn\\mambo_tutorial_audio_44100hz_mono.wav_0003108480_0003262720.wav.pt",
+          "bytes": 41743,
+          "utc_ticks": 639249945646999524
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\7-sv_cn\\mambo_tutorial_audio_44100hz_mono.wav_0003262720_0003386880.wav.pt",
+          "bytes": 41743,
+          "utc_ticks": 639249945648997933
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\7-sv_cn\\mambo_tutorial_audio_44100hz_mono.wav_0003386880_0003541760.wav.pt",
+          "bytes": 41743,
+          "utc_ticks": 639249945650002466
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\7-sv_cn\\mambo_tutorial_audio_44100hz_mono.wav_0003541760_0003734400.wav.pt",
+          "bytes": 41743,
+          "utc_ticks": 639249945651921452
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\7-sv_cn\\mambo_tutorial_audio_44100hz_mono.wav_0003734400_0003854080.wav.pt",
+          "bytes": 41743,
+          "utc_ticks": 639249945653499106
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\7-sv_cn\\mambo_tutorial_audio_44100hz_mono.wav_0003854080_0004003520.wav.pt",
+          "bytes": 41740,
+          "utc_ticks": 639249945654290959
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\7-sv_cn\\mambo_tutorial_audio_44100hz_mono.wav_0004003520_0004186240.wav.pt",
+          "bytes": 41743,
+          "utc_ticks": 639249945656530092
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\7-sv_cn\\mambo_tutorial_audio_44100hz_mono.wav_0004186240_0004321600.wav.pt",
+          "bytes": 41743,
+          "utc_ticks": 639249945658671770
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\7-sv_cn\\mambo_tutorial_audio_44100hz_mono.wav_0004321600_0004452480.wav.pt",
+          "bytes": 41740,
+          "utc_ticks": 639249945659165180
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\7-sv_cn\\mambo_tutorial_audio_44100hz_mono.wav_0004452480_0004577920.wav.pt",
+          "bytes": 41743,
+          "utc_ticks": 639249945660926519
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\7-sv_cn\\mambo_tutorial_audio_44100hz_mono.wav_0004577920_0004747520.wav.pt",
+          "bytes": 41743,
+          "utc_ticks": 639249945661468467
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\7-sv_cn\\mambo_tutorial_audio_44100hz_mono.wav_0004747520_0004907840.wav.pt",
+          "bytes": 41743,
+          "utc_ticks": 639249945662906397
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\7-sv_cn\\mambo_tutorial_audio_44100hz_mono.wav_0004907840_0005092800.wav.pt",
+          "bytes": 41743,
+          "utc_ticks": 639249945664801021
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\7-sv_cn\\mambo_tutorial_audio_44100hz_mono.wav_0005092800_0005242560.wav.pt",
+          "bytes": 41743,
+          "utc_ticks": 639249945665414026
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\7-sv_cn\\mambo_tutorial_audio_44100hz_mono.wav_0005242560_0005379520.wav.pt",
+          "bytes": 41743,
+          "utc_ticks": 639249945667159341
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\7-sv_cn\\mambo_tutorial_audio_44100hz_mono.wav_0005379520_0005529920.wav.pt",
+          "bytes": 41743,
+          "utc_ticks": 639249945668569345
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\7-sv_cn\\mambo_tutorial_audio_44100hz_mono.wav_0005529920_0005705280.wav.pt",
+          "bytes": 41743,
+          "utc_ticks": 639249945670170653
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\7-sv_cn\\mambo_tutorial_audio_44100hz_mono.wav_0005705280_0005846080.wav.pt",
+          "bytes": 41743,
+          "utc_ticks": 639249945670539512
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\7-sv_cn\\mambo_tutorial_audio_44100hz_mono.wav_0005846080_0006019200.wav.pt",
+          "bytes": 41743,
+          "utc_ticks": 639249945672373367
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\ANNOTATION_MISMATCH_DO_NOT_RESUME.md",
+          "bytes": 936,
+          "utc_ticks": 639249963421008689
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\config.json",
+          "bytes": 1577,
+          "utc_ticks": 639249952752970804
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\eval\\events.out.tfevents.1789398413.LAPTOP-152H5JNQ.70920.1",
+          "bytes": 88,
+          "utc_ticks": 639249952136031231
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\events.out.tfevents.1789398413.LAPTOP-152H5JNQ.70920.0",
+          "bytes": 205347,
+          "utc_ticks": 639249952893896845
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\logs_s1_v2ProPlus\\ckpt\\epoch=4-step=20.ckpt",
+          "bytes": 931416833,
+          "utc_ticks": 639249955565601784
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\logs_s1_v2ProPlus\\logs_s1_v2ProPlus\\version_0\\events.out.tfevents.1789398705.LAPTOP-152H5JNQ.47676.0",
+          "bytes": 4400,
+          "utc_ticks": 639249955569506774
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\logs_s1_v2ProPlus\\logs_s1_v2ProPlus\\version_0\\hparams.yaml",
+          "bytes": 1132,
+          "utc_ticks": 639249955061057290
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\logs_s2_v2ProPlus\\D_233333333333.pth",
+          "bytes": 758456195,
+          "utc_ticks": 639249953871662356
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\logs_s2_v2ProPlus\\G_233333333333.pth",
+          "bytes": 1177881987,
+          "utc_ticks": 639249953713683439
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v1\\train.log",
+          "bytes": 3270,
+          "utc_ticks": 639249953922496569
+        }
+      ],
+      "bytes": 2899900176.0
+    },
+    {
+      "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected",
+      "status": "recycled",
+      "files": [
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\01_text.err.log",
+          "bytes": 0,
+          "utc_ticks": 639249973772366912
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\01_text.out.log",
+          "bytes": 0,
+          "utc_ticks": 639249973772366912
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\02_hubert.err.log",
+          "bytes": 422,
+          "utc_ticks": 639249973968120482
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\02_hubert.out.log",
+          "bytes": 0,
+          "utc_ticks": 639249973856536511
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\03_speaker.err.log",
+          "bytes": 0,
+          "utc_ticks": 639249973984401979
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\03_speaker.out.log",
+          "bytes": 0,
+          "utc_ticks": 639249973984401979
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\04_semantic.err.log",
+          "bytes": 0,
+          "utc_ticks": 639249974063192724
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\04_semantic.out.log",
+          "bytes": 0,
+          "utc_ticks": 639249974063192724
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\04b_validate.err.log",
+          "bytes": 0,
+          "utc_ticks": 639249974185522110
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\04b_validate.out.log",
+          "bytes": 41,
+          "utc_ticks": 639249974259728995
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\05_sovits.err.log",
+          "bytes": 5365,
+          "utc_ticks": 639249975417661099
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\05_sovits.out.log",
+          "bytes": 4271,
+          "utc_ticks": 639249975727073009
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\06_gpt_recovery.err.log",
+          "bytes": 1781,
+          "utc_ticks": 639249977433263002
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\06_gpt_recovery.out.log",
+          "bytes": 45327,
+          "utc_ticks": 639249977433263002
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\2-name2text-0.txt",
+          "bytes": 13555,
+          "utc_ticks": 639249967992008104
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\2-name2text.txt",
+          "bytes": 13555,
+          "utc_ticks": 639249974185440338
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\3-bert\\mambo_tutorial_audio_44100hz_mono.wav_0000000000_0000201600.wav.pt",
+          "bytes": 127756,
+          "utc_ticks": 639249967975978998
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\3-bert\\mambo_tutorial_audio_44100hz_mono.wav_0000201600_0000351360.wav.pt",
+          "bytes": 88847,
+          "utc_ticks": 639249967976633057
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\3-bert\\mambo_tutorial_audio_44100hz_mono.wav_0000351360_0000523200.wav.pt",
+          "bytes": 109327,
+          "utc_ticks": 639249967977242090
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\3-bert\\mambo_tutorial_audio_44100hz_mono.wav_0000523200_0000664960.wav.pt",
+          "bytes": 82703,
+          "utc_ticks": 639249967977583886
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\3-bert\\mambo_tutorial_audio_44100hz_mono.wav_0000664960_0000793280.wav.pt",
+          "bytes": 80655,
+          "utc_ticks": 639249967978032135
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\3-bert\\mambo_tutorial_audio_44100hz_mono.wav_0000793280_0000954560.wav.pt",
+          "bytes": 86799,
+          "utc_ticks": 639249967978411414
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\3-bert\\mambo_tutorial_audio_44100hz_mono.wav_0000954560_0001085440.wav.pt",
+          "bytes": 80655,
+          "utc_ticks": 639249967978834211
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\3-bert\\mambo_tutorial_audio_44100hz_mono.wav_0001085440_0001226240.wav.pt",
+          "bytes": 76559,
+          "utc_ticks": 639249967979290189
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\3-bert\\mambo_tutorial_audio_44100hz_mono.wav_0001226240_0001355840.wav.pt",
+          "bytes": 82700,
+          "utc_ticks": 639249967979591210
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\3-bert\\mambo_tutorial_audio_44100hz_mono.wav_0001355840_0001525440.wav.pt",
+          "bytes": 115468,
+          "utc_ticks": 639249967979935846
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\3-bert\\mambo_tutorial_audio_44100hz_mono.wav_0001525440_0001736640.wav.pt",
+          "bytes": 135948,
+          "utc_ticks": 639249967980404761
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\3-bert\\mambo_tutorial_audio_44100hz_mono.wav_0001736640_0001907520.wav.pt",
+          "bytes": 109324,
+          "utc_ticks": 639249967980817754
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\3-bert\\mambo_tutorial_audio_44100hz_mono.wav_0001907520_0002027520.wav.pt",
+          "bytes": 58127,
+          "utc_ticks": 639249967981223648
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\3-bert\\mambo_tutorial_audio_44100hz_mono.wav_0002027520_0002155520.wav.pt",
+          "bytes": 86799,
+          "utc_ticks": 639249967981602220
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\3-bert\\mambo_tutorial_audio_44100hz_mono.wav_0002155520_0002334400.wav.pt",
+          "bytes": 115471,
+          "utc_ticks": 639249967982092544
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\3-bert\\mambo_tutorial_audio_44100hz_mono.wav_0002334400_0002492160.wav.pt",
+          "bytes": 97039,
+          "utc_ticks": 639249967982464107
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\3-bert\\mambo_tutorial_audio_44100hz_mono.wav_0002492160_0002659200.wav.pt",
+          "bytes": 94991,
+          "utc_ticks": 639249967982771018
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\3-bert\\mambo_tutorial_audio_44100hz_mono.wav_0002659200_0002804160.wav.pt",
+          "bytes": 88847,
+          "utc_ticks": 639249967983199470
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\3-bert\\mambo_tutorial_audio_44100hz_mono.wav_0002804160_0002953600.wav.pt",
+          "bytes": 97039,
+          "utc_ticks": 639249967983620604
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\3-bert\\mambo_tutorial_audio_44100hz_mono.wav_0002953600_0003108480.wav.pt",
+          "bytes": 92940,
+          "utc_ticks": 639249967984109119
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\3-bert\\mambo_tutorial_audio_44100hz_mono.wav_0003108480_0003262720.wav.pt",
+          "bytes": 88847,
+          "utc_ticks": 639249967984491577
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\3-bert\\mambo_tutorial_audio_44100hz_mono.wav_0003262720_0003386880.wav.pt",
+          "bytes": 82703,
+          "utc_ticks": 639249967984940884
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\3-bert\\mambo_tutorial_audio_44100hz_mono.wav_0003386880_0003541760.wav.pt",
+          "bytes": 99087,
+          "utc_ticks": 639249967985285538
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\3-bert\\mambo_tutorial_audio_44100hz_mono.wav_0003541760_0003734400.wav.pt",
+          "bytes": 121615,
+          "utc_ticks": 639249967985809558
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\3-bert\\mambo_tutorial_audio_44100hz_mono.wav_0003734400_0003854080.wav.pt",
+          "bytes": 74511,
+          "utc_ticks": 639249967986176802
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\3-bert\\mambo_tutorial_audio_44100hz_mono.wav_0003854080_0004003520.wav.pt",
+          "bytes": 101135,
+          "utc_ticks": 639249967986650638
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\3-bert\\mambo_tutorial_audio_44100hz_mono.wav_0004003520_0004186240.wav.pt",
+          "bytes": 127759,
+          "utc_ticks": 639249967987190855
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\3-bert\\mambo_tutorial_audio_44100hz_mono.wav_0004186240_0004321600.wav.pt",
+          "bytes": 86799,
+          "utc_ticks": 639249967987602708
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\3-bert\\mambo_tutorial_audio_44100hz_mono.wav_0004321600_0004452480.wav.pt",
+          "bytes": 84751,
+          "utc_ticks": 639249967987945979
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\3-bert\\mambo_tutorial_audio_44100hz_mono.wav_0004452480_0004577920.wav.pt",
+          "bytes": 80655,
+          "utc_ticks": 639249967988346497
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\3-bert\\mambo_tutorial_audio_44100hz_mono.wav_0004577920_0004747520.wav.pt",
+          "bytes": 117519,
+          "utc_ticks": 639249967988766548
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\3-bert\\mambo_tutorial_audio_44100hz_mono.wav_0004747520_0004907840.wav.pt",
+          "bytes": 111375,
+          "utc_ticks": 639249967989177406
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\3-bert\\mambo_tutorial_audio_44100hz_mono.wav_0004907840_0005092800.wav.pt",
+          "bytes": 117519,
+          "utc_ticks": 639249967989603695
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\3-bert\\mambo_tutorial_audio_44100hz_mono.wav_0005092800_0005242560.wav.pt",
+          "bytes": 68364,
+          "utc_ticks": 639249967990094127
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\3-bert\\mambo_tutorial_audio_44100hz_mono.wav_0005242560_0005379520.wav.pt",
+          "bytes": 90895,
+          "utc_ticks": 639249967990476672
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\3-bert\\mambo_tutorial_audio_44100hz_mono.wav_0005379520_0005529920.wav.pt",
+          "bytes": 88847,
+          "utc_ticks": 639249967990875808
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\3-bert\\mambo_tutorial_audio_44100hz_mono.wav_0005529920_0005705280.wav.pt",
+          "bytes": 107279,
+          "utc_ticks": 639249967991241162
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\3-bert\\mambo_tutorial_audio_44100hz_mono.wav_0005705280_0005846080.wav.pt",
+          "bytes": 92943,
+          "utc_ticks": 639249967991630497
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\3-bert\\mambo_tutorial_audio_44100hz_mono.wav_0005846080_0006019200.wav.pt",
+          "bytes": 105231,
+          "utc_ticks": 639249967991998058
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\4-cnhubert\\mambo_tutorial_audio_44100hz_mono.wav_0000000000_0000201600.wav.pt",
+          "bytes": 483087,
+          "utc_ticks": 639249968223975317
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\4-cnhubert\\mambo_tutorial_audio_44100hz_mono.wav_0000201600_0000351360.wav.pt",
+          "bytes": 358668,
+          "utc_ticks": 639249968226605285
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\4-cnhubert\\mambo_tutorial_audio_44100hz_mono.wav_0000351360_0000523200.wav.pt",
+          "bytes": 412428,
+          "utc_ticks": 639249968230301395
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\4-cnhubert\\mambo_tutorial_audio_44100hz_mono.wav_0000523200_0000664960.wav.pt",
+          "bytes": 340236,
+          "utc_ticks": 639249968233656711
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\4-cnhubert\\mambo_tutorial_audio_44100hz_mono.wav_0000664960_0000793280.wav.pt",
+          "bytes": 307980,
+          "utc_ticks": 639249968237803310
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\4-cnhubert\\mambo_tutorial_audio_44100hz_mono.wav_0000793280_0000954560.wav.pt",
+          "bytes": 386319,
+          "utc_ticks": 639249968240728856
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\4-cnhubert\\mambo_tutorial_audio_44100hz_mono.wav_0000954560_0001085440.wav.pt",
+          "bytes": 314127,
+          "utc_ticks": 639249968246584390
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\4-cnhubert\\mambo_tutorial_audio_44100hz_mono.wav_0001085440_0001226240.wav.pt",
+          "bytes": 337161,
+          "utc_ticks": 639249968251391753
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\4-cnhubert\\mambo_tutorial_audio_44100hz_mono.wav_0001226240_0001355840.wav.pt",
+          "bytes": 311055,
+          "utc_ticks": 639249968257311723
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\4-cnhubert\\mambo_tutorial_audio_44100hz_mono.wav_0001355840_0001525440.wav.pt",
+          "bytes": 406287,
+          "utc_ticks": 639249968260518529
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\4-cnhubert\\mambo_tutorial_audio_44100hz_mono.wav_0001525440_0001736640.wav.pt",
+          "bytes": 506127,
+          "utc_ticks": 639249968263695504
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\4-cnhubert\\mambo_tutorial_audio_44100hz_mono.wav_0001736640_0001907520.wav.pt",
+          "bytes": 409359,
+          "utc_ticks": 639249968266648859
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\4-cnhubert\\mambo_tutorial_audio_44100hz_mono.wav_0001907520_0002027520.wav.pt",
+          "bytes": 288015,
+          "utc_ticks": 639249968274528623
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\4-cnhubert\\mambo_tutorial_audio_44100hz_mono.wav_0002027520_0002155520.wav.pt",
+          "bytes": 306444,
+          "utc_ticks": 639249968282087604
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\4-cnhubert\\mambo_tutorial_audio_44100hz_mono.wav_0002155520_0002334400.wav.pt",
+          "bytes": 429327,
+          "utc_ticks": 639249968289280135
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\4-cnhubert\\mambo_tutorial_audio_44100hz_mono.wav_0002334400_0002492160.wav.pt",
+          "bytes": 378639,
+          "utc_ticks": 639249968296252073
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\4-cnhubert\\mambo_tutorial_audio_44100hz_mono.wav_0002492160_0002659200.wav.pt",
+          "bytes": 400143,
+          "utc_ticks": 639249968301019243
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\4-cnhubert\\mambo_tutorial_audio_44100hz_mono.wav_0002659200_0002804160.wav.pt",
+          "bytes": 347919,
+          "utc_ticks": 639249968304171720
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\4-cnhubert\\mambo_tutorial_audio_44100hz_mono.wav_0002804160_0002953600.wav.pt",
+          "bytes": 358668,
+          "utc_ticks": 639249968311325516
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\4-cnhubert\\mambo_tutorial_audio_44100hz_mono.wav_0002953600_0003108480.wav.pt",
+          "bytes": 370956,
+          "utc_ticks": 639249968316365385
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\4-cnhubert\\mambo_tutorial_audio_44100hz_mono.wav_0003108480_0003262720.wav.pt",
+          "bytes": 369423,
+          "utc_ticks": 639249968322490188
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\4-cnhubert\\mambo_tutorial_audio_44100hz_mono.wav_0003262720_0003386880.wav.pt",
+          "bytes": 297231,
+          "utc_ticks": 639249968329626575
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\4-cnhubert\\mambo_tutorial_audio_44100hz_mono.wav_0003386880_0003541760.wav.pt",
+          "bytes": 370959,
+          "utc_ticks": 639249968336866427
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\4-cnhubert\\mambo_tutorial_audio_44100hz_mono.wav_0003541760_0003734400.wav.pt",
+          "bytes": 461577,
+          "utc_ticks": 639249968343558611
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\4-cnhubert\\mambo_tutorial_audio_44100hz_mono.wav_0003734400_0003854080.wav.pt",
+          "bytes": 286479,
+          "utc_ticks": 639249968348446014
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\4-cnhubert\\mambo_tutorial_audio_44100hz_mono.wav_0003854080_0004003520.wav.pt",
+          "bytes": 358671,
+          "utc_ticks": 639249968353303431
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\4-cnhubert\\mambo_tutorial_audio_44100hz_mono.wav_0004003520_0004186240.wav.pt",
+          "bytes": 438540,
+          "utc_ticks": 639249968360624653
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\4-cnhubert\\mambo_tutorial_audio_44100hz_mono.wav_0004186240_0004321600.wav.pt",
+          "bytes": 324879,
+          "utc_ticks": 639249968366591418
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\4-cnhubert\\mambo_tutorial_audio_44100hz_mono.wav_0004321600_0004452480.wav.pt",
+          "bytes": 314127,
+          "utc_ticks": 639249968368767780
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\4-cnhubert\\mambo_tutorial_audio_44100hz_mono.wav_0004452480_0004577920.wav.pt",
+          "bytes": 300303,
+          "utc_ticks": 639249968371563102
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\4-cnhubert\\mambo_tutorial_audio_44100hz_mono.wav_0004577920_0004747520.wav.pt",
+          "bytes": 406287,
+          "utc_ticks": 639249968374045452
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\4-cnhubert\\mambo_tutorial_audio_44100hz_mono.wav_0004747520_0004907840.wav.pt",
+          "bytes": 384783,
+          "utc_ticks": 639249968383317345
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\4-cnhubert\\mambo_tutorial_audio_44100hz_mono.wav_0004907840_0005092800.wav.pt",
+          "bytes": 443148,
+          "utc_ticks": 639249968392328351
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\4-cnhubert\\mambo_tutorial_audio_44100hz_mono.wav_0005092800_0005242560.wav.pt",
+          "bytes": 358671,
+          "utc_ticks": 639249968403115841
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\4-cnhubert\\mambo_tutorial_audio_44100hz_mono.wav_0005242560_0005379520.wav.pt",
+          "bytes": 327951,
+          "utc_ticks": 639249968412533692
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\4-cnhubert\\mambo_tutorial_audio_44100hz_mono.wav_0005379520_0005529920.wav.pt",
+          "bytes": 360207,
+          "utc_ticks": 639249968418103511
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\4-cnhubert\\mambo_tutorial_audio_44100hz_mono.wav_0005529920_0005705280.wav.pt",
+          "bytes": 420111,
+          "utc_ticks": 639249968422905159
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\4-cnhubert\\mambo_tutorial_audio_44100hz_mono.wav_0005705280_0005846080.wav.pt",
+          "bytes": 337167,
+          "utc_ticks": 639249968425353344
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\4-cnhubert\\mambo_tutorial_audio_44100hz_mono.wav_0005846080_0006019200.wav.pt",
+          "bytes": 415503,
+          "utc_ticks": 639249968428838635
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\5-wav32k\\mambo_tutorial_audio_44100hz_mono.wav_0000000000_0000201600.wav",
+          "bytes": 403244,
+          "utc_ticks": 639249968223958552
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\5-wav32k\\mambo_tutorial_audio_44100hz_mono.wav_0000201600_0000351360.wav",
+          "bytes": 299564,
+          "utc_ticks": 639249968226595280
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\5-wav32k\\mambo_tutorial_audio_44100hz_mono.wav_0000351360_0000523200.wav",
+          "bytes": 343724,
+          "utc_ticks": 639249968230288391
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\5-wav32k\\mambo_tutorial_audio_44100hz_mono.wav_0000523200_0000664960.wav",
+          "bytes": 283564,
+          "utc_ticks": 639249968233645141
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\5-wav32k\\mambo_tutorial_audio_44100hz_mono.wav_0000664960_0000793280.wav",
+          "bytes": 256684,
+          "utc_ticks": 639249968237793271
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\5-wav32k\\mambo_tutorial_audio_44100hz_mono.wav_0000793280_0000954560.wav",
+          "bytes": 322604,
+          "utc_ticks": 639249968240719036
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\5-wav32k\\mambo_tutorial_audio_44100hz_mono.wav_0000954560_0001085440.wav",
+          "bytes": 261804,
+          "utc_ticks": 639249968246564392
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\5-wav32k\\mambo_tutorial_audio_44100hz_mono.wav_0001085440_0001226240.wav",
+          "bytes": 281644,
+          "utc_ticks": 639249968251378502
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\5-wav32k\\mambo_tutorial_audio_44100hz_mono.wav_0001226240_0001355840.wav",
+          "bytes": 259244,
+          "utc_ticks": 639249968257291585
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\5-wav32k\\mambo_tutorial_audio_44100hz_mono.wav_0001355840_0001525440.wav",
+          "bytes": 339244,
+          "utc_ticks": 639249968260508527
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\5-wav32k\\mambo_tutorial_audio_44100hz_mono.wav_0001525440_0001736640.wav",
+          "bytes": 422444,
+          "utc_ticks": 639249968263675514
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\5-wav32k\\mambo_tutorial_audio_44100hz_mono.wav_0001736640_0001907520.wav",
+          "bytes": 341804,
+          "utc_ticks": 639249968266638848
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\5-wav32k\\mambo_tutorial_audio_44100hz_mono.wav_0001907520_0002027520.wav",
+          "bytes": 240044,
+          "utc_ticks": 639249968274510559
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\5-wav32k\\mambo_tutorial_audio_44100hz_mono.wav_0002027520_0002155520.wav",
+          "bytes": 256044,
+          "utc_ticks": 639249968282072478
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\5-wav32k\\mambo_tutorial_audio_44100hz_mono.wav_0002155520_0002334400.wav",
+          "bytes": 357804,
+          "utc_ticks": 639249968289260064
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\5-wav32k\\mambo_tutorial_audio_44100hz_mono.wav_0002334400_0002492160.wav",
+          "bytes": 315564,
+          "utc_ticks": 639249968296230600
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\5-wav32k\\mambo_tutorial_audio_44100hz_mono.wav_0002492160_0002659200.wav",
+          "bytes": 334124,
+          "utc_ticks": 639249968300999237
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\5-wav32k\\mambo_tutorial_audio_44100hz_mono.wav_0002659200_0002804160.wav",
+          "bytes": 289964,
+          "utc_ticks": 639249968304161427
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\5-wav32k\\mambo_tutorial_audio_44100hz_mono.wav_0002804160_0002953600.wav",
+          "bytes": 298924,
+          "utc_ticks": 639249968311315520
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\5-wav32k\\mambo_tutorial_audio_44100hz_mono.wav_0002953600_0003108480.wav",
+          "bytes": 309804,
+          "utc_ticks": 639249968316352350
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\5-wav32k\\mambo_tutorial_audio_44100hz_mono.wav_0003108480_0003262720.wav",
+          "bytes": 308524,
+          "utc_ticks": 639249968322470013
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\5-wav32k\\mambo_tutorial_audio_44100hz_mono.wav_0003262720_0003386880.wav",
+          "bytes": 248364,
+          "utc_ticks": 639249968329616574
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\5-wav32k\\mambo_tutorial_audio_44100hz_mono.wav_0003386880_0003541760.wav",
+          "bytes": 309804,
+          "utc_ticks": 639249968336856433
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\5-wav32k\\mambo_tutorial_audio_44100hz_mono.wav_0003541760_0003734400.wav",
+          "bytes": 385324,
+          "utc_ticks": 639249968343538598
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\5-wav32k\\mambo_tutorial_audio_44100hz_mono.wav_0003734400_0003854080.wav",
+          "bytes": 239404,
+          "utc_ticks": 639249968348432324
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\5-wav32k\\mambo_tutorial_audio_44100hz_mono.wav_0003854080_0004003520.wav",
+          "bytes": 298924,
+          "utc_ticks": 639249968353273437
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\5-wav32k\\mambo_tutorial_audio_44100hz_mono.wav_0004003520_0004186240.wav",
+          "bytes": 365484,
+          "utc_ticks": 639249968360612921
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\5-wav32k\\mambo_tutorial_audio_44100hz_mono.wav_0004186240_0004321600.wav",
+          "bytes": 270764,
+          "utc_ticks": 639249968366571366
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\5-wav32k\\mambo_tutorial_audio_44100hz_mono.wav_0004321600_0004452480.wav",
+          "bytes": 261804,
+          "utc_ticks": 639249968368752690
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\5-wav32k\\mambo_tutorial_audio_44100hz_mono.wav_0004452480_0004577920.wav",
+          "bytes": 250924,
+          "utc_ticks": 639249968371553062
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\5-wav32k\\mambo_tutorial_audio_44100hz_mono.wav_0004577920_0004747520.wav",
+          "bytes": 339244,
+          "utc_ticks": 639249968374031937
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\5-wav32k\\mambo_tutorial_audio_44100hz_mono.wav_0004747520_0004907840.wav",
+          "bytes": 320684,
+          "utc_ticks": 639249968383304156
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\5-wav32k\\mambo_tutorial_audio_44100hz_mono.wav_0004907840_0005092800.wav",
+          "bytes": 369964,
+          "utc_ticks": 639249968392313212
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\5-wav32k\\mambo_tutorial_audio_44100hz_mono.wav_0005092800_0005242560.wav",
+          "bytes": 299564,
+          "utc_ticks": 639249968403095840
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\5-wav32k\\mambo_tutorial_audio_44100hz_mono.wav_0005242560_0005379520.wav",
+          "bytes": 273964,
+          "utc_ticks": 639249968412513596
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\5-wav32k\\mambo_tutorial_audio_44100hz_mono.wav_0005379520_0005529920.wav",
+          "bytes": 300844,
+          "utc_ticks": 639249968418083485
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\5-wav32k\\mambo_tutorial_audio_44100hz_mono.wav_0005529920_0005705280.wav",
+          "bytes": 350764,
+          "utc_ticks": 639249968422886077
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\5-wav32k\\mambo_tutorial_audio_44100hz_mono.wav_0005705280_0005846080.wav",
+          "bytes": 281644,
+          "utc_ticks": 639249968425343304
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\5-wav32k\\mambo_tutorial_audio_44100hz_mono.wav_0005846080_0006019200.wav",
+          "bytes": 346284,
+          "utc_ticks": 639249968428818628
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\6-name2semantic-0.tsv",
+          "bytes": 20880,
+          "utc_ticks": 639249968812335841
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\6-name2semantic.tsv",
+          "bytes": 20906,
+          "utc_ticks": 639249974185453899
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\7-sv_cn\\mambo_tutorial_audio_44100hz_mono.wav_0000000000_0000201600.wav.pt",
+          "bytes": 41740,
+          "utc_ticks": 639249968634664483
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\7-sv_cn\\mambo_tutorial_audio_44100hz_mono.wav_0000201600_0000351360.wav.pt",
+          "bytes": 41740,
+          "utc_ticks": 639249968636737872
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\7-sv_cn\\mambo_tutorial_audio_44100hz_mono.wav_0000351360_0000523200.wav.pt",
+          "bytes": 41740,
+          "utc_ticks": 639249968638656797
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\7-sv_cn\\mambo_tutorial_audio_44100hz_mono.wav_0000523200_0000664960.wav.pt",
+          "bytes": 41743,
+          "utc_ticks": 639249968640492148
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\7-sv_cn\\mambo_tutorial_audio_44100hz_mono.wav_0000664960_0000793280.wav.pt",
+          "bytes": 41743,
+          "utc_ticks": 639249968642463514
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\7-sv_cn\\mambo_tutorial_audio_44100hz_mono.wav_0000793280_0000954560.wav.pt",
+          "bytes": 41740,
+          "utc_ticks": 639249968644300396
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\7-sv_cn\\mambo_tutorial_audio_44100hz_mono.wav_0000954560_0001085440.wav.pt",
+          "bytes": 41740,
+          "utc_ticks": 639249968646172697
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\7-sv_cn\\mambo_tutorial_audio_44100hz_mono.wav_0001085440_0001226240.wav.pt",
+          "bytes": 41743,
+          "utc_ticks": 639249968647901614
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\7-sv_cn\\mambo_tutorial_audio_44100hz_mono.wav_0001226240_0001355840.wav.pt",
+          "bytes": 41743,
+          "utc_ticks": 639249968649549931
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\7-sv_cn\\mambo_tutorial_audio_44100hz_mono.wav_0001355840_0001525440.wav.pt",
+          "bytes": 41743,
+          "utc_ticks": 639249968651412611
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\7-sv_cn\\mambo_tutorial_audio_44100hz_mono.wav_0001525440_0001736640.wav.pt",
+          "bytes": 41743,
+          "utc_ticks": 639249968653104591
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\7-sv_cn\\mambo_tutorial_audio_44100hz_mono.wav_0001736640_0001907520.wav.pt",
+          "bytes": 41743,
+          "utc_ticks": 639249968654584909
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\7-sv_cn\\mambo_tutorial_audio_44100hz_mono.wav_0001907520_0002027520.wav.pt",
+          "bytes": 41740,
+          "utc_ticks": 639249968656539428
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\7-sv_cn\\mambo_tutorial_audio_44100hz_mono.wav_0002027520_0002155520.wav.pt",
+          "bytes": 41743,
+          "utc_ticks": 639249968657727778
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\7-sv_cn\\mambo_tutorial_audio_44100hz_mono.wav_0002155520_0002334400.wav.pt",
+          "bytes": 41740,
+          "utc_ticks": 639249968659514079
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\7-sv_cn\\mambo_tutorial_audio_44100hz_mono.wav_0002334400_0002492160.wav.pt",
+          "bytes": 41743,
+          "utc_ticks": 639249968661426196
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\7-sv_cn\\mambo_tutorial_audio_44100hz_mono.wav_0002492160_0002659200.wav.pt",
+          "bytes": 41740,
+          "utc_ticks": 639249968663314421
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\7-sv_cn\\mambo_tutorial_audio_44100hz_mono.wav_0002659200_0002804160.wav.pt",
+          "bytes": 41740,
+          "utc_ticks": 639249968665102087
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\7-sv_cn\\mambo_tutorial_audio_44100hz_mono.wav_0002804160_0002953600.wav.pt",
+          "bytes": 41740,
+          "utc_ticks": 639249968665937524
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\7-sv_cn\\mambo_tutorial_audio_44100hz_mono.wav_0002953600_0003108480.wav.pt",
+          "bytes": 41743,
+          "utc_ticks": 639249968667745945
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\7-sv_cn\\mambo_tutorial_audio_44100hz_mono.wav_0003108480_0003262720.wav.pt",
+          "bytes": 41743,
+          "utc_ticks": 639249968669505499
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\7-sv_cn\\mambo_tutorial_audio_44100hz_mono.wav_0003262720_0003386880.wav.pt",
+          "bytes": 41743,
+          "utc_ticks": 639249968671334324
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\7-sv_cn\\mambo_tutorial_audio_44100hz_mono.wav_0003386880_0003541760.wav.pt",
+          "bytes": 41740,
+          "utc_ticks": 639249968671815492
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\7-sv_cn\\mambo_tutorial_audio_44100hz_mono.wav_0003541760_0003734400.wav.pt",
+          "bytes": 41743,
+          "utc_ticks": 639249968673615013
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\7-sv_cn\\mambo_tutorial_audio_44100hz_mono.wav_0003734400_0003854080.wav.pt",
+          "bytes": 41740,
+          "utc_ticks": 639249968675227671
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\7-sv_cn\\mambo_tutorial_audio_44100hz_mono.wav_0003854080_0004003520.wav.pt",
+          "bytes": 41743,
+          "utc_ticks": 639249968675808481
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\7-sv_cn\\mambo_tutorial_audio_44100hz_mono.wav_0004003520_0004186240.wav.pt",
+          "bytes": 41740,
+          "utc_ticks": 639249968677544006
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\7-sv_cn\\mambo_tutorial_audio_44100hz_mono.wav_0004186240_0004321600.wav.pt",
+          "bytes": 41743,
+          "utc_ticks": 639249968679354007
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\7-sv_cn\\mambo_tutorial_audio_44100hz_mono.wav_0004321600_0004452480.wav.pt",
+          "bytes": 41743,
+          "utc_ticks": 639249968679955237
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\7-sv_cn\\mambo_tutorial_audio_44100hz_mono.wav_0004452480_0004577920.wav.pt",
+          "bytes": 41740,
+          "utc_ticks": 639249968681623460
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\7-sv_cn\\mambo_tutorial_audio_44100hz_mono.wav_0004577920_0004747520.wav.pt",
+          "bytes": 41740,
+          "utc_ticks": 639249968682270922
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\7-sv_cn\\mambo_tutorial_audio_44100hz_mono.wav_0004747520_0004907840.wav.pt",
+          "bytes": 41743,
+          "utc_ticks": 639249968683799156
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\7-sv_cn\\mambo_tutorial_audio_44100hz_mono.wav_0004907840_0005092800.wav.pt",
+          "bytes": 41743,
+          "utc_ticks": 639249968685178410
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\7-sv_cn\\mambo_tutorial_audio_44100hz_mono.wav_0005092800_0005242560.wav.pt",
+          "bytes": 41743,
+          "utc_ticks": 639249968685677111
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\7-sv_cn\\mambo_tutorial_audio_44100hz_mono.wav_0005242560_0005379520.wav.pt",
+          "bytes": 41743,
+          "utc_ticks": 639249968687463046
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\7-sv_cn\\mambo_tutorial_audio_44100hz_mono.wav_0005379520_0005529920.wav.pt",
+          "bytes": 41740,
+          "utc_ticks": 639249968688521438
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\7-sv_cn\\mambo_tutorial_audio_44100hz_mono.wav_0005529920_0005705280.wav.pt",
+          "bytes": 41743,
+          "utc_ticks": 639249968690315125
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\7-sv_cn\\mambo_tutorial_audio_44100hz_mono.wav_0005705280_0005846080.wav.pt",
+          "bytes": 41743,
+          "utc_ticks": 639249968690933097
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\7-sv_cn\\mambo_tutorial_audio_44100hz_mono.wav_0005846080_0006019200.wav.pt",
+          "bytes": 41743,
+          "utc_ticks": 639249968692947085
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\attempt_before_retry_20260914_233909\\01_text.err.log",
+          "bytes": 422,
+          "utc_ticks": 639249967913790618
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\attempt_before_retry_20260914_233909\\01_text.out.log",
+          "bytes": 2535,
+          "utc_ticks": 639249967991630497
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\attempt_before_retry_20260914_233909\\02_hubert.err.log",
+          "bytes": 422,
+          "utc_ticks": 639249968185604342
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\attempt_before_retry_20260914_233909\\02_hubert.out.log",
+          "bytes": 0,
+          "utc_ticks": 639249968005083418
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\attempt_before_retry_20260914_233909\\03_speaker.err.log",
+          "bytes": 341,
+          "utc_ticks": 639249968625972680
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\attempt_before_retry_20260914_233909\\03_speaker.out.log",
+          "bytes": 0,
+          "utc_ticks": 639249968454131285
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\attempt_before_retry_20260914_233909\\04_semantic.err.log",
+          "bytes": 0,
+          "utc_ticks": 639249968701981302
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\attempt_before_retry_20260914_233909\\04_semantic.out.log",
+          "bytes": 138,
+          "utc_ticks": 639249968797840396
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\attempt_before_retry_20260914_233909\\05_sovits.err.log",
+          "bytes": 102563,
+          "utc_ticks": 639249970569235899
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\attempt_before_retry_20260914_233909\\05_sovits.out.log",
+          "bytes": 3103,
+          "utc_ticks": 639249970528956261
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\attempt_before_retry_20260914_233909\\config.json",
+          "bytes": 2407,
+          "utc_ticks": 639249969670060664
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\attempt_before_retry_20260914_233909\\input_audit.json",
+          "bytes": 15081,
+          "utc_ticks": 639249967832440247
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\attempt_before_retry_20260914_233909\\pipeline_status.json",
+          "bytes": 765,
+          "utc_ticks": 639249970587792350
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\attempt_before_retry_20260914_233909\\run_s2.json",
+          "bytes": 2407,
+          "utc_ticks": 639249968923084461
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\attempt_before_retry_20260914_233909\\train.log",
+          "bytes": 2608,
+          "utc_ticks": 639249970528956261
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\attempt_before_retry_20260914_234257\\01_text.err.log",
+          "bytes": 0,
+          "utc_ticks": 639249971494705850
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\attempt_before_retry_20260914_234257\\01_text.out.log",
+          "bytes": 0,
+          "utc_ticks": 639249971494705850
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\attempt_before_retry_20260914_234257\\02_hubert.err.log",
+          "bytes": 422,
+          "utc_ticks": 639249971674367913
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\attempt_before_retry_20260914_234257\\02_hubert.out.log",
+          "bytes": 0,
+          "utc_ticks": 639249971564519116
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\attempt_before_retry_20260914_234257\\03_speaker.err.log",
+          "bytes": 0,
+          "utc_ticks": 639249971690264880
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\attempt_before_retry_20260914_234257\\03_speaker.out.log",
+          "bytes": 0,
+          "utc_ticks": 639249971690264880
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\attempt_before_retry_20260914_234257\\04_semantic.err.log",
+          "bytes": 0,
+          "utc_ticks": 639249971762896349
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\attempt_before_retry_20260914_234257\\04_semantic.out.log",
+          "bytes": 0,
+          "utc_ticks": 639249971762896349
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\attempt_before_retry_20260914_234257\\05_sovits.err.log",
+          "bytes": 5350,
+          "utc_ticks": 639249972882470603
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\attempt_before_retry_20260914_234257\\05_sovits.out.log",
+          "bytes": 3310,
+          "utc_ticks": 639249972590531877
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\attempt_before_retry_20260914_234257\\config.json",
+          "bytes": 2407,
+          "utc_ticks": 639249972167237943
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\attempt_before_retry_20260914_234257\\input_audit.json",
+          "bytes": 15081,
+          "utc_ticks": 639249971494695844
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\attempt_before_retry_20260914_234257\\pipeline_status.json",
+          "bytes": 760,
+          "utc_ticks": 639249972893575511
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\attempt_before_retry_20260914_234257\\run_s2.json",
+          "bytes": 2407,
+          "utc_ticks": 639249971927496571
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\attempt_before_retry_20260914_234257\\train.log",
+          "bytes": 5447,
+          "utc_ticks": 639249972590531877
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\config.json",
+          "bytes": 2407,
+          "utc_ticks": 639249974393395688
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\eval\\events.out.tfevents.1789400112.LAPTOP-152H5JNQ.62480.1",
+          "bytes": 88,
+          "utc_ticks": 639249969123082829
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\eval\\events.out.tfevents.1789400409.LAPTOP-152H5JNQ.56520.1",
+          "bytes": 88,
+          "utc_ticks": 639249972093965660
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\eval\\events.out.tfevents.1789400643.LAPTOP-152H5JNQ.60420.1",
+          "bytes": 88,
+          "utc_ticks": 639249974430987099
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\events.out.tfevents.1789400112.LAPTOP-152H5JNQ.62480.0",
+          "bytes": 204554,
+          "utc_ticks": 639249969820445075
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\events.out.tfevents.1789400409.LAPTOP-152H5JNQ.56520.0",
+          "bytes": 205347,
+          "utc_ticks": 639249972273687788
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\events.out.tfevents.1789400643.LAPTOP-152H5JNQ.60420.0",
+          "bytes": 189036,
+          "utc_ticks": 639249974509246780
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\inference.err.log",
+          "bytes": 5422,
+          "utc_ticks": 639249985813125925
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\inference.out.log",
+          "bytes": 7614,
+          "utc_ticks": 639249985815729173
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\input_audit.json",
+          "bytes": 15081,
+          "utc_ticks": 639249973772336730
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\logs_s1_v2ProPlus\\ckpt\\epoch=4-step=20.ckpt",
+          "bytes": 931417153,
+          "utc_ticks": 639249977428954174
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\logs_s1_v2ProPlus\\logs_s1_v2ProPlus\\version_0\\events.out.tfevents.1789400908.LAPTOP-152H5JNQ.43196.0",
+          "bytes": 4703,
+          "utc_ticks": 639249977433251517
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\logs_s1_v2ProPlus\\logs_s1_v2ProPlus\\version_0\\hparams.yaml",
+          "bytes": 1445,
+          "utc_ticks": 639249977091502099
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\logs_s2_v2ProPlus\\D_233333333333.pth",
+          "bytes": 758455605,
+          "utc_ticks": 639249975636712531
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\logs_s2_v2ProPlus\\G_233333333333.pth",
+          "bytes": 1177881987,
+          "utc_ticks": 639249975522763684
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\pipeline_status_before_process_exit.json",
+          "bytes": 729,
+          "utc_ticks": 639249974267791932
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\pipeline_status.json",
+          "bytes": 1673,
+          "utc_ticks": 639249980075974101
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\run_s1_recovery.yaml",
+          "bytes": 1369,
+          "utc_ticks": 639249976969741504
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\run_s2.json",
+          "bytes": 2407,
+          "utc_ticks": 639249974267791932
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\train.log",
+          "bytes": 9424,
+          "utc_ticks": 639249975726855567
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\training_input.list",
+          "bytes": 9402,
+          "utc_ticks": 639249973772217808
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\logs\\manbo_narrator_zh_v2_corrected\\weight_before_inference.json",
+          "bytes": 83,
+          "utc_ticks": 639249959358756488
+        }
+      ],
+      "bytes": 2900562619.0
+    },
+    {
+      "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1",
+      "status": "recycled",
+      "files": [
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\asr_ja\\slicer.list",
+          "bytes": 27362,
+          "utc_ticks": 639249100806342144
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\asr\\slicer.list",
+          "bytes": 24093,
+          "utc_ticks": 639249078445025539
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0000000000_0000214720.wav",
+          "bytes": 429484,
+          "utc_ticks": 639249077093806250
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0000217600_0000278400.wav",
+          "bytes": 121644,
+          "utc_ticks": 639249077093822561
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0000344000_0000500800.wav",
+          "bytes": 313644,
+          "utc_ticks": 639249077093843665
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0000517120_0000590400.wav",
+          "bytes": 146604,
+          "utc_ticks": 639249077093859000
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0000635520_0000821760.wav",
+          "bytes": 372524,
+          "utc_ticks": 639249077093899448
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0000821760_0000907840.wav",
+          "bytes": 172204,
+          "utc_ticks": 639249077093915651
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0000952000_0001173120.wav",
+          "bytes": 442284,
+          "utc_ticks": 639249077093936804
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0001222400_0001359360.wav",
+          "bytes": 273964,
+          "utc_ticks": 639249077093957016
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0001359360_0001519360.wav",
+          "bytes": 320044,
+          "utc_ticks": 639249077093967064
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0001540160_0001717120.wav",
+          "bytes": 353964,
+          "utc_ticks": 639249077093977165
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0001732480_0001877440.wav",
+          "bytes": 289964,
+          "utc_ticks": 639249077093997248
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0001877440_0002005440.wav",
+          "bytes": 256044,
+          "utc_ticks": 639249077094007362
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0002005440_0002160960.wav",
+          "bytes": 311084,
+          "utc_ticks": 639249077094022428
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0002189760_0002326720.wav",
+          "bytes": 273964,
+          "utc_ticks": 639249077094042522
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0002326720_0002463040.wav",
+          "bytes": 272684,
+          "utc_ticks": 639249077094054547
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0002487360_0002615040.wav",
+          "bytes": 255404,
+          "utc_ticks": 639249077094064605
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0002615040_0002736640.wav",
+          "bytes": 243244,
+          "utc_ticks": 639249077094075042
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0002751360_0002875200.wav",
+          "bytes": 247724,
+          "utc_ticks": 639249077094085113
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0002875200_0003001600.wav",
+          "bytes": 252844,
+          "utc_ticks": 639249077094095155
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0003017600_0003164800.wav",
+          "bytes": 294444,
+          "utc_ticks": 639249077094105194
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0003205440_0003323520.wav",
+          "bytes": 236204,
+          "utc_ticks": 639249077094120258
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0003323520_0003440320.wav",
+          "bytes": 233644,
+          "utc_ticks": 639249077094130504
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0003468800_0003580160.wav",
+          "bytes": 222764,
+          "utc_ticks": 639249077094140548
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0003603840_0003811520.wav",
+          "bytes": 415404,
+          "utc_ticks": 639249077094150594
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0003811520_0003920640.wav",
+          "bytes": 218284,
+          "utc_ticks": 639249077094170722
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0003966400_0004106880.wav",
+          "bytes": 281004,
+          "utc_ticks": 639249077094180788
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0004106880_0004285440.wav",
+          "bytes": 357164,
+          "utc_ticks": 639249077094190840
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0004331200_0004489280.wav",
+          "bytes": 316204,
+          "utc_ticks": 639249077094202324
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0004489280_0004589120.wav",
+          "bytes": 199724,
+          "utc_ticks": 639249077094217384
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0004649600_0004775360.wav",
+          "bytes": 251564,
+          "utc_ticks": 639249077094217384
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0004775360_0004939200.wav",
+          "bytes": 327724,
+          "utc_ticks": 639249077094227610
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0004939200_0005154560.wav",
+          "bytes": 430764,
+          "utc_ticks": 639249077094247745
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0005182080_0005305600.wav",
+          "bytes": 247084,
+          "utc_ticks": 639249077094257801
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0005305600_0005450880.wav",
+          "bytes": 290604,
+          "utc_ticks": 639249077094267875
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0005464960_0005625600.wav",
+          "bytes": 321324,
+          "utc_ticks": 639249077094287964
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0005625600_0005771520.wav",
+          "bytes": 291884,
+          "utc_ticks": 639249077094298044
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0005783360_0005930560.wav",
+          "bytes": 294444,
+          "utc_ticks": 639249077094308084
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0005930560_0006066560.wav",
+          "bytes": 272044,
+          "utc_ticks": 639249077094318095
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0006066560_0006119040.wav",
+          "bytes": 105004,
+          "utc_ticks": 639249077094323163
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0006180800_0006314880.wav",
+          "bytes": 268204,
+          "utc_ticks": 639249077094323163
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0006314880_0006404160.wav",
+          "bytes": 178604,
+          "utc_ticks": 639249077094333203
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0006499200_0006643520.wav",
+          "bytes": 288684,
+          "utc_ticks": 639249077094355030
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0006643520_0006790400.wav",
+          "bytes": 293804,
+          "utc_ticks": 639249077094365103
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0006790400_0006899200.wav",
+          "bytes": 217644,
+          "utc_ticks": 639249077094375552
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0006906240_0007055040.wav",
+          "bytes": 297644,
+          "utc_ticks": 639249077094385609
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0007096000_0007215040.wav",
+          "bytes": 238124,
+          "utc_ticks": 639249077094395676
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0007226560_0007367040.wav",
+          "bytes": 281004,
+          "utc_ticks": 639249077094405758
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0007367680_0007541120.wav",
+          "bytes": 346924,
+          "utc_ticks": 639249077094420820
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0007541120_0007675840.wav",
+          "bytes": 269484,
+          "utc_ticks": 639249077094441137
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0007675840_0007807360.wav",
+          "bytes": 263084,
+          "utc_ticks": 639249077094451208
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0007807360_0007975680.wav",
+          "bytes": 336684,
+          "utc_ticks": 639249077094451208
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0007977280_0008065280.wav",
+          "bytes": 176044,
+          "utc_ticks": 639249077094461267
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0008102080_0008233600.wav",
+          "bytes": 263084,
+          "utc_ticks": 639249077094471329
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0008237760_0008392000.wav",
+          "bytes": 308524,
+          "utc_ticks": 639249077094481396
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0008432000_0008566720.wav",
+          "bytes": 269484,
+          "utc_ticks": 639249077094497253
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0008566720_0008670080.wav",
+          "bytes": 206764,
+          "utc_ticks": 639249077094507369
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0008705920_0008890560.wav",
+          "bytes": 369324,
+          "utc_ticks": 639249077094522434
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0008890560_0009064320.wav",
+          "bytes": 347564,
+          "utc_ticks": 639249077094532502
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0009075200_0009238400.wav",
+          "bytes": 326444,
+          "utc_ticks": 639249077094542558
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0009238400_0009398720.wav",
+          "bytes": 320684,
+          "utc_ticks": 639249077094562675
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0009401920_0009534080.wav",
+          "bytes": 264364,
+          "utc_ticks": 639249077094572718
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0009534080_0009752640.wav",
+          "bytes": 437164,
+          "utc_ticks": 639249077094582804
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0009752640_0009927040.wav",
+          "bytes": 348844,
+          "utc_ticks": 639249077094592845
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0009927040_0010076800.wav",
+          "bytes": 299564,
+          "utc_ticks": 639249077094602982
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0010076800_0010225280.wav",
+          "bytes": 297004,
+          "utc_ticks": 639249077094618047
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0010225280_0010306560.wav",
+          "bytes": 162604,
+          "utc_ticks": 639249077094628262
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0010350720_0010513280.wav",
+          "bytes": 325164,
+          "utc_ticks": 639249077094638354
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0010513280_0010605760.wav",
+          "bytes": 185004,
+          "utc_ticks": 639249077094648397
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0010650560_0010823040.wav",
+          "bytes": 345004,
+          "utc_ticks": 639249077094660377
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0010823040_0010959360.wav",
+          "bytes": 272684,
+          "utc_ticks": 639249077094670872
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0010959360_0011128960.wav",
+          "bytes": 339244,
+          "utc_ticks": 639249077094691053
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0011128960_0011201600.wav",
+          "bytes": 145324,
+          "utc_ticks": 639249077094701131
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0011241920_0011381120.wav",
+          "bytes": 278444,
+          "utc_ticks": 639249077094711182
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0011381120_0011488320.wav",
+          "bytes": 214444,
+          "utc_ticks": 639249077094711182
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0011544960_0011685760.wav",
+          "bytes": 281644,
+          "utc_ticks": 639249077094726254
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0011685760_0011884160.wav",
+          "bytes": 396844,
+          "utc_ticks": 639249077094736307
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0011942400_0012091840.wav",
+          "bytes": 298924,
+          "utc_ticks": 639249077094746407
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0012091840_0012215360.wav",
+          "bytes": 247084,
+          "utc_ticks": 639249077094756456
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0012215360_0012345600.wav",
+          "bytes": 260524,
+          "utc_ticks": 639249077094766507
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0012354240_0012478080.wav",
+          "bytes": 247724,
+          "utc_ticks": 639249077094776557
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0012518080_0012694720.wav",
+          "bytes": 353324,
+          "utc_ticks": 639249077094786598
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0012695680_0012878720.wav",
+          "bytes": 366124,
+          "utc_ticks": 639249077094811753
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0012891840_0013056640.wav",
+          "bytes": 329644,
+          "utc_ticks": 639249077094816817
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0013056640_0013197120.wav",
+          "bytes": 281004,
+          "utc_ticks": 639249077094837039
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0013210560_0013345920.wav",
+          "bytes": 270764,
+          "utc_ticks": 639249077094847132
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0013345920_0013489600.wav",
+          "bytes": 287404,
+          "utc_ticks": 639249077094857186
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0013499200_0013654400.wav",
+          "bytes": 310444,
+          "utc_ticks": 639249077094867227
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0013696000_0013829120.wav",
+          "bytes": 266284,
+          "utc_ticks": 639249077094877265
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0013829120_0013960000.wav",
+          "bytes": 261804,
+          "utc_ticks": 639249077094887356
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0013968320_0014104000.wav",
+          "bytes": 271404,
+          "utc_ticks": 639249077094897424
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0014104000_0014237440.wav",
+          "bytes": 266924,
+          "utc_ticks": 639249077094907467
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0014237440_0014368320.wav",
+          "bytes": 261804,
+          "utc_ticks": 639249077094907467
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0014376640_0014512000.wav",
+          "bytes": 270764,
+          "utc_ticks": 639249077094917463
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0014512000_0014645760.wav",
+          "bytes": 267564,
+          "utc_ticks": 639249077094922526
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0014645760_0014776640.wav",
+          "bytes": 261804,
+          "utc_ticks": 639249077094932561
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0014785280_0014919680.wav",
+          "bytes": 268844,
+          "utc_ticks": 639249077094942608
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0014919680_0015054080.wav",
+          "bytes": 268844,
+          "utc_ticks": 639249077094952702
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0015054080_0015184960.wav",
+          "bytes": 261804,
+          "utc_ticks": 639249077094964114
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0015193600_0015328960.wav",
+          "bytes": 270764,
+          "utc_ticks": 639249077094974559
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0015328960_0015463040.wav",
+          "bytes": 268204,
+          "utc_ticks": 639249077094984604
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0015463040_0015593280.wav",
+          "bytes": 260524,
+          "utc_ticks": 639249077094994653
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0015601280_0015735040.wav",
+          "bytes": 267564,
+          "utc_ticks": 639249077095004757
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0015735040_0015941120.wav",
+          "bytes": 412204,
+          "utc_ticks": 639249077095004757
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0015941120_0016064640.wav",
+          "bytes": 247084,
+          "utc_ticks": 639249077095030066
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0016064640_0016190400.wav",
+          "bytes": 251564,
+          "utc_ticks": 639249077095040110
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0016190400_0016329920.wav",
+          "bytes": 279084,
+          "utc_ticks": 639249077095050174
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0016329920_0016448960.wav",
+          "bytes": 238124,
+          "utc_ticks": 639249077095060242
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0016448960_0016577920.wav",
+          "bytes": 257964,
+          "utc_ticks": 639249077095070293
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0016577920_0016783040.wav",
+          "bytes": 410284,
+          "utc_ticks": 639249077095080365
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0016783040_0016902400.wav",
+          "bytes": 238764,
+          "utc_ticks": 639249077095090461
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0016909440_0017107520.wav",
+          "bytes": 396204,
+          "utc_ticks": 639249077095112122
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0017107520_0017304000.wav",
+          "bytes": 393004,
+          "utc_ticks": 639249077095127392
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0017318080_0017486080.wav",
+          "bytes": 336044,
+          "utc_ticks": 639249077095137437
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0017567360_0017707200.wav",
+          "bytes": 279724,
+          "utc_ticks": 639249077095147500
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0017707200_0017813120.wav",
+          "bytes": 211884,
+          "utc_ticks": 639249077095157551
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0017856960_0017968000.wav",
+          "bytes": 222124,
+          "utc_ticks": 639249077095167616
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0017990720_0018122560.wav",
+          "bytes": 263724,
+          "utc_ticks": 639249077095177660
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0018129920_0018247360.wav",
+          "bytes": 234924,
+          "utc_ticks": 639249077095187703
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0018252480_0018388800.wav",
+          "bytes": 272684,
+          "utc_ticks": 639249077095197783
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0018388800_0018539200.wav",
+          "bytes": 300844,
+          "utc_ticks": 639249077095207848
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0018539200_0018674240.wav",
+          "bytes": 270124,
+          "utc_ticks": 639249077095217859
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0018684480_0018802880.wav",
+          "bytes": 236844,
+          "utc_ticks": 639249077095228256
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0018847360_0019003200.wav",
+          "bytes": 311724,
+          "utc_ticks": 639249077095238303
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0019003840_0019096000.wav",
+          "bytes": 184364,
+          "utc_ticks": 639249077095248350
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0019127040_0019218240.wav",
+          "bytes": 182444,
+          "utc_ticks": 639249077095259759
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0019271040_0019427840.wav",
+          "bytes": 313644,
+          "utc_ticks": 639249077095270181
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0019473600_0019638400.wav",
+          "bytes": 329644,
+          "utc_ticks": 639249077095280238
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0019669760_0019744320.wav",
+          "bytes": 149164,
+          "utc_ticks": 639249077095290277
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0019802880_0019958720.wav",
+          "bytes": 311724,
+          "utc_ticks": 639249077095300316
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0019958720_0020086080.wav",
+          "bytes": 254764,
+          "utc_ticks": 639249077095310398
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0020087360_0020185920.wav",
+          "bytes": 197164,
+          "utc_ticks": 639249077095325462
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0020201280_0020349760.wav",
+          "bytes": 297004,
+          "utc_ticks": 639249077095325462
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0020351360_0020478080.wav",
+          "bytes": 253484,
+          "utc_ticks": 639249077095335512
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0020487040_0020620160.wav",
+          "bytes": 266284,
+          "utc_ticks": 639249077095345561
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0020645760_0020753920.wav",
+          "bytes": 216364,
+          "utc_ticks": 639249077095355607
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0020774400_0020944000.wav",
+          "bytes": 339244,
+          "utc_ticks": 639249077095365680
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0020944000_0021070400.wav",
+          "bytes": 252844,
+          "utc_ticks": 639249077095375750
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0021084160_0021264000.wav",
+          "bytes": 359724,
+          "utc_ticks": 639249077095385790
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0021268480_0021516800.wav",
+          "bytes": 496684,
+          "utc_ticks": 639249077095421042
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0021523200_0021665280.wav",
+          "bytes": 284204,
+          "utc_ticks": 639249077095431316
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0021665280_0021792000.wav",
+          "bytes": 253484,
+          "utc_ticks": 639249077095441357
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0021792000_0021916480.wav",
+          "bytes": 249004,
+          "utc_ticks": 639249077095451415
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0021925760_0022102720.wav",
+          "bytes": 353964,
+          "utc_ticks": 639249077095451415
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0022106240_0022295040.wav",
+          "bytes": 377644,
+          "utc_ticks": 639249077095471494
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0022298880_0022462400.wav",
+          "bytes": 327084,
+          "utc_ticks": 639249077095481566
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0022462400_0022587520.wav",
+          "bytes": 250284,
+          "utc_ticks": 639249077095491631
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0022587520_0022815360.wav",
+          "bytes": 455724,
+          "utc_ticks": 639249077095516735
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0022815360_0023023360.wav",
+          "bytes": 416044,
+          "utc_ticks": 639249077095537055
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0023029440_0023170880.wav",
+          "bytes": 282924,
+          "utc_ticks": 639249077095547113
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0023170880_0023315200.wav",
+          "bytes": 288684,
+          "utc_ticks": 639249077095569201
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0023317760_0023440960.wav",
+          "bytes": 246444,
+          "utc_ticks": 639249077095576207
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0023487360_0023613440.wav",
+          "bytes": 252204,
+          "utc_ticks": 639249077095586402
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0023621760_0023749120.wav",
+          "bytes": 254764,
+          "utc_ticks": 639249077095596442
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0023749120_0023902400.wav",
+          "bytes": 306604,
+          "utc_ticks": 639249077095606530
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0023934400_0024088000.wav",
+          "bytes": 307244,
+          "utc_ticks": 639249077095621594
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0024094720_0024203520.wav",
+          "bytes": 217644,
+          "utc_ticks": 639249077095631640
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0024329920_0024464640.wav",
+          "bytes": 269484,
+          "utc_ticks": 639249077095641712
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0024520960_0024652800.wav",
+          "bytes": 263724,
+          "utc_ticks": 639249077095651753
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0024657600_0024808960.wav",
+          "bytes": 302764,
+          "utc_ticks": 639249077095651753
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_v1\\slicer\\taici.MP3_0024808960_0025015680.wav",
+          "bytes": 413484,
+          "utc_ticks": 639249077095661823
+        }
+      ],
+      "bytes": 45559935.0
+    },
+    {
+      "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1",
+      "status": "recycled",
+      "files": [
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\asr_large_v3_zh\\mambo_tutorial_narrator.list",
+          "bytes": 9428,
+          "utc_ticks": 639249962987155832
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\asr_large_v3_zh\\transcript_for_review.txt",
+          "bytes": 2948,
+          "utc_ticks": 639249104186098527
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\asr_small_auto\\slicer.list",
+          "bytes": 8996,
+          "utc_ticks": 639249093880227430
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\asr_small_auto\\transcript_candidate.txt",
+          "bytes": 3316,
+          "utc_ticks": 639249093880237511
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\recovery_20260914_232250\\mambo_tutorial_narrator_at_editor_stop.list",
+          "bytes": 9454,
+          "utc_ticks": 639249961010044454
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\recovery_20260914_232250\\mambo_tutorial_narrator_before_recovery.list",
+          "bytes": 9454,
+          "utc_ticks": 639249961010044454
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\recovery_20260914_232250\\recovered_page0_evidence.json",
+          "bytes": 3020,
+          "utc_ticks": 639249962987179696
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\recovery_20260914_232250\\transcript_before_recovery.txt",
+          "bytes": 2828,
+          "utc_ticks": 639249126703700356
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\slicer_tailpad_20260915\\audio\\mambo_tutorial_audio_44100hz_mono.wav_0000000000_0000201600.wav",
+          "bytes": 419244,
+          "utc_ticks": 639250335249790613
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\slicer_tailpad_20260915\\audio\\mambo_tutorial_audio_44100hz_mono.wav_0000201600_0000351360.wav",
+          "bytes": 315564,
+          "utc_ticks": 639250335249916390
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\slicer_tailpad_20260915\\audio\\mambo_tutorial_audio_44100hz_mono.wav_0000351360_0000523200.wav",
+          "bytes": 359724,
+          "utc_ticks": 639250335250089910
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\slicer_tailpad_20260915\\audio\\mambo_tutorial_audio_44100hz_mono.wav_0000523200_0000664960.wav",
+          "bytes": 299564,
+          "utc_ticks": 639250335250249812
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\slicer_tailpad_20260915\\audio\\mambo_tutorial_audio_44100hz_mono.wav_0000664960_0000793280.wav",
+          "bytes": 272684,
+          "utc_ticks": 639250335250417982
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\slicer_tailpad_20260915\\audio\\mambo_tutorial_audio_44100hz_mono.wav_0000793280_0000954560.wav",
+          "bytes": 338604,
+          "utc_ticks": 639250335250561554
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\slicer_tailpad_20260915\\audio\\mambo_tutorial_audio_44100hz_mono.wav_0000954560_0001085440.wav",
+          "bytes": 277804,
+          "utc_ticks": 639250335250722113
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\slicer_tailpad_20260915\\audio\\mambo_tutorial_audio_44100hz_mono.wav_0001085440_0001226240.wav",
+          "bytes": 297644,
+          "utc_ticks": 639250335250827216
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\slicer_tailpad_20260915\\audio\\mambo_tutorial_audio_44100hz_mono.wav_0001226240_0001355840.wav",
+          "bytes": 275244,
+          "utc_ticks": 639250335251009413
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\slicer_tailpad_20260915\\audio\\mambo_tutorial_audio_44100hz_mono.wav_0001355840_0001525440.wav",
+          "bytes": 355244,
+          "utc_ticks": 639250335251146841
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\slicer_tailpad_20260915\\audio\\mambo_tutorial_audio_44100hz_mono.wav_0001525440_0001736640.wav",
+          "bytes": 438444,
+          "utc_ticks": 639250335251300856
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\slicer_tailpad_20260915\\audio\\mambo_tutorial_audio_44100hz_mono.wav_0001736640_0001907520.wav",
+          "bytes": 357804,
+          "utc_ticks": 639250335251412693
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\slicer_tailpad_20260915\\audio\\mambo_tutorial_audio_44100hz_mono.wav_0001907520_0002027520.wav",
+          "bytes": 256044,
+          "utc_ticks": 639250335251571527
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\slicer_tailpad_20260915\\audio\\mambo_tutorial_audio_44100hz_mono.wav_0002027520_0002155520.wav",
+          "bytes": 272044,
+          "utc_ticks": 639250335251723485
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\slicer_tailpad_20260915\\audio\\mambo_tutorial_audio_44100hz_mono.wav_0002155520_0002334400.wav",
+          "bytes": 373804,
+          "utc_ticks": 639250335251877042
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\slicer_tailpad_20260915\\audio\\mambo_tutorial_audio_44100hz_mono.wav_0002334400_0002492160.wav",
+          "bytes": 331564,
+          "utc_ticks": 639250335252034159
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\slicer_tailpad_20260915\\audio\\mambo_tutorial_audio_44100hz_mono.wav_0002492160_0002659200.wav",
+          "bytes": 350124,
+          "utc_ticks": 639250335252202396
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\slicer_tailpad_20260915\\audio\\mambo_tutorial_audio_44100hz_mono.wav_0002659200_0002804160.wav",
+          "bytes": 305964,
+          "utc_ticks": 639250335252333080
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\slicer_tailpad_20260915\\audio\\mambo_tutorial_audio_44100hz_mono.wav_0002804160_0002953600.wav",
+          "bytes": 314924,
+          "utc_ticks": 639250335252508503
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\slicer_tailpad_20260915\\audio\\mambo_tutorial_audio_44100hz_mono.wav_0002953600_0003108480.wav",
+          "bytes": 325804,
+          "utc_ticks": 639250335252589842
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\slicer_tailpad_20260915\\audio\\mambo_tutorial_audio_44100hz_mono.wav_0003108480_0003262720.wav",
+          "bytes": 324524,
+          "utc_ticks": 639250335252801609
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\slicer_tailpad_20260915\\audio\\mambo_tutorial_audio_44100hz_mono.wav_0003262720_0003386880.wav",
+          "bytes": 264364,
+          "utc_ticks": 639250335253018314
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\slicer_tailpad_20260915\\audio\\mambo_tutorial_audio_44100hz_mono.wav_0003386880_0003541760.wav",
+          "bytes": 325804,
+          "utc_ticks": 639250335253164623
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\slicer_tailpad_20260915\\audio\\mambo_tutorial_audio_44100hz_mono.wav_0003541760_0003734400.wav",
+          "bytes": 401324,
+          "utc_ticks": 639250335253293467
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\slicer_tailpad_20260915\\audio\\mambo_tutorial_audio_44100hz_mono.wav_0003734400_0003854080.wav",
+          "bytes": 255404,
+          "utc_ticks": 639250335253457491
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\slicer_tailpad_20260915\\audio\\mambo_tutorial_audio_44100hz_mono.wav_0003854080_0004003520.wav",
+          "bytes": 314924,
+          "utc_ticks": 639250335253616539
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\slicer_tailpad_20260915\\audio\\mambo_tutorial_audio_44100hz_mono.wav_0004003520_0004186240.wav",
+          "bytes": 381484,
+          "utc_ticks": 639250335253752259
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\slicer_tailpad_20260915\\audio\\mambo_tutorial_audio_44100hz_mono.wav_0004186240_0004321600.wav",
+          "bytes": 286764,
+          "utc_ticks": 639250335253914788
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\slicer_tailpad_20260915\\audio\\mambo_tutorial_audio_44100hz_mono.wav_0004321600_0004452480.wav",
+          "bytes": 277804,
+          "utc_ticks": 639250335253996771
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\slicer_tailpad_20260915\\audio\\mambo_tutorial_audio_44100hz_mono.wav_0004452480_0004577920.wav",
+          "bytes": 266924,
+          "utc_ticks": 639250335254200609
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\slicer_tailpad_20260915\\audio\\mambo_tutorial_audio_44100hz_mono.wav_0004577920_0004747520.wav",
+          "bytes": 355244,
+          "utc_ticks": 639250335254333627
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\slicer_tailpad_20260915\\audio\\mambo_tutorial_audio_44100hz_mono.wav_0004747520_0004907840.wav",
+          "bytes": 336684,
+          "utc_ticks": 639250335254542428
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\slicer_tailpad_20260915\\audio\\mambo_tutorial_audio_44100hz_mono.wav_0004907840_0005092800.wav",
+          "bytes": 385964,
+          "utc_ticks": 639250335254679574
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\slicer_tailpad_20260915\\audio\\mambo_tutorial_audio_44100hz_mono.wav_0005092800_0005242560.wav",
+          "bytes": 315564,
+          "utc_ticks": 639250335254854932
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\slicer_tailpad_20260915\\audio\\mambo_tutorial_audio_44100hz_mono.wav_0005242560_0005379520.wav",
+          "bytes": 289964,
+          "utc_ticks": 639250335255032731
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\slicer_tailpad_20260915\\audio\\mambo_tutorial_audio_44100hz_mono.wav_0005379520_0005529920.wav",
+          "bytes": 316844,
+          "utc_ticks": 639250335255167093
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\slicer_tailpad_20260915\\audio\\mambo_tutorial_audio_44100hz_mono.wav_0005529920_0005705280.wav",
+          "bytes": 366764,
+          "utc_ticks": 639250335255369772
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\slicer_tailpad_20260915\\audio\\mambo_tutorial_audio_44100hz_mono.wav_0005705280_0005846080.wav",
+          "bytes": 297644,
+          "utc_ticks": 639250335255492513
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\slicer_tailpad_20260915\\audio\\mambo_tutorial_audio_44100hz_mono.wav_0005846080_0006019200.wav",
+          "bytes": 362284,
+          "utc_ticks": 639250335255622348
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\slicer_tailpad_20260915\\audio\\mambo_tutorial_audio_44100hz_mono.wav_0006019200_0006121920.wav",
+          "bytes": 221434,
+          "utc_ticks": 639250335255790141
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\slicer_tailpad_20260915\\README.md",
+          "bytes": 2448,
+          "utc_ticks": 639250335882653404
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\slicer_tailpad_20260915\\training.list",
+          "bytes": 10356,
+          "utc_ticks": 639250352058331550
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\slicer_tailpad_20260915\\verification.json",
+          "bytes": 33104,
+          "utc_ticks": 639250335256490511
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\slicer\\mambo_tutorial_audio_44100hz_mono.wav_0000000000_0000201600.wav",
+          "bytes": 403244,
+          "utc_ticks": 639249090609632859
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\slicer\\mambo_tutorial_audio_44100hz_mono.wav_0000201600_0000351360.wav",
+          "bytes": 299564,
+          "utc_ticks": 639249090609657493
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\slicer\\mambo_tutorial_audio_44100hz_mono.wav_0000351360_0000523200.wav",
+          "bytes": 343724,
+          "utc_ticks": 639249090609675082
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\slicer\\mambo_tutorial_audio_44100hz_mono.wav_0000523200_0000664960.wav",
+          "bytes": 283564,
+          "utc_ticks": 639249090609695133
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\slicer\\mambo_tutorial_audio_44100hz_mono.wav_0000664960_0000793280.wav",
+          "bytes": 256684,
+          "utc_ticks": 639249090609695133
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\slicer\\mambo_tutorial_audio_44100hz_mono.wav_0000793280_0000954560.wav",
+          "bytes": 322604,
+          "utc_ticks": 639249090609705115
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\slicer\\mambo_tutorial_audio_44100hz_mono.wav_0000954560_0001085440.wav",
+          "bytes": 261804,
+          "utc_ticks": 639249090609727714
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\slicer\\mambo_tutorial_audio_44100hz_mono.wav_0001085440_0001226240.wav",
+          "bytes": 281644,
+          "utc_ticks": 639249090609737698
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\slicer\\mambo_tutorial_audio_44100hz_mono.wav_0001226240_0001355840.wav",
+          "bytes": 259244,
+          "utc_ticks": 639249090609737698
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\slicer\\mambo_tutorial_audio_44100hz_mono.wav_0001355840_0001525440.wav",
+          "bytes": 339244,
+          "utc_ticks": 639249090609761986
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\slicer\\mambo_tutorial_audio_44100hz_mono.wav_0001525440_0001736640.wav",
+          "bytes": 422444,
+          "utc_ticks": 639249090609782325
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\slicer\\mambo_tutorial_audio_44100hz_mono.wav_0001736640_0001907520.wav",
+          "bytes": 341804,
+          "utc_ticks": 639249090609797889
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\slicer\\mambo_tutorial_audio_44100hz_mono.wav_0001907520_0002027520.wav",
+          "bytes": 240044,
+          "utc_ticks": 639249090609797889
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\slicer\\mambo_tutorial_audio_44100hz_mono.wav_0002027520_0002155520.wav",
+          "bytes": 256044,
+          "utc_ticks": 639249090609822793
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\slicer\\mambo_tutorial_audio_44100hz_mono.wav_0002155520_0002334400.wav",
+          "bytes": 357804,
+          "utc_ticks": 639249090609822793
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\slicer\\mambo_tutorial_audio_44100hz_mono.wav_0002334400_0002492160.wav",
+          "bytes": 315564,
+          "utc_ticks": 639249090609847119
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\slicer\\mambo_tutorial_audio_44100hz_mono.wav_0002492160_0002659200.wav",
+          "bytes": 334124,
+          "utc_ticks": 639249090609860485
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\slicer\\mambo_tutorial_audio_44100hz_mono.wav_0002659200_0002804160.wav",
+          "bytes": 289964,
+          "utc_ticks": 639249090609860485
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\slicer\\mambo_tutorial_audio_44100hz_mono.wav_0002804160_0002953600.wav",
+          "bytes": 298924,
+          "utc_ticks": 639249090609883768
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\slicer\\mambo_tutorial_audio_44100hz_mono.wav_0002953600_0003108480.wav",
+          "bytes": 309804,
+          "utc_ticks": 639249090609894142
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\slicer\\mambo_tutorial_audio_44100hz_mono.wav_0003108480_0003262720.wav",
+          "bytes": 308524,
+          "utc_ticks": 639249090609904142
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\slicer\\mambo_tutorial_audio_44100hz_mono.wav_0003262720_0003386880.wav",
+          "bytes": 248364,
+          "utc_ticks": 639249090609918104
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\slicer\\mambo_tutorial_audio_44100hz_mono.wav_0003386880_0003541760.wav",
+          "bytes": 309804,
+          "utc_ticks": 639249090609931321
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\slicer\\mambo_tutorial_audio_44100hz_mono.wav_0003541760_0003734400.wav",
+          "bytes": 385324,
+          "utc_ticks": 639249090609941516
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\slicer\\mambo_tutorial_audio_44100hz_mono.wav_0003734400_0003854080.wav",
+          "bytes": 239404,
+          "utc_ticks": 639249090609962310
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\slicer\\mambo_tutorial_audio_44100hz_mono.wav_0003854080_0004003520.wav",
+          "bytes": 298924,
+          "utc_ticks": 639249090609976243
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\slicer\\mambo_tutorial_audio_44100hz_mono.wav_0004003520_0004186240.wav",
+          "bytes": 365484,
+          "utc_ticks": 639249090609986323
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\slicer\\mambo_tutorial_audio_44100hz_mono.wav_0004186240_0004321600.wav",
+          "bytes": 270764,
+          "utc_ticks": 639249090610001057
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\slicer\\mambo_tutorial_audio_44100hz_mono.wav_0004321600_0004452480.wav",
+          "bytes": 261804,
+          "utc_ticks": 639249090610015031
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\slicer\\mambo_tutorial_audio_44100hz_mono.wav_0004452480_0004577920.wav",
+          "bytes": 250924,
+          "utc_ticks": 639249090610015031
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\slicer\\mambo_tutorial_audio_44100hz_mono.wav_0004577920_0004747520.wav",
+          "bytes": 339244,
+          "utc_ticks": 639249090610028325
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\slicer\\mambo_tutorial_audio_44100hz_mono.wav_0004747520_0004907840.wav",
+          "bytes": 320684,
+          "utc_ticks": 639249090610028325
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\slicer\\mambo_tutorial_audio_44100hz_mono.wav_0004907840_0005092800.wav",
+          "bytes": 369964,
+          "utc_ticks": 639249090610048311
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\slicer\\mambo_tutorial_audio_44100hz_mono.wav_0005092800_0005242560.wav",
+          "bytes": 299564,
+          "utc_ticks": 639249090610058317
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\slicer\\mambo_tutorial_audio_44100hz_mono.wav_0005242560_0005379520.wav",
+          "bytes": 273964,
+          "utc_ticks": 639249090610068323
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\slicer\\mambo_tutorial_audio_44100hz_mono.wav_0005379520_0005529920.wav",
+          "bytes": 300844,
+          "utc_ticks": 639249090610078327
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\slicer\\mambo_tutorial_audio_44100hz_mono.wav_0005529920_0005705280.wav",
+          "bytes": 350764,
+          "utc_ticks": 639249090610091241
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\slicer\\mambo_tutorial_audio_44100hz_mono.wav_0005705280_0005846080.wav",
+          "bytes": 281644,
+          "utc_ticks": 639249090610106036
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\slicer\\mambo_tutorial_audio_44100hz_mono.wav_0005846080_0006019200.wav",
+          "bytes": 346284,
+          "utc_ticks": 639249090610116175
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\slicer\\mambo_tutorial_audio_44100hz_mono.wav_0006019200_0006121920.wav",
+          "bytes": 205434,
+          "utc_ticks": 639249090610126280
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\source\\mambo_tutorial_audio_44100hz_mono_transcript_INVALID_pre_submit.txt",
+          "bytes": 2762,
+          "utc_ticks": 639249111363253235
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\source\\mambo_tutorial_audio_44100hz_mono_transcript.txt",
+          "bytes": 2828,
+          "utc_ticks": 639249126703700356
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\source\\mambo_tutorial_audio_44100hz_mono.wav",
+          "bytes": 16873550,
+          "utc_ticks": 639249090404472166
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\source\\mambo_tutorial_narrator_zh_only.wav",
+          "bytes": 16590498,
+          "utc_ticks": 639249111875803749
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\train_manbo_v2_corrected\\text_corrections.json",
+          "bytes": 1132,
+          "utc_ticks": 639249966851469934
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\output\\nuonuo_mambo_video_v1\\train_manbo_v2_corrected\\training.list",
+          "bytes": 9402,
+          "utc_ticks": 639249966851459943
+        }
+      ],
+      "bytes": 58706624.0
+    },
+    {
+      "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\SoVITS_weights_v2ProPlus\\manbo_narrator_zh_v1_e2_s40.pth",
+      "status": "recycled",
+      "files": [
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\SoVITS_weights_v2ProPlus\\manbo_narrator_zh_v1_e2_s40.pth",
+          "bytes": 172764597,
+          "utc_ticks": 639249953340451909
+        }
+      ],
+      "bytes": 172764597.0
+    },
+    {
+      "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\SoVITS_weights_v2ProPlus\\manbo_narrator_zh_v1_e4_s80.pth",
+      "status": "recycled",
+      "files": [
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\SoVITS_weights_v2ProPlus\\manbo_narrator_zh_v1_e4_s80.pth",
+          "bytes": 172764597,
+          "utc_ticks": 639249953921944067
+        }
+      ],
+      "bytes": 172764597.0
+    },
+    {
+      "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\SoVITS_weights_v2ProPlus\\manbo_narrator_zh_v2_corrected_e2_s40.pth",
+      "status": "recycled",
+      "files": [
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\SoVITS_weights_v2ProPlus\\manbo_narrator_zh_v2_corrected_e2_s40.pth",
+          "bytes": 172764789,
+          "utc_ticks": 639249975073330648
+        }
+      ],
+      "bytes": 172764789.0
+    },
+    {
+      "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\SoVITS_weights_v2ProPlus\\manbo_narrator_zh_v2_corrected_e4_s80.pth",
+      "status": "recycled",
+      "files": [
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\SoVITS_weights_v2ProPlus\\manbo_narrator_zh_v2_corrected_e4_s80.pth",
+          "bytes": 172764789,
+          "utc_ticks": 639249975726233184
+        }
+      ],
+      "bytes": 172764789.0
+    },
+    {
+      "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\TEMP_backup_before_training_ui_20260915_095344",
+      "status": "recycled",
+      "files": [
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\TEMP_backup_before_training_ui_20260915_095344\\gradio\\1ce9c3770d9c97bc1511655b43de2c4112ee4c00a315100309a53fbc800fdae7\\mambo_tutorial_audio_44100hz_mono.wav_0000201600_0000351360.wav",
+          "bytes": 299564,
+          "utc_ticks": 639249962292119803
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\TEMP_backup_before_training_ui_20260915_095344\\gradio\\b8397edc8200deae84b2b447e637543d38216e1e3da760807ff845631da7662d\\audio.wav",
+          "bytes": 252204,
+          "utc_ticks": 639249962391637361
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\TEMP_backup_before_training_ui_20260915_095344\\jieba.cache",
+          "bytes": 9254935,
+          "utc_ticks": 638756616939399460
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\TEMP_backup_before_training_ui_20260915_095344\\tmp_s1.yaml",
+          "bytes": 919,
+          "utc_ticks": 639249954901604384
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\TEMP_backup_before_training_ui_20260915_095344\\tmp_s2.json",
+          "bytes": 1577,
+          "utc_ticks": 639249951872634748
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\TEMP_backup_before_training_ui_20260915_095344\\torch\\kernels\\abs_kernel_vectorized4_arch8.9_nvrtc11.8_sass_46612_5ca80c7cc1f08542488d0fb86de817d6a839599c_tmp_54824",
+          "bytes": 9520,
+          "utc_ticks": 639249962379644019
+        },
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\TEMP_backup_before_training_ui_20260915_095344\\torch\\kernels\\abs_kernel_vectorized4_arch8.9_nvrtc11.8_sass_46612_5ca80c7cc1f08542488d0fb86de817d6a839599c_tmp_56524",
+          "bytes": 9520,
+          "utc_ticks": 639249945606372545
+        }
+      ],
+      "bytes": 9828239.0
+    },
+    {
+      "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\TEMP\\gradio\\0265f7b70f7733eb8e233a1e8c19d62125c275ed3bf1cf87bd966fa1a4973964",
+      "status": "recycled",
+      "files": [
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\TEMP\\gradio\\0265f7b70f7733eb8e233a1e8c19d62125c275ed3bf1cf87bd966fa1a4973964\\mambo_tutorial_audio_44100hz_mono.wav_0002027520_0002155520.wav",
+          "bytes": 272044,
+          "utc_ticks": 639250335251723485
+        }
+      ],
+      "bytes": 272044.0
+    },
+    {
+      "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\TEMP\\gradio\\070d1db6e551e20d121a009f492b3b3bb538b284fffe0f601ae040743559e1b9",
+      "status": "recycled",
+      "files": [
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\TEMP\\gradio\\070d1db6e551e20d121a009f492b3b3bb538b284fffe0f601ae040743559e1b9\\mambo_tutorial_audio_44100hz_mono.wav_0001085440_0001226240.wav",
+          "bytes": 297644,
+          "utc_ticks": 639250335250827216
+        }
+      ],
+      "bytes": 297644.0
+    },
+    {
+      "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\TEMP\\gradio\\1df388f82fe0302355c5b0ae719832bf6b9fb4808f00ecb2ec50d8902c261ae0",
+      "status": "recycled",
+      "files": [
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\TEMP\\gradio\\1df388f82fe0302355c5b0ae719832bf6b9fb4808f00ecb2ec50d8902c261ae0\\mambo_tutorial_audio_44100hz_mono.wav_0000954560_0001085440.wav",
+          "bytes": 277804,
+          "utc_ticks": 639250335250722113
+        }
+      ],
+      "bytes": 277804.0
+    },
+    {
+      "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\TEMP\\gradio\\1ea8ddec42153f250794cee7bbe675e31f1bcc9aae366b20e13cb2724d32d049",
+      "status": "recycled",
+      "files": [
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\TEMP\\gradio\\1ea8ddec42153f250794cee7bbe675e31f1bcc9aae366b20e13cb2724d32d049\\mambo_tutorial_audio_44100hz_mono.wav_0002953600_0003108480.wav",
+          "bytes": 325804,
+          "utc_ticks": 639250335252589842
+        }
+      ],
+      "bytes": 325804.0
+    },
+    {
+      "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\TEMP\\gradio\\3b0d9dc01ab9dbf9d680d44d0972ade9487e3b12f371c6d481a6f8f62a50f4a1",
+      "status": "recycled",
+      "files": [
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\TEMP\\gradio\\3b0d9dc01ab9dbf9d680d44d0972ade9487e3b12f371c6d481a6f8f62a50f4a1\\mambo_tutorial_audio_44100hz_mono.wav_0000523200_0000664960.wav",
+          "bytes": 299564,
+          "utc_ticks": 639250335250249812
+        }
+      ],
+      "bytes": 299564.0
+    },
+    {
+      "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\TEMP\\gradio\\414b11de37c6143f6a691748cb861e39a479d65de8929e087644fadd738904f2",
+      "status": "recycled",
+      "files": [
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\TEMP\\gradio\\414b11de37c6143f6a691748cb861e39a479d65de8929e087644fadd738904f2\\mambo_tutorial_audio_44100hz_mono.wav_0000793280_0000954560.wav",
+          "bytes": 338604,
+          "utc_ticks": 639250335250561554
+        }
+      ],
+      "bytes": 338604.0
+    },
+    {
+      "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\TEMP\\gradio\\4b9c93c00a33a655cb86d47a66d13716553fea147489389fbd832b100d080c40",
+      "status": "recycled",
+      "files": [
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\TEMP\\gradio\\4b9c93c00a33a655cb86d47a66d13716553fea147489389fbd832b100d080c40\\mambo_tutorial_audio_44100hz_mono.wav_0002492160_0002659200.wav",
+          "bytes": 350124,
+          "utc_ticks": 639250335252202396
+        }
+      ],
+      "bytes": 350124.0
+    },
+    {
+      "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\TEMP\\gradio\\581b44c591ecbb39a753864726baea0916296f0d6f140ffcb0b49fcdad3b33c3",
+      "status": "recycled",
+      "files": [
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\TEMP\\gradio\\581b44c591ecbb39a753864726baea0916296f0d6f140ffcb0b49fcdad3b33c3\\mambo_tutorial_audio_44100hz_mono.wav_0001355840_0001525440.wav",
+          "bytes": 355244,
+          "utc_ticks": 639250335251146841
+        }
+      ],
+      "bytes": 355244.0
+    },
+    {
+      "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\TEMP\\gradio\\66a9019d0a61817cb8e4109878ef2d2203d619d0f09e4a514371c8924a968f61",
+      "status": "recycled",
+      "files": [
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\TEMP\\gradio\\66a9019d0a61817cb8e4109878ef2d2203d619d0f09e4a514371c8924a968f61\\mambo_tutorial_audio_44100hz_mono.wav_0001525440_0001736640.wav",
+          "bytes": 438444,
+          "utc_ticks": 639250335251300856
+        }
+      ],
+      "bytes": 438444.0
+    },
+    {
+      "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\TEMP\\gradio\\68b98dcff2efbd1c6f076139a731f09183446838ba1f6d4341cbea0ee69763d3",
+      "status": "recycled",
+      "files": [
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\TEMP\\gradio\\68b98dcff2efbd1c6f076139a731f09183446838ba1f6d4341cbea0ee69763d3\\mambo_tutorial_audio_44100hz_mono.wav_0000351360_0000523200.wav",
+          "bytes": 359724,
+          "utc_ticks": 639250335250089910
+        }
+      ],
+      "bytes": 359724.0
+    },
+    {
+      "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\TEMP\\gradio\\91c8165453c9f92615afee6ddea690021b97548667fa60788cce05f7c20c34d3",
+      "status": "recycled",
+      "files": [
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\TEMP\\gradio\\91c8165453c9f92615afee6ddea690021b97548667fa60788cce05f7c20c34d3\\mambo_tutorial_audio_44100hz_mono.wav_0001907520_0002027520.wav",
+          "bytes": 256044,
+          "utc_ticks": 639250335251571527
+        }
+      ],
+      "bytes": 256044.0
+    },
+    {
+      "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\TEMP\\gradio\\958f6f53e0aacab65962cd77e9705e15aafd629404931060930e4a08f2cfd19c",
+      "status": "recycled",
+      "files": [
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\TEMP\\gradio\\958f6f53e0aacab65962cd77e9705e15aafd629404931060930e4a08f2cfd19c\\mambo_tutorial_audio_44100hz_mono.wav_0002659200_0002804160.wav",
+          "bytes": 305964,
+          "utc_ticks": 639250335252333080
+        }
+      ],
+      "bytes": 305964.0
+    },
+    {
+      "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\TEMP\\gradio\\9969a3922becc901ac3b5d71bb4ce5f0b92fab0048036a358fef6e01b5b7931c",
+      "status": "recycled",
+      "files": [
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\TEMP\\gradio\\9969a3922becc901ac3b5d71bb4ce5f0b92fab0048036a358fef6e01b5b7931c\\mambo_tutorial_audio_44100hz_mono.wav_0002334400_0002492160.wav",
+          "bytes": 331564,
+          "utc_ticks": 639250335252034159
+        }
+      ],
+      "bytes": 331564.0
+    },
+    {
+      "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\TEMP\\gradio\\a74b0d3791a310aa8f252ace1f0e17c8004e209a94514e793a420d018bef8734",
+      "status": "recycled",
+      "files": [
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\TEMP\\gradio\\a74b0d3791a310aa8f252ace1f0e17c8004e209a94514e793a420d018bef8734\\mambo_tutorial_audio_44100hz_mono.wav_0001736640_0001907520.wav",
+          "bytes": 357804,
+          "utc_ticks": 639250335251412693
+        }
+      ],
+      "bytes": 357804.0
+    },
+    {
+      "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\TEMP\\gradio\\a8c518b3085eab5d6dd56859c124bbdbd0645042c8fa729e81f15bb476182839",
+      "status": "recycled",
+      "files": [
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\TEMP\\gradio\\a8c518b3085eab5d6dd56859c124bbdbd0645042c8fa729e81f15bb476182839\\mambo_tutorial_audio_44100hz_mono.wav_0002804160_0002953600.wav",
+          "bytes": 314924,
+          "utc_ticks": 639250335252508503
+        }
+      ],
+      "bytes": 314924.0
+    },
+    {
+      "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\TEMP\\gradio\\c440d7a0c5f3d28bf3bdb2d3bded4d91397fdf6194e3943c1d64d431f771e71c",
+      "status": "recycled",
+      "files": [
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\TEMP\\gradio\\c440d7a0c5f3d28bf3bdb2d3bded4d91397fdf6194e3943c1d64d431f771e71c\\mambo_tutorial_audio_44100hz_mono.wav_0000000000_0000201600.wav",
+          "bytes": 419244,
+          "utc_ticks": 639250335249790613
+        }
+      ],
+      "bytes": 419244.0
+    },
+    {
+      "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\TEMP\\gradio\\c6ba6d5feb82dfb706791f66d5c7081f07d859b37cd41adcd303b8de0e594801",
+      "status": "recycled",
+      "files": [
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\TEMP\\gradio\\c6ba6d5feb82dfb706791f66d5c7081f07d859b37cd41adcd303b8de0e594801\\mambo_tutorial_audio_44100hz_mono.wav_0000201600_0000351360.wav",
+          "bytes": 315564,
+          "utc_ticks": 639250335249916390
+        }
+      ],
+      "bytes": 315564.0
+    },
+    {
+      "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\TEMP\\gradio\\dc721d390d673c0d90b31845ab232a9355f038abd4d5d8281b330ac6b19df342",
+      "status": "recycled",
+      "files": [
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\TEMP\\gradio\\dc721d390d673c0d90b31845ab232a9355f038abd4d5d8281b330ac6b19df342\\mambo_tutorial_audio_44100hz_mono.wav_0002155520_0002334400.wav",
+          "bytes": 373804,
+          "utc_ticks": 639250335251877042
+        }
+      ],
+      "bytes": 373804.0
+    },
+    {
+      "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\TEMP\\gradio\\ef71c591a8b7a15d1f26132469f2c356ee5751b1dcaeabbb595461bcef3e3fb7",
+      "status": "recycled",
+      "files": [
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\TEMP\\gradio\\ef71c591a8b7a15d1f26132469f2c356ee5751b1dcaeabbb595461bcef3e3fb7\\mambo_tutorial_audio_44100hz_mono.wav_0001226240_0001355840.wav",
+          "bytes": 275244,
+          "utc_ticks": 639250335251009413
+        }
+      ],
+      "bytes": 275244.0
+    },
+    {
+      "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\TEMP\\gradio\\f9968b9e8b9677f8c281ac2c608e6f41108b619fcc2e548c155c28f60c13aa17",
+      "status": "recycled",
+      "files": [
+        {
+          "path": "E:\\AI\\GPTSoVITS\\GPT-SoVITS-v2pro-20250604\\TEMP\\gradio\\f9968b9e8b9677f8c281ac2c608e6f41108b619fcc2e548c155c28f60c13aa17\\mambo_tutorial_audio_44100hz_mono.wav_0000664960_0000793280.wav",
+          "bytes": 272684,
+          "utc_ticks": 639250335250417982
+        }
+      ],
+      "bytes": 272684.0
+    },
+    {
+      "path": "E:\\Projects2026\\Prp_voice_servo_unified\\server\\annotation_recovery_20260914_232250.err.log",
+      "status": "recycled",
+      "files": [
+        {
+          "path": "E:\\Projects2026\\Prp_voice_servo_unified\\server\\annotation_recovery_20260914_232250.err.log",
+          "bytes": 0,
+          "utc_ticks": 639249962999814292
+        }
+      ],
+      "bytes": 0.0
+    },
+    {
+      "path": "E:\\Projects2026\\Prp_voice_servo_unified\\server\\annotation_recovery_20260914_232250.out.log",
+      "status": "recycled",
+      "files": [
+        {
+          "path": "E:\\Projects2026\\Prp_voice_servo_unified\\server\\annotation_recovery_20260914_232250.out.log",
+          "bytes": 104,
+          "utc_ticks": 639249963127598074
+        }
+      ],
+      "bytes": 104.0
+    },
+    {
+      "path": "E:\\Projects2026\\Prp_voice_servo_unified\\server\\annotation_ui_20260914_224847.err.log",
+      "status": "recycled",
+      "files": [
+        {
+          "path": "E:\\Projects2026\\Prp_voice_servo_unified\\server\\annotation_ui_20260914_224847.err.log",
+          "bytes": 0,
+          "utc_ticks": 639249941291169705
+        }
+      ],
+      "bytes": 0.0
+    },
+    {
+      "path": "E:\\Projects2026\\Prp_voice_servo_unified\\server\\annotation_ui_20260914_224847.out.log",
+      "status": "recycled",
+      "files": [
+        {
+          "path": "E:\\Projects2026\\Prp_voice_servo_unified\\server\\annotation_ui_20260914_224847.out.log",
+          "bytes": 0,
+          "utc_ticks": 639249941291169705
+        }
+      ],
+      "bytes": 0.0
+    },
+    {
+      "path": "E:\\Projects2026\\Prp_voice_servo_unified\\server\\manbo_v2_pipeline_retry1.err.log",
+      "status": "recycled",
+      "files": [
+        {
+          "path": "E:\\Projects2026\\Prp_voice_servo_unified\\server\\manbo_v2_pipeline_retry1.err.log",
+          "bytes": 1080,
+          "utc_ticks": 639249972893780105
+        }
+      ],
+      "bytes": 1080.0
+    },
+    {
+      "path": "E:\\Projects2026\\Prp_voice_servo_unified\\server\\manbo_v2_pipeline_retry1.out.log",
+      "status": "recycled",
+      "files": [
+        {
+          "path": "E:\\Projects2026\\Prp_voice_servo_unified\\server\\manbo_v2_pipeline_retry1.out.log",
+          "bytes": 591,
+          "utc_ticks": 639249972893701038
+        }
+      ],
+      "bytes": 591.0
+    },
+    {
+      "path": "E:\\Projects2026\\Prp_voice_servo_unified\\server\\manbo_v2_pipeline_retry2.err.log",
+      "status": "recycled",
+      "files": [
+        {
+          "path": "E:\\Projects2026\\Prp_voice_servo_unified\\server\\manbo_v2_pipeline_retry2.err.log",
+          "bytes": 0,
+          "utc_ticks": 639249973769130641
+        }
+      ],
+      "bytes": 0.0
+    },
+    {
+      "path": "E:\\Projects2026\\Prp_voice_servo_unified\\server\\manbo_v2_pipeline_retry2.out.log",
+      "status": "recycled",
+      "files": [
+        {
+          "path": "E:\\Projects2026\\Prp_voice_servo_unified\\server\\manbo_v2_pipeline_retry2.out.log",
+          "bytes": 632,
+          "utc_ticks": 639249974267806697
+        }
+      ],
+      "bytes": 632.0
+    },
+    {
+      "path": "E:\\Projects2026\\Prp_voice_servo_unified\\server\\manbo_v2_pipeline.err.log",
+      "status": "recycled",
+      "files": [
+        {
+          "path": "E:\\Projects2026\\Prp_voice_servo_unified\\server\\manbo_v2_pipeline.err.log",
+          "bytes": 1078,
+          "utc_ticks": 639249970587945894
+        }
+      ],
+      "bytes": 1078.0
+    },
+    {
+      "path": "E:\\Projects2026\\Prp_voice_servo_unified\\server\\manbo_v2_pipeline.out.log",
+      "status": "recycled",
+      "files": [
+        {
+          "path": "E:\\Projects2026\\Prp_voice_servo_unified\\server\\manbo_v2_pipeline.out.log",
+          "bytes": 591,
+          "utc_ticks": 639249970587804538
+        }
+      ],
+      "bytes": 591.0
+    },
+    {
+      "path": "E:\\Projects2026\\Prp_voice_servo_unified\\server\\manbo_zeroshot_20260915_081742.err.log",
+      "status": "recycled",
+      "files": [
+        {
+          "path": "E:\\Projects2026\\Prp_voice_servo_unified\\server\\manbo_zeroshot_20260915_081742.err.log",
+          "bytes": 4560,
+          "utc_ticks": 639250341475561231
+        }
+      ],
+      "bytes": 4560.0
+    },
+    {
+      "path": "E:\\Projects2026\\Prp_voice_servo_unified\\server\\manbo_zeroshot_20260915_081742.out.log",
+      "status": "recycled",
+      "files": [
+        {
+          "path": "E:\\Projects2026\\Prp_voice_servo_unified\\server\\manbo_zeroshot_20260915_081742.out.log",
+          "bytes": 5589,
+          "utc_ticks": 639250300649415863
+        }
+      ],
+      "bytes": 5589.0
+    },
+    {
+      "path": "E:\\Projects2026\\Prp_voice_servo_unified\\server\\recordings\\manbo_v2_corrected_audition_20260914.wav",
+      "status": "recycled",
+      "files": [
+        {
+          "path": "E:\\Projects2026\\Prp_voice_servo_unified\\server\\recordings\\manbo_v2_corrected_audition_20260914.wav",
+          "bytes": 369964,
+          "utc_ticks": 639249978660789198
+        }
+      ],
+      "bytes": 369964.0
+    },
+    {
+      "path": "E:\\Projects2026\\Prp_voice_servo_unified\\server\\recordings\\manbo_zeroshot_20260915_sample01.wav",
+      "status": "recycled",
+      "files": [
+        {
+          "path": "E:\\Projects2026\\Prp_voice_servo_unified\\server\\recordings\\manbo_zeroshot_20260915_sample01.wav",
+          "bytes": 180524,
+          "utc_ticks": 639250283487375996
+        }
+      ],
+      "bytes": 180524.0
+    },
+    {
+      "path": "E:\\Projects2026\\Prp_voice_servo_unified\\server\\recordings\\manbo_zeroshot_20260915_sample02.wav",
+      "status": "recycled",
+      "files": [
+        {
+          "path": "E:\\Projects2026\\Prp_voice_servo_unified\\server\\recordings\\manbo_zeroshot_20260915_sample02.wav",
+          "bytes": 398124,
+          "utc_ticks": 639250284026301432
+        }
+      ],
+      "bytes": 398124.0
+    },
+    {
+      "path": "E:\\Projects2026\\Prp_voice_servo_unified\\server\\training_ui_20260914_224847.err.log",
+      "status": "recycled",
+      "files": [
+        {
+          "path": "E:\\Projects2026\\Prp_voice_servo_unified\\server\\training_ui_20260914_224847.err.log",
+          "bytes": 8509,
+          "utc_ticks": 639249962373554141
+        }
+      ],
+      "bytes": 8509.0
+    },
+    {
+      "path": "E:\\Projects2026\\Prp_voice_servo_unified\\server\\training_ui_20260914_224847.out.log",
+      "status": "recycled",
+      "files": [
+        {
+          "path": "E:\\Projects2026\\Prp_voice_servo_unified\\server\\training_ui_20260914_224847.out.log",
+          "bytes": 52553,
+          "utc_ticks": 639249962361563690
+        }
+      ],
+      "bytes": 52553.0
+    },
+    {
+      "path": "E:\\Projects2026\\Prp_voice_servo_unified\\server\\training_ui_20260915_095344.err.log",
+      "status": "recycled",
+      "files": [
+        {
+          "path": "E:\\Projects2026\\Prp_voice_servo_unified\\server\\training_ui_20260915_095344.err.log",
+          "bytes": 0,
+          "utc_ticks": 639250340374685717
+        }
+      ],
+      "bytes": 0.0
+    },
+    {
+      "path": "E:\\Projects2026\\Prp_voice_servo_unified\\server\\training_ui_20260915_095344.out.log",
+      "status": "recycled",
+      "files": [
+        {
+          "path": "E:\\Projects2026\\Prp_voice_servo_unified\\server\\training_ui_20260915_095344.out.log",
+          "bytes": 671,
+          "utc_ticks": 639250351397714725
+        }
+      ],
+      "bytes": 671.0
+    }
+  ]
+}
