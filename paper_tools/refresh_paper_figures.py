@@ -125,7 +125,7 @@ def power_box(draw, xy, title, lines, fill, accent):
 def draw_power(path: Path):
     img = Image.new("RGB", (2400, 1242), WHITE)
     d = ImageDraw.Draw(img)
-    power_box(d, (70, 420, 420, 650), "2S 7.4 V电池", "满电约8.4 V\n电池规格待最终匹配", ORANGE, ORANGE_DARK)
+    power_box(d, (70, 420, 420, 650), "2S 7.4 V电池", "满电约8.4 V\n按最终电池规格匹配", ORANGE, ORANGE_DARK)
     power_box(d, (520, 420, 870, 650), "保护与总开关", "BMS / 保险丝\n切断整机输入电源", PURPLE, PURPLE_DARK)
     power_box(d, (970, 420, 1360, 650), "5 V稳压模块", "建议额定6～8 A\n按实测峰值校核", GREEN, GREEN_DARK)
 
@@ -156,7 +156,7 @@ def draw_power(path: Path):
         d.line([(x, 1040), (x, 1080)], fill=LINE, width=6)
         d.ellipse((x - 9, 1071, x + 9, 1089), fill=LINE)
     centered_text(d, (200, 1090, 2200, 1185), "所有支路在电源分配点共地；舵机电流不得经过ESP32开发板或普通杜邦线。", font(31, True), INK)
-    d.text((75, 1165), "说明：USB仅用于烧录和调试；外部5 V与USB同时连接前应确认隔离，避免倒灌。整机供电方案待五舵机联调验证。", font=font(27), fill=RED)
+    d.text((75, 1165), "说明：USB仅用于烧录和调试；外部5 V与USB同时连接前应确认隔离，避免倒灌。下一步开展五舵机供电联调。", font=font(27), fill=RED)
     img.save(path, quality=95, dpi=(300, 300))
 
 
@@ -221,7 +221,7 @@ def draw_data_flow(path: Path):
     centered_text(
         d,
         (205, 1350, 2195, 1448),
-        "端点检测、服务端管线与WAV下载播放已有代码；新版连续对话配置已编译，尚待烧录实测。\n五舵机动作架构已写入代码，目前仅PCA9685通道0完成实际运动验证。",
+        "端点检测、服务端管线与WAV下载播放已有代码；新版连续对话配置已编译，下一步完成烧录实测。\n五舵机动作架构已写入代码，目前PCA9685通道0已完成实际运动验证。",
         font(27), RED, 12,
     )
     img.save(path, quality=95, dpi=(300, 300))

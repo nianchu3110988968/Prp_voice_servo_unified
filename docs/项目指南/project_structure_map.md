@@ -122,7 +122,8 @@ E:/Projects2026/Prp_voice_servo_unified
 ├─ paper_tools/                           论文文档处理脚本
 │  ├─ format_official_paper.py            正式论文正文排版
 │  ├─ check_paper_layout.py               论文结构与排版检查
-│  └─ refresh_paper_figures.py            重绘三张核心示意图并替换DOCX内嵌图片
+│  ├─ refresh_paper_figures.py            重绘三张核心示意图并替换DOCX内嵌图片
+│  └─ refine_paper_language.py             精简开发过程并统一论文状态表述
 ├─ 论文初稿/                              论文文档、示意图与排版检查产物
 ├─ platformio.ini                         ESP-IDF + PlatformIO 构建配置
 ├─ partitions.csv                         Flash 分区；含 NVS、factory、model
