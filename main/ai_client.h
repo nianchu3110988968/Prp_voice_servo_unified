@@ -17,6 +17,9 @@ typedef struct
     char tts_backend[32];
     char motion[32];
     char audio_url[160];
+    bool phrase_hit;
+    char job_url[80];
+    char job_status[16];
     int asr_ms;
     int dialogue_ms;
     int tts_ms;
@@ -24,7 +27,11 @@ typedef struct
     int body_receive_ms;
     int prepare_audio_ms;
     int total_request_ms;
+    int background_total_ms;
 } ai_response_t;
 
 esp_err_t ai_client_send_pcm(const int16_t *samples, size_t byte_len, uint32_t sample_rate, ai_response_t *response,
-                             voice_trace_t *trace = nullptr);
+                             voice_trace_t *trace = nullptr, bool allow_phrase_cache = false);
+
+// Poll a compact background result without touching upload/foreground trace slots.
+esp_err_t ai_client_get_job(const char *job_url, const char *request_id, ai_response_t *response);

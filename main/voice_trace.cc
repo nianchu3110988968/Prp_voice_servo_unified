@@ -55,14 +55,17 @@ void voice_trace_event(const voice_trace_t *trace, const char *event, int64_t at
         ESP_LOGI(TAG, "[%s] 收到JSON=%lldms | 录音结束至JSON=%lldms", trace->request_id, at_ms,
                  elapsed_ms(trace->recording_end_us, at_us));
     else if (strcmp(event, "download_end") == 0)
-        ESP_LOGI(TAG, "[%s] 下载开始=%lldms → 下载结束=%lldms | 下载耗时=%lldms", trace->request_id,
+        ESP_LOGI(TAG, "[%s] %s下载开始=%lldms → 下载结束=%lldms | 下载耗时=%lldms", trace->request_id,
+                 trace->background_download ? "后台（不播放）" : (trace->cached_playback ? "缓存" : ""),
                  elapsed_ms(trace->started_us, trace->download_start_us), at_ms,
                  elapsed_ms(trace->download_start_us, at_us));
     else if (strcmp(event, "playback_start") == 0)
-        ESP_LOGI(TAG, "[%s] 播放开始=%lldms | 录音结束至播放=%lldms", trace->request_id, at_ms,
+        ESP_LOGI(TAG, "[%s] %s播放开始=%lldms | 录音结束至播放=%lldms", trace->request_id,
+                 trace->cached_playback ? "缓存" : "", at_ms,
                  elapsed_ms(trace->recording_end_us, at_us));
     else if (strcmp(event, "playback_end") == 0)
-        ESP_LOGI(TAG, "[%s] 播放结束=%lldms | 播放耗时=%lldms", trace->request_id, at_ms,
+        ESP_LOGI(TAG, "[%s] %s播放结束=%lldms | 播放耗时=%lldms", trace->request_id,
+                 trace->cached_playback ? "缓存" : "", at_ms,
                  elapsed_ms(trace->playback_start_us, at_us));
 }
 

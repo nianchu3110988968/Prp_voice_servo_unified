@@ -68,3 +68,11 @@ GPT_SOVITS_REFERENCE_WAV = os.getenv("PRP_GPT_SOVITS_REFERENCE_WAV", "")
 GPT_SOVITS_PROMPT_TEXT = os.getenv("PRP_GPT_SOVITS_PROMPT_TEXT", "")
 GPT_SOVITS_PROMPT_LANGUAGE = os.getenv("PRP_GPT_SOVITS_PROMPT_LANGUAGE", "zh")
 GPT_SOVITS_TEXT_LANGUAGE = os.getenv("PRP_GPT_SOVITS_TEXT_LANGUAGE", "zh")
+
+# No manifest -> ordinary dialogue. Updating the workbook never synthesizes on
+# a voice request: publish a new cache explicitly from the visible VS Code CLI.
+PHRASE_LIBRARY_ENABLED = os.getenv("PRP_PHRASE_LIBRARY_ENABLED", "true").lower() in {"1", "true", "yes", "on"}
+PHRASE_WORKBOOK = Path(os.getenv("PRP_PHRASE_WORKBOOK", str(SERVER_ROOT.parent / "docs/响应词对话/响应词对话1.xlsx")))
+PHRASE_CACHE_DIR = SERVER_ROOT / "phrase_cache"
+PHRASE_VOICE_REVISION = os.getenv("PRP_PHRASE_VOICE_REVISION", "local-config-v1")
+PHRASE_MATCH_TIMEOUT_SECONDS = float(os.getenv("PRP_PHRASE_MATCH_TIMEOUT_SECONDS", "8"))

@@ -20,6 +20,8 @@ struct voice_trace_t
     int64_t playback_end_us;
     size_t upload_bytes;
     unsigned upload_attempts;
+    bool cached_playback;
+    bool background_download;
 };
 
 void voice_trace_init(voice_trace_t *trace);

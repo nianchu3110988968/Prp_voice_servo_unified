@@ -4,6 +4,7 @@ from pathlib import Path
 import subprocess
 import tempfile
 import wave
+import threading
 
 import requests
 
@@ -19,7 +20,17 @@ from server_config import (
 )
 
 
+_synthesis_lock = threading.Lock()
+
+
 def synthesize_reply(reply_text: str, output_dir: Path) -> dict:
+    # GPT-SoVITS uses shared model state. Serialize foreground/cache-build/background
+    # calls without blocking FastAPI's event loop or cached audio GETs.
+    with _synthesis_lock:
+        return _synthesize_reply(reply_text, output_dir)
+
+
+def _synthesize_reply(reply_text: str, output_dir: Path) -> dict:
     """Synthesize speech through the configured backend and return a common result."""
     if not reply_text.strip():
         return {

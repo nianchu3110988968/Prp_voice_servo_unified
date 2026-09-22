@@ -20,6 +20,18 @@ docs/assets/project_structure_map_snapshot_20260915.png
 
 ## 当前目录地图
 
+2026-09-22 Excel词库/缓存先播（源码`2026-09-22-phrase-cache-v1`，离线验证通过、未烧录）：
+
+- `docs/响应词对话/响应词对话1.xlsx`：用户维护的唯一当前词库输入，首张表两列示例输入/标准输出；本轮只读，不覆盖未保存编辑。
+- `server/services/phrase_library.py`：只读XLSX校验、Ollama语义分类、音色/文件指纹、WAV校验和原子缓存发布；`server/phrase_cache/`为Git忽略的生成音频/清单。
+- `server/services/phrase_jobs.py`：有界后台任务和结果期限；`server/ai_bridge_server.py`增加能力协商、缓存首包、后台TTS结果、预制音频GET和本机维护接口；模型调用不占用事件循环。
+- `server/tools/prepare_phrase_library.py`：用户在可见VS Code终端调用已运行8000生成缓存，沿用该服务的实际TTS配置，不启动服务或切换权重。
+- `main/phrase_background.h/.cc`：后台名额、取结果/日志、真实下载后丢弃；`main/ai_client.h/.cc`扩展协议与堆上8KB JSON缓冲；`main/audio_reply_player.h/.cc`新增只下载不播放路径；`main/voice_trace.h/.cc`区分缓存/后台，正常日志格式不变。
+- `tools/verify_phrase_cache.ps1`、`server/tests/test_phrase_library.py`、`tests/firmware/audio_download_test.cc`与新增HTTP/内存/错误测试桩：离线词库/后台协议回归、platformio run、真实下载代码不播放验证。扩展原trace主机回归；脚本由用户在VS Code执行，当前结果见进度记录。
+- URL回归补充：音频下载和后台结果查询都固定同一个服务器URL指针，避免字符串宏展开后的跨数组指针相减；音频主机测试使用MSVC C++20与`/Od /GF-`，验证不合并常量时仍正确拼接，覆盖斜杠、绝对URL和容量边界。
+- `verify_phrase_cache.ps1 -OutputCheck`：单独检查PS5下UTF-8双流解码和非零退出码，不编译或请求服务；功能18项+原日志9项、固件与两项主机测试，以及编码/退出码短测均已通过，细节见进度记录。
+- `docs/项目指南/phrase_library_demo.md`：Excel规则、单独维护入口、旧固件兼容、命中/失败路径和真实计时定义。不得用缓存播放时间冒充完整实时TTS链路。
+
 2026-09-22 中文演示日志（更新下方历史日志说明）：
 
 - `main/voice_trace.cc`：复用原单调时钟与上传透明观测，将事件合并为中文起止/耗时/结果；不改传输调用。
@@ -129,7 +141,7 @@ E:/Projects2026/Prp_voice_servo_unified
 ## 当前状态提醒
 
 - `README.md` 仍含早期单舵机 GPIO18 示例，不应作为当前五舵机结构依据。
-- 当前工作区源码版本为 `2026-09-22-demo-log-v1`，叠加既有servo-power-safety-v2改动；日志任务没有再调整舵机逻辑。用户在VS Code运行验证脚本，固件编译、9项服务端测试、语音观测主机测试通过；后两者不覆盖舵机寄存器/并发回归。未烧录、未硬件复测。板上附件确认仍为 `2026-09-15-audio-v1`；舵机子系统导致无声的具体电气原因仍未逐项定位。
+- 当前`2026-09-22-phrase-cache-v1`及URL修正已由用户在VS Code完整验证：18项新离线测试、9项原日志测试、固件编译及两种主机回归PASS（RAM14.8%、Flash72.2%）。仍叠加既有servo-power-safety-v2改动，词库任务不再改舵机；未烧录、未硬件复测。板上附件最后确认仍为 `2026-09-15-audio-v1`；舵机子系统导致无声的具体电气原因仍未逐项定位。
 - 舵机部分最近一次硬件实测仍为 `2026-09-08-five-servo-v2` 阶段：通道 0 的 `servo fl 80/100` 已验证，其余四路与组合动作未系统实测；后来固件保留这些代码，但未重新做舵机回归测试。
 - 服务器端 ASR、Ollama、TTS 链路已实现；实际运行状态需要每次测试前重新检查端口、日志和 `/config`。
 

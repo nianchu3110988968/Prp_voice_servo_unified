@@ -34,13 +34,21 @@ class RequestTrace:
         elif event.endswith("_end") and fields.get("status") == "failed":
             label = {"asr_end": "语音识别", "dialogue_end": "回复生成", "tts_end": "语音合成"}.get(event, event)
             log_line(f"{prefix} {label}失败，已耗时={fields.get('duration_ms', -1)}ms")
-        elif event == "response_ready":
+        elif event == "phrase_ready":
+            result = fields["response"]
+            log_line(f"{prefix} 【词库命中】识别：{quoted(result['recognized_text'])} | 回复：{quoted(result['reply_text'])}")
+        elif event in {"response_ready", "background_ready"}:
             timings = fields["timings_ms"]
             result = fields["response"]
-            log_line(f"{prefix} 识别：{quoted(result['recognized_text'])} | 回复：{quoted(result['reply_text'])}")
+            if event == "response_ready":
+                log_line(f"{prefix} 识别：{quoted(result['recognized_text'])} | 回复：{quoted(result['reply_text'])}")
+            else:
+                prefix += "[后台]"
             log_line(f"{prefix} 语音识别={timings['asr']}ms | 大模型响应时间={timings['dialogue']}ms | 语音合成={timings['tts']}ms")
             log_line(f"{prefix} 收包={timings['body_receive']}ms | 音频预处理={timings['prepare_audio']}ms | "
-                     f"AI流水线={timings['total_pipeline']}ms | 整请求={timings['total_request']}ms")
+                     f"AI流水线={timings['total_pipeline']}ms | "
+                     + (f"首包就绪={timings['total_request']}ms | 后台完成={timings['background_total']}ms"
+                        if event == "background_ready" else f"整请求={timings['total_request']}ms"))
             log_line(f"{prefix} 后端：ASR={result['asr_status']}/{result['asr_backend']} | "
                      f"LLM={result['llm_status']}/{result['llm_backend']} | TTS={result['tts_status']}/{result['tts_backend']}")
             raw = result["audio_stats"].get("raw", {})

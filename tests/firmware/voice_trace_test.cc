@@ -120,6 +120,16 @@ int main()
     assert(logged("本轮结果=完成(ok) | 录音结束至播放结束=1680ms"));
     for (const auto &line : log_lines) assert(line.find(demo.request_id) != std::string::npos);
     assert(!logged("VOICE_"));
+    voice_trace_t background = demo;
+    background.background_download = true;
+    background.download_start_us = 2100000;
+    background.download_end_us = 2200000;
+    voice_trace_event(&background, "download_end", background.download_end_us);
+    assert(logged("后台（不播放）下载开始=2000ms"));
+    assert(demo.download_end_us == 970000 && demo.playback_end_us == 1980000);
+    demo.cached_playback = true;
+    voice_trace_event(&demo, "playback_start", demo.playback_start_us);
+    assert(logged("缓存播放开始=880ms"));
     log_lines.clear();
     voice_trace_init(&demo);
     voice_trace_finish(&demo, "no_speech");

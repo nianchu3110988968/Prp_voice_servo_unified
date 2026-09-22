@@ -24,6 +24,7 @@ idf_component_register(SRCS
                        ai_client.cc
                        audio_reply_player.cc
                        voice_trace.cc
+                       phrase_background.cc
                        INCLUDE_DIRS
                        "."
                        REQUIRES

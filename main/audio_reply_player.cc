@@ -16,6 +16,7 @@ typedef struct
     uint8_t *data;
     size_t len;
     size_t capacity;
+    bool overflow;
 } download_buffer_t;
 
 static esp_err_t download_event_handler(esp_http_client_event_t *evt)
@@ -28,30 +29,37 @@ static esp_err_t download_event_handler(esp_http_client_event_t *evt)
 
     if (buffer->len + evt->data_len > buffer->capacity)
     {
+        buffer->overflow = true;
         ESP_LOGE(TAG, "Downloaded audio exceeds buffer: %u > %u",
                  (unsigned)(buffer->len + evt->data_len), (unsigned)buffer->capacity);
         return ESP_FAIL;
     }
 
-    memcpy(buffer->data + buffer->len, evt->data, evt->data_len);
+    // Background downloads consume real network bytes, without a second 512KB
+    // allocation and without ever calling the audio driver.
+    if (buffer->data) memcpy(buffer->data + buffer->len, evt->data, evt->data_len);
     buffer->len += evt->data_len;
     return ESP_OK;
 }
 
 static bool build_absolute_url(const char *audio_url, char *dst, size_t dst_len)
 {
-    if (audio_url == nullptr || audio_url[0] == '\0')
+    if (audio_url == nullptr || audio_url[0] == '\0' || dst == nullptr || dst_len == 0)
     {
         return false;
     }
 
     if (strncmp(audio_url, "http://", 7) == 0 || strncmp(audio_url, "https://", 8) == 0)
     {
+        if (strlen(audio_url) >= dst_len) return false;
         strlcpy(dst, audio_url, dst_len);
         return true;
     }
 
-    const char *scheme_end = strstr(AI_SERVER_URL, "://");
+    // A macro expanding to a string literal may create a distinct array at each
+    // use (e.g. MSVC /GF-). Subtract pointers only within this one bound array.
+    const char *server_url = AI_SERVER_URL;
+    const char *scheme_end = strstr(server_url, "://");
     if (scheme_end == nullptr)
     {
         return false;
@@ -59,13 +67,14 @@ static bool build_absolute_url(const char *audio_url, char *dst, size_t dst_len)
 
     const char *host_start = scheme_end + 3;
     const char *path_start = strchr(host_start, '/');
-    size_t origin_len = path_start == nullptr ? strlen(AI_SERVER_URL) : (size_t)(path_start - AI_SERVER_URL);
-    if (origin_len + strlen(audio_url) + 1 > dst_len)
+    size_t origin_len = path_start == nullptr ? strlen(server_url) : (size_t)(path_start - server_url);
+    size_t separator_len = audio_url[0] == '/' ? 0 : 1;
+    if (origin_len + separator_len + strlen(audio_url) + 1 > dst_len)
     {
         return false;
     }
 
-    memcpy(dst, AI_SERVER_URL, origin_len);
+    memcpy(dst, server_url, origin_len);
     dst[origin_len] = '\0';
     strlcat(dst, audio_url[0] == '/' ? audio_url : "/", dst_len);
     if (audio_url[0] != '/')
@@ -112,7 +121,7 @@ static bool find_wav_data_chunk(const uint8_t *wav, size_t wav_len, const uint8_
     return false;
 }
 
-esp_err_t audio_reply_play_from_url(const char *audio_url, voice_trace_t *trace)
+static esp_err_t download_reply(const char *audio_url, voice_trace_t *trace, bool play)
 {
     char full_url[256];
     if (!build_absolute_url(audio_url, full_url, sizeof(full_url)))
@@ -121,12 +130,12 @@ esp_err_t audio_reply_play_from_url(const char *audio_url, voice_trace_t *trace)
         return ESP_ERR_INVALID_ARG;
     }
 
-    uint8_t *storage = (uint8_t *)heap_caps_malloc(MAX_AUDIO_BYTES, MALLOC_CAP_SPIRAM | MALLOC_CAP_8BIT);
-    if (storage == nullptr)
+    uint8_t *storage = play ? (uint8_t *)heap_caps_malloc(MAX_AUDIO_BYTES, MALLOC_CAP_SPIRAM | MALLOC_CAP_8BIT) : nullptr;
+    if (play && storage == nullptr)
     {
         storage = (uint8_t *)heap_caps_malloc(MAX_AUDIO_BYTES, MALLOC_CAP_8BIT);
     }
-    if (storage == nullptr)
+    if (play && storage == nullptr)
     {
         ESP_LOGE(TAG, "Failed to allocate reply audio buffer");
         return ESP_ERR_NO_MEM;
@@ -136,6 +145,7 @@ esp_err_t audio_reply_play_from_url(const char *audio_url, voice_trace_t *trace)
         .data = storage,
         .len = 0,
         .capacity = MAX_AUDIO_BYTES,
+        .overflow = false,
     };
 
     esp_http_client_config_t config = {};
@@ -161,13 +171,15 @@ esp_err_t audio_reply_play_from_url(const char *audio_url, voice_trace_t *trace)
     int status = esp_http_client_get_status_code(client);
     esp_http_client_cleanup(client);
 
-    if (ret != ESP_OK || status < 200 || status >= 300)
+    if (ret != ESP_OK || status < 200 || status >= 300 || buffer.overflow || buffer.len == 0)
     {
         ESP_LOGE(TAG, "[%s] 音频下载失败：%s，HTTP=%d，已收=%u字节",
                  trace ? trace->request_id : "-", esp_err_to_name(ret), status, (unsigned)buffer.len);
         heap_caps_free(storage);
         return ret == ESP_OK ? ESP_FAIL : ret;
     }
+
+    if (!play) return ESP_OK;
 
     const uint8_t *pcm = nullptr;
     size_t pcm_len = 0;
@@ -186,4 +198,14 @@ esp_err_t audio_reply_play_from_url(const char *audio_url, voice_trace_t *trace)
 
     heap_caps_free(storage);
     return ret;
+}
+
+esp_err_t audio_reply_play_from_url(const char *audio_url, voice_trace_t *trace)
+{
+    return download_reply(audio_url, trace, true);
+}
+
+esp_err_t audio_reply_download_only(const char *audio_url, voice_trace_t *trace)
+{
+    return download_reply(audio_url, trace, false);
 }

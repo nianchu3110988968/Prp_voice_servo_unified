@@ -3,6 +3,8 @@
 #include <stdio.h>
 #include <string.h>
 #include <strings.h>
+#include <memory>
+#include <new>
 #include "cJSON.h"
 #include "esp_http_client.h"
 #include "esp_log.h"
@@ -11,7 +13,7 @@
 
 static const char *TAG = "ai_client";
 static const int HTTP_TIMEOUT_MS = 20000;
-static const int RESPONSE_BUFFER_SIZE = 2048;
+static const int RESPONSE_BUFFER_SIZE = 8192;
 
 typedef struct
 {
@@ -70,8 +72,35 @@ static int copy_json_integer(cJSON *root, const char *key)
     return cJSON_IsNumber(item) ? item->valueint : -1;
 }
 
+static void parse_response(cJSON *root, ai_response_t *response)
+{
+    memset(response, 0, sizeof(*response));
+    copy_json_string(root, "reply_text", response->reply_text, sizeof(response->reply_text));
+    copy_json_string(root, "recognized_text", response->recognized_text, sizeof(response->recognized_text));
+    copy_json_string(root, "asr_status", response->asr_status, sizeof(response->asr_status));
+    copy_json_string(root, "asr_backend", response->asr_backend, sizeof(response->asr_backend));
+    copy_json_string(root, "llm_status", response->llm_status, sizeof(response->llm_status));
+    copy_json_string(root, "llm_backend", response->llm_backend, sizeof(response->llm_backend));
+    copy_json_string(root, "tts_status", response->tts_status, sizeof(response->tts_status));
+    copy_json_string(root, "tts_backend", response->tts_backend, sizeof(response->tts_backend));
+    copy_json_string(root, "motion", response->motion, sizeof(response->motion));
+    copy_json_string(root, "audio_url", response->audio_url, sizeof(response->audio_url));
+    copy_json_string(root, "job_url", response->job_url, sizeof(response->job_url));
+    copy_json_string(root, "job_status", response->job_status, sizeof(response->job_status));
+    response->phrase_hit = cJSON_IsTrue(cJSON_GetObjectItem(root, "phrase_hit"));
+    cJSON *timings = cJSON_GetObjectItem(root, "timings_ms");
+    response->asr_ms = copy_json_integer(timings, "asr");
+    response->dialogue_ms = copy_json_integer(timings, "dialogue");
+    response->tts_ms = copy_json_integer(timings, "tts");
+    response->total_pipeline_ms = copy_json_integer(timings, "total_pipeline");
+    response->body_receive_ms = copy_json_integer(timings, "body_receive");
+    response->prepare_audio_ms = copy_json_integer(timings, "prepare_audio");
+    response->total_request_ms = copy_json_integer(timings, "total_request");
+    response->background_total_ms = copy_json_integer(timings, "background_total");
+}
+
 esp_err_t ai_client_send_pcm(const int16_t *samples, size_t byte_len, uint32_t sample_rate, ai_response_t *response,
-                             voice_trace_t *trace)
+                             voice_trace_t *trace, bool allow_phrase_cache)
 {
     if (samples == nullptr || byte_len == 0 || response == nullptr)
     {
@@ -82,9 +111,11 @@ esp_err_t ai_client_send_pcm(const int16_t *samples, size_t byte_len, uint32_t s
     response->asr_ms = response->dialogue_ms = response->tts_ms = response->total_pipeline_ms = -1;
     response->body_receive_ms = response->prepare_audio_ms = response->total_request_ms = -1;
 
-    char response_storage[RESPONSE_BUFFER_SIZE] = {};
+    // Keep the larger, bounded protocol buffer off the audio task's stack.
+    std::unique_ptr<char[]> response_storage(new (std::nothrow) char[RESPONSE_BUFFER_SIZE]());
+    if (!response_storage) return ESP_ERR_NO_MEM;
     response_buffer_t response_buffer = {
-        .buffer = response_storage,
+        .buffer = response_storage.get(),
         .len = 0,
         .capacity = RESPONSE_BUFFER_SIZE,
         .trace = trace,
@@ -112,6 +143,7 @@ esp_err_t ai_client_send_pcm(const int16_t *samples, size_t byte_len, uint32_t s
     esp_http_client_set_header(client, "Content-Type", "application/octet-stream");
     esp_http_client_set_header(client, "X-Audio-Format", "pcm_s16le_mono");
     esp_http_client_set_header(client, "X-Sample-Rate", sample_rate_header);
+    if (allow_phrase_cache) esp_http_client_set_header(client, "X-Voice-Capabilities", "phrase-cache-v1");
     if (trace) esp_http_client_set_header(client, "X-Request-ID", trace->request_id);
     esp_http_client_set_post_field(client, (const char *)samples, byte_len);
 
@@ -146,7 +178,7 @@ esp_err_t ai_client_send_pcm(const int16_t *samples, size_t byte_len, uint32_t s
         return ESP_FAIL;
     }
 
-    cJSON *root = cJSON_Parse(response_storage);
+    cJSON *root = response_buffer.truncated ? nullptr : cJSON_Parse(response_storage.get());
     if (root == nullptr)
     {
         ESP_LOGE(TAG, "[%s] JSON解析失败：收到%d字节，截断=%d", trace ? trace->request_id : "-",
@@ -159,28 +191,51 @@ esp_err_t ai_client_send_pcm(const int16_t *samples, size_t byte_len, uint32_t s
         voice_trace_event(trace, "json_received", trace->json_received_us);
     }
 
-    copy_json_string(root, "reply_text", response->reply_text, sizeof(response->reply_text));
-    copy_json_string(root, "recognized_text", response->recognized_text, sizeof(response->recognized_text));
-    copy_json_string(root, "asr_status", response->asr_status, sizeof(response->asr_status));
-    copy_json_string(root, "asr_backend", response->asr_backend, sizeof(response->asr_backend));
-    copy_json_string(root, "llm_status", response->llm_status, sizeof(response->llm_status));
-    copy_json_string(root, "llm_backend", response->llm_backend, sizeof(response->llm_backend));
-    copy_json_string(root, "tts_status", response->tts_status, sizeof(response->tts_status));
-    copy_json_string(root, "tts_backend", response->tts_backend, sizeof(response->tts_backend));
-    copy_json_string(root, "motion", response->motion, sizeof(response->motion));
-    copy_json_string(root, "audio_url", response->audio_url, sizeof(response->audio_url));
-    cJSON *timings = cJSON_GetObjectItem(root, "timings_ms");
-    if (cJSON_IsObject(timings))
-    {
-        response->asr_ms = copy_json_integer(timings, "asr");
-        response->dialogue_ms = copy_json_integer(timings, "dialogue");
-        response->tts_ms = copy_json_integer(timings, "tts");
-        response->total_pipeline_ms = copy_json_integer(timings, "total_pipeline");
-        response->body_receive_ms = copy_json_integer(timings, "body_receive");
-        response->prepare_audio_ms = copy_json_integer(timings, "prepare_audio");
-        response->total_request_ms = copy_json_integer(timings, "total_request");
-    }
+    parse_response(root, response);
     cJSON_Delete(root);
+    if (response->phrase_hit && (!allow_phrase_cache || response->job_url[0] == '\0' || response->audio_url[0] == '\0'))
+        return ESP_ERR_INVALID_RESPONSE;
 
+    return ESP_OK;
+}
+
+esp_err_t ai_client_get_job(const char *job_url, const char *request_id, ai_response_t *response)
+{
+    // Only job paths issued by this protocol, always on the configured origin.
+    const char *prefix = "/voice/jobs/";
+    if (!job_url || !request_id || !response || strncmp(job_url, prefix, strlen(prefix)) != 0 ||
+        strlen(job_url) != strlen(prefix) + 32 || strspn(job_url + strlen(prefix), "0123456789abcdef") != 32)
+        return ESP_ERR_INVALID_ARG;
+    // Bind the macro once: repeated string literals need not share an address.
+    const char *server_url = AI_SERVER_URL;
+    const char *scheme = strstr(server_url, "://");
+    if (!scheme) return ESP_ERR_INVALID_ARG;
+    const char *path = strchr(scheme + 3, '/');
+    size_t origin_len = path ? (size_t)(path - server_url) : strlen(server_url);
+    char url[256];
+    if (origin_len + strlen(job_url) >= sizeof(url)) return ESP_ERR_INVALID_ARG;
+    snprintf(url, sizeof(url), "%.*s%s", (int)origin_len, server_url, job_url);
+    std::unique_ptr<char[]> storage(new (std::nothrow) char[RESPONSE_BUFFER_SIZE]());
+    if (!storage) return ESP_ERR_NO_MEM;
+    voice_trace_t correlation_trace = {};
+    strlcpy(correlation_trace.request_id, request_id, sizeof(correlation_trace.request_id));
+    response_buffer_t buffer = {storage.get(), 0, RESPONSE_BUFFER_SIZE, &correlation_trace, -1, false, -1};
+    esp_http_client_config_t config = {};
+    config.url = url;
+    config.timeout_ms = 25000; // Server long-polls up to 20s, asynchronously.
+    config.event_handler = http_event_handler;
+    config.user_data = &buffer;
+    esp_http_client_handle_t client = esp_http_client_init(&config);
+    if (!client) return ESP_FAIL;
+    esp_http_client_set_header(client, "X-Request-ID", request_id);
+    esp_err_t ret = esp_http_client_perform(client);
+    int status = esp_http_client_get_status_code(client);
+    esp_http_client_cleanup(client);
+    if (ret != ESP_OK) return ret;
+    if (status != 200 || buffer.truncated || buffer.correlation != 1) return ESP_ERR_INVALID_RESPONSE;
+    cJSON *json = cJSON_Parse(storage.get());
+    if (!json) return ESP_ERR_INVALID_RESPONSE;
+    parse_response(json, response);
+    cJSON_Delete(json);
     return ESP_OK;
 }

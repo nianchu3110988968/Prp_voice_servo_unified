@@ -55,6 +55,7 @@ extern "C"
 #include "ai_client.h"
 #include "audio_reply_player.h"
 #include "audio_recorder.h"
+#include "phrase_background.h"
 #include "network_config.h"
 #include "servo_controller.h" // 舵机控制器类
 #include "robot_motions.h"
@@ -63,7 +64,7 @@ extern "C"
 
 static const char *TAG = "主控";
 static const char *FIRMWARE_NAME = "PRP voice-servo AI bridge";
-static const char *FIRMWARE_VERSION = "2026-09-22-demo-log-v1";
+static const char *FIRMWARE_VERSION = "2026-09-22-phrase-cache-v1";
 
 // 系统状态定义
 typedef enum
@@ -430,35 +431,61 @@ static ai_interaction_result_t run_ai_bridge_interaction(int audio_chunksize, ui
     }
 
     ai_response_t response = {};
-    ret = ai_client_send_pcm(recording.samples, recording.byte_len, recording.sample_rate, &response, &trace);
+    bool background_slot = phrase_background_reserve();
+    ret = ai_client_send_pcm(recording.samples, recording.byte_len, recording.sample_rate, &response, &trace, background_slot);
     audio_recorder_free(&recording);
 
     if (ret != ESP_OK)
     {
+        if (background_slot) phrase_background_release();
         voice_trace_finish(&trace, "request_failed");
         return AI_INTERACTION_FAILED;
     }
 
-    ESP_LOGI(TAG, "[%s] 识别：%s", trace.request_id, response.recognized_text);
+    if (background_slot && !response.phrase_hit) phrase_background_release();
+    trace.cached_playback = response.phrase_hit;
+    ESP_LOGI(TAG, "[%s] %s识别：%s", trace.request_id, response.phrase_hit ? "【词库命中】" : "", response.recognized_text);
     ESP_LOGI(TAG, "[%s] 回复：%s", trace.request_id, response.reply_text);
-    ESP_LOGI(TAG, "[%s] 服务端：语音识别=%dms | 大模型响应时间=%dms | 语音合成=%dms",
-             trace.request_id, response.asr_ms, response.dialogue_ms, response.tts_ms);
-    ESP_LOGI(TAG, "[%s] 服务端：收包=%dms | 音频预处理=%dms | AI流水线=%dms | 整请求=%dms",
-             trace.request_id, response.body_receive_ms, response.prepare_audio_ms,
-             response.total_pipeline_ms, response.total_request_ms);
-    if (strcmp(response.asr_status, "ok") != 0 || strcmp(response.llm_status, "ok") != 0 ||
-        strcmp(response.tts_status, "ok") != 0 || strstr(response.tts_backend, "fallback") != nullptr)
-        ESP_LOGW(TAG, "[%s] 后端状态（回退/非ok/旧服务缺字段）：ASR=%s/%s | LLM=%s/%s | TTS=%s/%s",
-                 trace.request_id, response.asr_status, response.asr_backend,
-                 response.llm_status, response.llm_backend, response.tts_status, response.tts_backend);
+    if (!response.phrase_hit)
+    {
+        ESP_LOGI(TAG, "[%s] 服务端：语音识别=%dms | 大模型响应时间=%dms | 语音合成=%dms",
+                 trace.request_id, response.asr_ms, response.dialogue_ms, response.tts_ms);
+        ESP_LOGI(TAG, "[%s] 服务端：收包=%dms | 音频预处理=%dms | AI流水线=%dms | 整请求=%dms",
+                 trace.request_id, response.body_receive_ms, response.prepare_audio_ms,
+                 response.total_pipeline_ms, response.total_request_ms);
+        if (strcmp(response.asr_status, "ok") != 0 || strcmp(response.llm_status, "ok") != 0 ||
+            strcmp(response.tts_status, "ok") != 0 || strstr(response.tts_backend, "fallback") != nullptr)
+            ESP_LOGW(TAG, "[%s] 后端状态（回退/非ok/旧服务缺字段）：ASR=%s/%s | LLM=%s/%s | TTS=%s/%s",
+                     trace.request_id, response.asr_status, response.asr_backend,
+                     response.llm_status, response.llm_backend, response.tts_status, response.tts_backend);
+    }
+    else
+        ESP_LOGI(TAG, "[%s] 首包：语音识别=%dms | 大模型响应时间=%dms | 后台合成待完成（耗时稍后输出）",
+                 trace.request_id, response.asr_ms, response.dialogue_ms);
     dispatch_ai_motion(response.motion);
     const char *trace_result = "no_audio";
     if (response.audio_url[0] != '\0')
     {
         esp_err_t play_ret = audio_reply_play_from_url(response.audio_url, &trace);
+        if (response.phrase_hit && play_ret != ESP_OK && trace.playback_start_us < 0)
+        {
+            // If the cached GET failed, wait on the already running real TTS,
+            // then play it on this foreground task. Never retry after partial playback.
+            ESP_LOGW(TAG, "[%s] 缓存未能播放，等待本轮新音频补播", trace.request_id);
+            ai_response_t fallback = {};
+            play_ret = phrase_background_collect(response.job_url, &trace, &fallback);
+            if (play_ret == ESP_OK)
+            {
+                trace.cached_playback = false;
+                play_ret = audio_reply_play_from_url(fallback.audio_url, &trace);
+            }
+            phrase_background_release();
+            background_slot = false;
+        }
         trace_result = play_ret == ESP_OK ? "ok" : "audio_failed";
     }
     voice_trace_finish(&trace, trace_result);
+    if (response.phrase_hit && background_slot) phrase_background_start(response.job_url, &trace);
     return AI_INTERACTION_OK;
 }
 

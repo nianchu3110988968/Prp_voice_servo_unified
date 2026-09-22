@@ -3,16 +3,24 @@ from pathlib import Path
 import sys
 import time
 import wave
+import re
+import threading
+import asyncio
 
 from fastapi import FastAPI, HTTPException, Request, Response
 from fastapi.responses import FileResponse
+from starlette.concurrency import run_in_threadpool
 
 from services.asr_service import transcribe_audio, warm_up_asr
 from services.audio_utils import normalize_pcm_s16le, pcm_s16le_stats
 from services.dialogue_service import generate_healing_reply, warm_up_dialogue_model
+from services.dialogue_service import choose_reply_style, enforce_emotion_motion_consistency, remember_turn
 from services.tts_service import synthesize_reply
 from services.latency_trace import RequestTrace, measure_stage, log_line, quoted
 from server_config import AUDIO_NORMALIZE_TARGET_PEAK
+import server_config as config
+from services.phrase_library import PhraseLibrary, semantic_match
+from services.phrase_jobs import PhraseJobs
 
 
 def configure_stdio_encoding() -> None:
@@ -28,6 +36,16 @@ RECORDINGS_DIR = APP_ROOT / "recordings"
 RECORDINGS_DIR.mkdir(exist_ok=True)
 
 app = FastAPI(title="PRP Plush Robot AI Bridge")
+phrase_library = PhraseLibrary(config.PHRASE_WORKBOOK, config.PHRASE_CACHE_DIR)
+phrase_jobs = PhraseJobs()
+# Preserve the existing single ordered ASR/dialogue/history lane. Long TTS jobs
+# leave this lane after a cache hit, while file GETs remain responsive.
+interaction_lock = threading.Lock()
+
+
+@app.on_event("shutdown")
+def close_phrase_jobs():
+    phrase_jobs.close()
 
 
 @app.on_event("startup")
@@ -55,15 +73,83 @@ def pcm_to_wav(pcm_bytes: bytes, wav_path: Path, sample_rate: int) -> None:
         wav_file.writeframes(pcm_bytes)
 
 
-def run_ai_pipeline(wav_path: Path, audio_stats: dict | None = None, trace: RequestTrace | None = None) -> dict:
+def run_ai_pipeline(wav_path: Path, audio_stats: dict | None = None, trace: RequestTrace | None = None,
+                    allow_phrases: bool = False, prepared_timings: dict | None = None) -> dict:
     pipeline_start = time.perf_counter()
 
     asr_result, asr_ms = measure_stage("asr", lambda: transcribe_audio(wav_path), trace)
 
     recognized_text = asr_result["text"]
-    dialogue, dialogue_ms = measure_stage("dialogue", lambda: generate_healing_reply(recognized_text), trace)
+    cache = {}
+
+    def select_dialogue():
+        if allow_phrases and config.PHRASE_LIBRARY_ENABLED and asr_result["status"] == "ok":
+            try:
+                entries, manifest = phrase_library.ready()
+                entry = semantic_match(recognized_text, entries)
+                if entry:
+                    audio_url = phrase_library.audio_for(entry, manifest)
+                    style = choose_reply_style(recognized_text)
+                    emotion, motion = enforce_emotion_motion_consistency(recognized_text, entry.reply, "", "")
+                    cache.update(id=entry.id, audio_url=audio_url)
+                    # Do not pass fixed replies through the ordinary 48-char truncation.
+                    return {"reply_text": entry.reply, "style": style, "emotion": emotion, "motion": motion,
+                            "persona": config.PERSONA_PROMPT_NAME, "status": "ok", "backend": "ollama"}
+            except Exception as exc:
+                log_line(f"[服务端][{trace.request_id if trace else '-'}] 词库不可用，回正常回复：{quoted(str(exc))}")
+        return generate_healing_reply(recognized_text)
+
+    dialogue, dialogue_ms = measure_stage("dialogue", select_dialogue, trace)
+
+    if cache and trace:
+        # Immutable snapshots per request; no worker reads mutable global history.
+        synthesizer = synthesize_reply
+        output_dir = RECORDINGS_DIR
+        ready_to_run = threading.Event()
+        early_ms = -1
+
+        def complete_background():
+            # Publish the first response and its real timestamp before the worker
+            # reads it. Also ensures the one hit/text log precedes background logs.
+            if not ready_to_run.wait(5):
+                raise RuntimeError("first response preparation failed")
+            tts, tts_ms = measure_stage("tts", lambda: synthesizer(dialogue["reply_text"], output_dir), trace)
+            result = pipeline_response(wav_path, audio_stats, asr_result, dialogue, tts,
+                                       asr_ms, dialogue_ms, tts_ms, pipeline_start)
+            result["timings_ms"].update(prepared_timings or {})
+            result["timings_ms"]["total_request"] = early_ms
+            result["timings_ms"]["background_total"] = int((time.perf_counter() - trace.started) * 1000)
+            result.update(phrase_hit=True, phrase_id=cache["id"])
+            trace.event("background_ready", timings_ms=result["timings_ms"], response=result, recording=wav_path.name)
+            return result
+
+        job_id = phrase_jobs.submit(trace.request_id, complete_background)
+        if job_id:
+            remember_turn(recognized_text, dialogue["reply_text"], dialogue["style"])
+            result = pipeline_response(wav_path, audio_stats, asr_result, dialogue,
+                                       {"audio_url": cache["audio_url"], "status": "pending", "backend": config.TTS_BACKEND},
+                                       asr_ms, dialogue_ms, -1, pipeline_start)
+            result["timings_ms"].update(prepared_timings or {})
+            result["timings_ms"]["total_pipeline"] = -1
+            result["timings_s"].update(tts=-1, total=-1)
+            result.update(phrase_hit=True, phrase_id=cache["id"], job_url=f"/voice/jobs/{job_id}")
+            early_ms = int((time.perf_counter() - trace.started) * 1000)
+            result["timings_ms"]["total_request"] = early_ms
+            trace.event("phrase_ready", response=result)
+            ready_to_run.set()
+            return result
+        log_line(f"[服务端][{trace.request_id}] 词库后台队列已满，回正常回复")
+        fallback_start = time.perf_counter()
+        dialogue = generate_healing_reply(recognized_text)
+        dialogue_ms += int((time.perf_counter() - fallback_start) * 1000)
 
     tts_result, tts_ms = measure_stage("tts", lambda: synthesize_reply(dialogue["reply_text"], RECORDINGS_DIR), trace)
+    return pipeline_response(wav_path, audio_stats, asr_result, dialogue, tts_result,
+                             asr_ms, dialogue_ms, tts_ms, pipeline_start)
+
+
+def pipeline_response(wav_path, audio_stats, asr_result, dialogue, tts_result,
+                      asr_ms, dialogue_ms, tts_ms, pipeline_start):
     total_ms = int((time.perf_counter() - pipeline_start) * 1000)
     timings_s = {
         "understand": round(asr_ms / 1000, 1),
@@ -73,7 +159,7 @@ def run_ai_pipeline(wav_path: Path, audio_stats: dict | None = None, trace: Requ
     }
 
     return {
-        "recognized_text": recognized_text,
+        "recognized_text": asr_result["text"],
         "asr_status": asr_result["status"],
         "asr_backend": asr_result["backend"],
         "asr_model": asr_result.get("model", ""),
@@ -101,6 +187,51 @@ def run_ai_pipeline(wav_path: Path, audio_stats: dict | None = None, trace: Requ
         "debug_recording": wav_path.name,
         "audio_stats": audio_stats or {},
     }
+
+
+def ordered_pipeline(*args, **kwargs):
+    with interaction_lock:
+        return run_ai_pipeline(*args, **kwargs)
+
+
+@app.get("/voice/jobs/{job_id}")
+async def get_voice_job(job_id: str, request: Request, http_response: Response):
+    deadline = time.monotonic() + 20
+    while True:
+        result = phrase_jobs.get(job_id) if re.fullmatch(r"[0-9a-f]{32}", job_id) else None
+        if result is None or request.headers.get("x-request-id") != result["request_id"]:
+            raise HTTPException(status_code=404, detail="job not found or expired")
+        if result["job_status"] != "pending" or time.monotonic() >= deadline:
+            break
+        # Long-poll asynchronously: no busy access-log spam, no occupied TTS lane.
+        await asyncio.sleep(0.1)
+    http_response.headers["X-Request-ID"] = result["request_id"]
+    # Background polling does not retransmit recognized text/audio stats every time.
+    keys = {"job_status", "request_id", "error", "audio_url", "tts_status", "tts_backend", "timings_ms"}
+    return {key: value for key, value in result.items() if key in keys}
+
+
+@app.get("/phrase-audio/{file_name}")
+def get_phrase_audio(file_name: str):
+    if not re.fullmatch(r"[0-9a-f]{64}\.wav", file_name):
+        raise HTTPException(status_code=404, detail="audio not found")
+    path = phrase_library.cache_dir / file_name
+    if not path.is_file():
+        raise HTTPException(status_code=404, detail="audio not found")
+    return FileResponse(path, media_type="audio/wav")
+
+
+@app.post("/phrase-library/rebuild")
+def rebuild_phrase_library(request: Request):
+    # This local maintenance operation is not an anonymous LAN/browser action.
+    if not request.client or request.client.host not in {"127.0.0.1", "::1"} or request.headers.get("origin"):
+        raise HTTPException(status_code=403, detail="local CLI only")
+    if request.headers.get("x-prp-maintenance") != "phrase-library":
+        raise HTTPException(status_code=403, detail="maintenance header required")
+    try:
+        return phrase_library.rebuild(synthesize_reply)
+    except Exception as exc:
+        raise HTTPException(status_code=400, detail=str(exc)) from exc
 
 
 @app.get("/health")
@@ -157,12 +288,17 @@ def get_config():
         "gpt_sovits_reference_wav_configured": bool(GPT_SOVITS_REFERENCE_WAV),
         "gpt_sovits_prompt_language": GPT_SOVITS_PROMPT_LANGUAGE,
         "gpt_sovits_text_language": GPT_SOVITS_TEXT_LANGUAGE,
+        "phrase_library_enabled": config.PHRASE_LIBRARY_ENABLED,
+        "phrase_workbook": str(config.PHRASE_WORKBOOK),
+        "phrase_cache_published": (phrase_library.cache_dir / "manifest.json").is_file(),
+        "phrase_voice_revision": config.PHRASE_VOICE_REVISION,
     }
 
 
 @app.get("/debug/dialogue")
 def debug_dialogue(text: str):
-    return generate_healing_reply(text)
+    with interaction_lock:
+        return generate_healing_reply(text)
 
 
 @app.get("/debug/tts")
@@ -205,7 +341,7 @@ def debug_pipeline(file_name: str):
     if file_path.suffix.lower() != ".wav":
         raise HTTPException(status_code=400, detail="debug pipeline requires a wav file")
 
-    return run_ai_pipeline(file_path)
+    return ordered_pipeline(file_path)
 
 
 @app.post("/voice/interact")
@@ -236,14 +372,18 @@ async def voice_interact(request: Request, http_response: Response):
         trace.event("prepare_audio_start", prepare_start)
         trace.event("prepare_audio_end", prepare_end, recording=wav_path.name)
 
-        response = run_ai_pipeline(wav_path, audio_stats={
-            "raw": raw_stats, "normalized": normalized_stats,
-            "normalize_target_peak": AUDIO_NORMALIZE_TARGET_PEAK,
-        }, trace=trace)
-        response["timings_ms"].update({
+        prepared_timings = {
             "body_receive": int((receive_end - receive_start) * 1000),
             "prepare_audio": int((prepare_end - prepare_start) * 1000),
-        })
+        }
+        response = await run_in_threadpool(ordered_pipeline, wav_path, audio_stats={
+            "raw": raw_stats, "normalized": normalized_stats,
+            "normalize_target_peak": AUDIO_NORMALIZE_TARGET_PEAK,
+        }, trace=trace, prepared_timings=prepared_timings,
+            allow_phrases=request.headers.get("x-voice-capabilities") == "phrase-cache-v1")
+        if response.get("phrase_hit"):
+            return response
+        response["timings_ms"].update(prepared_timings)
         ready = time.perf_counter()
         # Handler entry -> response dict ready. NOT HTTP serialization/send time.
         response["timings_ms"]["total_request"] = int((ready - trace.started) * 1000)
