@@ -176,7 +176,7 @@ esp_err_t audio_recorder_record_pcm(audio_recording_t *recording, uint32_t durat
     recording->byte_len = target_bytes;
     recording->sample_rate = SAMPLE_RATE_HZ;
     recording->duration_ms = duration_ms;
-    ESP_LOGI(TAG, "Recorded PCM audio: %u bytes, %u ms, gain=%d",
+    ESP_LOGI(TAG, "固定录音：%u字节 | 音频时长=%ums | 采集增益=%d",
              (unsigned)target_bytes, (unsigned)duration_ms, AI_RECORD_GAIN);
     return ESP_OK;
 }
@@ -260,15 +260,6 @@ esp_err_t audio_recorder_record_pcm_endpoint(audio_recording_t *recording, int f
     uint64_t noise_sum = 0;
     uint32_t noise_min = UINT32_MAX;
 
-    ESP_LOGI(TAG,
-             "Endpoint recorder calibrating noise: sample=%d ms, timeout=%u ms, max=%d ms, min=%d ms, silence_end=%d ms, frame=%u ms",
-             AI_RECORD_NOISE_SAMPLE_MS,
-             (unsigned)start_timeout_ms,
-             AI_RECORD_MAX_DURATION_MS,
-             AI_RECORD_MIN_DURATION_MS,
-             AI_RECORD_SILENCE_END_MS,
-             (unsigned)frame_ms);
-
     while (noise_sample_ms < AI_RECORD_NOISE_SAMPLE_MS)
     {
         esp_err_t ret = bsp_get_feed_data(false, frame, frame_bytes);
@@ -317,12 +308,6 @@ esp_err_t audio_recorder_record_pcm_endpoint(audio_recording_t *recording, int f
         uint32_t min_limited = noise_min == UINT32_MAX ? noise_avg : noise_min * 2 + AI_RECORD_STOP_NOISE_MARGIN;
         noise_floor = noise_avg < min_limited ? noise_avg : min_limited;
     }
-
-    ESP_LOGI(TAG,
-             "Endpoint recorder waiting for speech: noise_floor=%u, start_threshold=%u, stop_threshold=%u",
-             (unsigned)noise_floor,
-             (unsigned)dynamic_start_threshold(noise_floor),
-             (unsigned)dynamic_stop_threshold(noise_floor));
 
     while (elapsed_ms < start_timeout_ms || recording_started)
     {
@@ -385,12 +370,6 @@ esp_err_t audio_recorder_record_pcm_endpoint(audio_recording_t *recording, int f
                 }
                 recording_ms = (uint32_t)((recorded_bytes * 1000) / (SAMPLE_RATE_HZ * BYTES_PER_SAMPLE));
                 silence_ms = 0;
-                ESP_LOGI(TAG, "Speech detected: rms=%u, peak=%u, noise_floor=%u, start_threshold=%u, preroll=%u bytes",
-                         (unsigned)stats.rms,
-                         (unsigned)stats.peak,
-                         (unsigned)noise_floor,
-                         (unsigned)start_threshold,
-                         (unsigned)recorded_bytes);
             }
 
             elapsed_ms += frame_ms;
@@ -432,8 +411,6 @@ esp_err_t audio_recorder_record_pcm_endpoint(audio_recording_t *recording, int f
     if (!recording_started || recorded_bytes == 0)
     {
         heap_caps_free(buffer);
-        ESP_LOGW(TAG, "Endpoint recorder timed out before speech: waited=%u ms, max_rms=%u, max_peak=%u",
-                 (unsigned)elapsed_ms, (unsigned)max_rms, (unsigned)max_peak);
         return ESP_ERR_TIMEOUT;
     }
 
@@ -441,13 +418,12 @@ esp_err_t audio_recorder_record_pcm_endpoint(audio_recording_t *recording, int f
     recording->byte_len = recorded_bytes;
     recording->sample_rate = SAMPLE_RATE_HZ;
     recording->duration_ms = recording_ms;
-    ESP_LOGI(TAG, "Endpoint recorder finished: %u bytes, %u ms, reason=%s, max_rms=%u, max_peak=%u, gain=%d",
-             (unsigned)recorded_bytes,
-             (unsigned)recording_ms,
-             finish_reason,
-             (unsigned)max_rms,
-             (unsigned)max_peak,
-             AI_RECORD_GAIN);
+    const char *reason = strcmp(finish_reason, "silence_end") == 0 ? "连续静音" :
+                         strcmp(finish_reason, "buffer_full") == 0 ? "缓冲已满" : "达到时限";
+    ESP_LOGI(TAG, "录音统计：%ums/%u字节 | 结束=%s | 最大帧RMS=%u/峰值=%u | 噪声底=%u/开口阈值=%u",
+             (unsigned)recording_ms, (unsigned)recorded_bytes, reason,
+             (unsigned)max_rms, (unsigned)max_peak, (unsigned)noise_floor,
+             (unsigned)dynamic_start_threshold(noise_floor));
     return ESP_OK;
 }
 

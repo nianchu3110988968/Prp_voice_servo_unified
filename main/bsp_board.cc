@@ -360,11 +360,9 @@ esp_err_t bsp_play_audio(const uint8_t *audio_data, size_t data_len)
         tx_channel_enabled = true;
         // Give MAX98357A stable clocks before sending non-zero samples.
         vTaskDelay(pdMS_TO_TICKS(I2S_TX_AMP_WAKE_MS));
-        ESP_LOGI(TAG, "I2S 发送通道已重新启用并完成稳定等待");
     }
 
     // 将音频数据写入 I2S 发送通道
-    ESP_LOGI(TAG, "I2S 音频写入开始: %u 字节", (unsigned)data_len);
     ret = i2s_channel_write(tx_handle, audio_data, data_len, &bytes_written, portMAX_DELAY);
 
     if (ret != ESP_OK)
@@ -388,8 +386,6 @@ esp_err_t bsp_play_audio(const uint8_t *audio_data, size_t data_len)
         I2S_TX_DRAIN_MARGIN_MS;
     vTaskDelay(pdMS_TO_TICKS(drain_ms));
 
-    ESP_LOGI(TAG, "I2S 音频播放完成: 写入=%u 字节, 排空等待=%u ms, 通道保持静音运行",
-             (unsigned)bytes_written, (unsigned)drain_ms);
     return ESP_OK;
 }
 

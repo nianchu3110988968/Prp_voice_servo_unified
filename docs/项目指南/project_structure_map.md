@@ -1,6 +1,6 @@
 # 项目结构地图
 
-最后核对日期：2026-09-15
+最后核对日期：2026-09-22
 
 本文是项目目录与关键文件职责的维护入口。后续新建文档、增加功能模块、调整入口文件或改变运行链路时，必须同步更新本文，避免后续交接时只依赖过期 README 或口头记忆。
 
@@ -19,6 +19,16 @@ docs/assets/project_structure_map_snapshot_20260915.png
 - 如果根目录 README 与当前源码冲突，以当前源码、`docs/README.md` 和 `docs/工作留档/task_progress.md` 为准。
 
 ## 当前目录地图
+
+2026-09-22 中文演示日志（更新下方历史日志说明）：
+
+- `main/voice_trace.cc`：复用原单调时钟与上传透明观测，将事件合并为中文起止/耗时/结果；不改传输调用。
+- `main/ai_client.h/.cc`：同请求ID关联、7项timings_ms解析，补读现有LLM/TTS状态用于回退警告，不增加响应协议字段。
+- `main/main.cc`、`main/audio_recorder.cc`、`main/audio_reply_player.cc`、`main/bsp_board.cc`：删除重复成功debug，保留录音能量统计、一次识别/回复、下载/播放边界及错误。
+- `server/services/latency_trace.py`、`server/ai_bridge_server.py`：每轮6行中文摘要，同ID且直接使用响应timings_ms；另报失败/回退，保留原录音、API和模型行为。
+- `tools/verify_voice_logging.ps1`：用户在VS Code空闲PowerShell运行的验证入口，依次做服务端9项离线测试、platformio run、MSVC主机观测回归；不启动服务、不烧录。
+- `server/tests/test_latency_trace.py`、`tests/firmware/voice_trace_test.cc`与`tests/firmware_stubs/esp_log.h`：测试紧凑中文日志、时间字段、回退、控制字符/坏控制台、传输透传和失败边界。
+- `docs/项目指南/voice_latency_logging.md`：新旧日志对照与“字幕by索兰娅”排查；`recording_endpoint_detection.md`同步新输出。用户已贴回三项验证通过；本轮未烧录，未重启正在运行的服务。
 
 2026-09-15 本地目录集中（已实际迁移，现行根目录未改名）：
 
@@ -119,7 +129,7 @@ E:/Projects2026/Prp_voice_servo_unified
 ## 当前状态提醒
 
 - `README.md` 仍含早期单舵机 GPIO18 示例，不应作为当前五舵机结构依据。
-- 当前源码及板上固件版本为 `2026-09-15-audio-v1`：保留连续对话和分段延迟日志，并修复 I2S 写入后立即停钟可能截断音频、频繁唤醒功放的问题；已烧录且两次本地音频自检均完成 I2S 写入，实际扬声器听感待用户确认。
+- 当前工作区源码版本为 `2026-09-22-demo-log-v1`，叠加既有servo-power-safety-v2改动；日志任务没有再调整舵机逻辑。用户在VS Code运行验证脚本，固件编译、9项服务端测试、语音观测主机测试通过；后两者不覆盖舵机寄存器/并发回归。未烧录、未硬件复测。板上附件确认仍为 `2026-09-15-audio-v1`；舵机子系统导致无声的具体电气原因仍未逐项定位。
 - 舵机部分最近一次硬件实测仍为 `2026-09-08-five-servo-v2` 阶段：通道 0 的 `servo fl 80/100` 已验证，其余四路与组合动作未系统实测；后来固件保留这些代码，但未重新做舵机回归测试。
 - 服务器端 ASR、Ollama、TTS 链路已实现；实际运行状态需要每次测试前重新检查端口、日志和 `/config`。
 

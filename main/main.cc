@@ -61,9 +61,9 @@ extern "C"
 #include "touch_inputs.h"
 #include "wifi_manager.h"
 
-static const char *TAG = "舵机控制"; // 日志标签
+static const char *TAG = "主控";
 static const char *FIRMWARE_NAME = "PRP voice-servo AI bridge";
-static const char *FIRMWARE_VERSION = "2026-09-15-audio-v1";
+static const char *FIRMWARE_VERSION = "2026-09-22-demo-log-v1";
 
 // 系统状态定义
 typedef enum
@@ -415,8 +415,6 @@ static ai_interaction_result_t run_ai_bridge_interaction(int audio_chunksize, ui
     audio_recording_t recording = {};
     voice_trace_t trace;
     voice_trace_init(&trace);
-    ESP_LOGI(TAG, "AI bridge recording started: endpoint=%d, start_timeout=%u ms, fixed_duration=%d ms",
-             AI_RECORD_ENDPOINT_ENABLED, (unsigned)start_timeout_ms, AI_RECORD_DURATION_MS);
 #if AI_RECORD_ENDPOINT_ENABLED
     esp_err_t ret = audio_recorder_record_pcm_endpoint(&recording, audio_chunksize, start_timeout_ms);
 #else
@@ -425,48 +423,40 @@ static ai_interaction_result_t run_ai_bridge_interaction(int audio_chunksize, ui
     voice_trace_mark(&trace, "recording_end", &trace.recording_end_us);
     if (ret != ESP_OK)
     {
-        ESP_LOGE(TAG, "AI bridge recording failed: %s", esp_err_to_name(ret));
+        if (ret != ESP_ERR_TIMEOUT)
+            ESP_LOGE(TAG, "[%s] 录音失败：%s", trace.request_id, esp_err_to_name(ret));
         voice_trace_finish(&trace, ret == ESP_ERR_TIMEOUT ? "no_speech" : "recording_failed");
         return ret == ESP_ERR_TIMEOUT ? AI_INTERACTION_NO_SPEECH : AI_INTERACTION_FAILED;
     }
 
-    ESP_LOGI(TAG, "AI bridge recording finished: %u bytes captured, uploading to server",
-             (unsigned)recording.byte_len);
     ai_response_t response = {};
-    int64_t request_start_us = esp_timer_get_time();
     ret = ai_client_send_pcm(recording.samples, recording.byte_len, recording.sample_rate, &response, &trace);
-    int request_ms = (int)((esp_timer_get_time() - request_start_us) / 1000);
     audio_recorder_free(&recording);
 
     if (ret != ESP_OK)
     {
-        ESP_LOGE(TAG, "AI bridge request failed: %s", esp_err_to_name(ret));
         voice_trace_finish(&trace, "request_failed");
         return AI_INTERACTION_FAILED;
     }
 
-    ESP_LOGI(TAG,
-             "AI latency: request_roundtrip=%d ms, server_total=%d ms (asr=%d, reply=%d, tts=%d)",
-             request_ms,
-             response.total_pipeline_ms,
-             response.asr_ms,
-             response.dialogue_ms,
-             response.tts_ms);
-    ESP_LOGI(TAG, "AI bridge response text: %s", response.reply_text);
-    ESP_LOGI(TAG, "VOICE_SERVER id=%s body_receive_ms=%d prepare_audio_ms=%d asr_ms=%d dialogue_ms=%d "
-             "tts_ms=%d total_pipeline_ms=%d total_request_ms=%d",
-             trace.request_id, response.body_receive_ms, response.prepare_audio_ms, response.asr_ms,
-             response.dialogue_ms, response.tts_ms, response.total_pipeline_ms, response.total_request_ms);
+    ESP_LOGI(TAG, "[%s] 识别：%s", trace.request_id, response.recognized_text);
+    ESP_LOGI(TAG, "[%s] 回复：%s", trace.request_id, response.reply_text);
+    ESP_LOGI(TAG, "[%s] 服务端：语音识别=%dms | 大模型响应时间=%dms | 语音合成=%dms",
+             trace.request_id, response.asr_ms, response.dialogue_ms, response.tts_ms);
+    ESP_LOGI(TAG, "[%s] 服务端：收包=%dms | 音频预处理=%dms | AI流水线=%dms | 整请求=%dms",
+             trace.request_id, response.body_receive_ms, response.prepare_audio_ms,
+             response.total_pipeline_ms, response.total_request_ms);
+    if (strcmp(response.asr_status, "ok") != 0 || strcmp(response.llm_status, "ok") != 0 ||
+        strcmp(response.tts_status, "ok") != 0 || strstr(response.tts_backend, "fallback") != nullptr)
+        ESP_LOGW(TAG, "[%s] 后端状态（回退/非ok/旧服务缺字段）：ASR=%s/%s | LLM=%s/%s | TTS=%s/%s",
+                 trace.request_id, response.asr_status, response.asr_backend,
+                 response.llm_status, response.llm_backend, response.tts_status, response.tts_backend);
     dispatch_ai_motion(response.motion);
     const char *trace_result = "no_audio";
     if (response.audio_url[0] != '\0')
     {
         esp_err_t play_ret = audio_reply_play_from_url(response.audio_url, &trace);
         trace_result = play_ret == ESP_OK ? "ok" : "audio_failed";
-        if (play_ret != ESP_OK)
-        {
-            ESP_LOGW(TAG, "Reply audio playback failed: %s", esp_err_to_name(play_ret));
-        }
     }
     voice_trace_finish(&trace, trace_result);
     return AI_INTERACTION_OK;
@@ -483,7 +473,7 @@ static ai_interaction_result_t run_ai_bridge_conversation(int audio_chunksize)
 #if AI_CHAT_CONTINUE_ENABLED
     for (int turn = 0; turn < AI_CHAT_MAX_FOLLOWUP_TURNS; turn++)
     {
-        ESP_LOGI(TAG, "AI bridge follow-up listening: turn=%d/%d, timeout=%d ms",
+        ESP_LOGI(TAG, "继续聆听：第%d/%d轮，%dms内可直接说话",
                  turn + 1, AI_CHAT_MAX_FOLLOWUP_TURNS, AI_CHAT_FOLLOWUP_TIMEOUT_MS);
         result = run_ai_bridge_interaction(audio_chunksize, AI_CHAT_FOLLOWUP_TIMEOUT_MS);
         if (result == AI_INTERACTION_OK)
@@ -492,12 +482,11 @@ static ai_interaction_result_t run_ai_bridge_conversation(int audio_chunksize)
         }
         if (result == AI_INTERACTION_NO_SPEECH)
         {
-            ESP_LOGI(TAG, "AI bridge conversation ended: no follow-up speech");
             return AI_INTERACTION_OK;
         }
         return result;
     }
-    ESP_LOGI(TAG, "AI bridge conversation ended: max follow-up turns reached");
+    ESP_LOGI(TAG, "连续对话已达到轮数上限");
 #endif
 
     return AI_INTERACTION_OK;
@@ -516,8 +505,6 @@ static ai_interaction_result_t run_ai_bridge_conversation(int audio_chunksize)
  */
 static esp_err_t configure_custom_commands(esp_mn_iface_t *multinet, model_iface_data_t *mn_model_data)
 {
-    ESP_LOGI(TAG, "开始配置自定义命令词...");
-
     // 首先尝试从sdkconfig加载默认命令词配置
     esp_mn_commands_update_from_sdkconfig(multinet, mn_model_data);
 
@@ -540,15 +527,11 @@ static esp_err_t configure_custom_commands(esp_mn_iface_t *multinet, model_iface
     {
         const command_config_t *cmd = &custom_commands[i];
 
-        ESP_LOGI(TAG, "添加命令词 [%d]: %s (%s)",
-                 cmd->command_id, cmd->description, cmd->pinyin);
-
         // 添加命令词
         esp_err_t ret_cmd = esp_mn_commands_add(cmd->command_id, cmd->pinyin);
         if (ret_cmd == ESP_OK)
         {
             success_count++;
-            ESP_LOGI(TAG, "✓ 命令词 [%d] 添加成功", cmd->command_id);
         }
         else
         {
@@ -559,7 +542,6 @@ static esp_err_t configure_custom_commands(esp_mn_iface_t *multinet, model_iface
     }
 
     // 更新命令词到模型
-    ESP_LOGI(TAG, "更新命令词到模型...");
     esp_mn_error_t *error_phrases = esp_mn_commands_update();
     if (error_phrases != NULL && error_phrases->num > 0)
     {
@@ -574,18 +556,6 @@ static esp_err_t configure_custom_commands(esp_mn_iface_t *multinet, model_iface
 
     // 打印配置结果
     ESP_LOGI(TAG, "命令词配置完成: 成功 %d 个, 失败 %d 个", success_count, fail_count);
-
-    // 打印激活的命令词
-    ESP_LOGI(TAG, "当前激活的命令词列表:");
-    multinet->print_active_speech_commands(mn_model_data);
-
-    // 打印支持的命令列表
-    ESP_LOGI(TAG, "支持的语音命令:");
-    for (int i = 0; i < CUSTOM_COMMANDS_COUNT; i++)
-    {
-        const command_config_t *cmd = &custom_commands[i];
-        ESP_LOGI(TAG, "  ID=%d: '%s'", cmd->command_id, cmd->description);
-    }
 
     return (fail_count == 0) ? ESP_OK : ESP_FAIL;
 }
@@ -616,13 +586,8 @@ static const char *get_command_description(int command_id)
 static void execute_exit_logic(void)
 {
     // 播放再见音频
-    ESP_LOGI(TAG, "播放再见音频...");
     esp_err_t audio_ret = bsp_play_audio(byebye, byebye_len);
-    if (audio_ret == ESP_OK)
-    {
-        ESP_LOGI(TAG, "✓ 再见音频播放成功");
-    }
-    else
+    if (audio_ret != ESP_OK)
     {
         ESP_LOGE(TAG, "再见音频播放失败: %s", esp_err_to_name(audio_ret));
     }
@@ -639,7 +604,7 @@ static void execute_exit_logic(void)
  */
 extern "C" void app_main(void)
 {
-    ESP_LOGI(TAG, "Booting %s (%s)", FIRMWARE_NAME, FIRMWARE_VERSION);
+    ESP_LOGI(TAG, "启动固件：%s (%s)", FIRMWARE_NAME, FIRMWARE_VERSION);
 
     // ========== 第一步：初始化舵机 ==========
     esp_err_t motion_ret = robot_motions.init();
@@ -678,9 +643,6 @@ extern "C" void app_main(void)
     }
 
     // ========== 第二步：初始化INMP441麦克风硬件 ==========
-    ESP_LOGI(TAG, "正在初始化INMP441数字麦克风...");
-    ESP_LOGI(TAG, "音频参数: 采样率16kHz, 单声道, 16位深度");
-
     esp_err_t ret = bsp_board_init(16000, 1, 16); // 16kHz, 单声道, 16位
     if (ret != ESP_OK)
     {
@@ -688,12 +650,8 @@ extern "C" void app_main(void)
         ESP_LOGE(TAG, "请检查硬件连接: VDD->3.3V, GND->GND, SD->GPIO6, WS->GPIO4, SCK->GPIO5");
         return;
     }
-    ESP_LOGI(TAG, "✓ INMP441麦克风初始化成功");
 
     // ========== 第三步：初始化音频播放功能 ==========
-    ESP_LOGI(TAG, "正在初始化音频播放功能...");
-    ESP_LOGI(TAG, "音频播放参数: 采样率16kHz, 单声道, 16位深度");
-
     ret = bsp_audio_init(16000, 1, 16); // 16kHz, 单声道, 16位
     if (ret != ESP_OK)
     {
@@ -701,20 +659,12 @@ extern "C" void app_main(void)
         ESP_LOGE(TAG, "请检查MAX98357A硬件连接: DIN->GPIO7, BCLK->GPIO15, LRC->GPIO16");
         return;
     }
-    ESP_LOGI(TAG, "✓ 音频播放初始化成功");
 
     // ========== 第四步：初始化语音识别模型 ==========
-    ESP_LOGI(TAG, "正在初始化唤醒词检测模型...");
+    ESP_LOGI(TAG, "加载本地唤醒词和命令词模型...");
 
     // 检查内存状态
     size_t free_heap = heap_caps_get_free_size(MALLOC_CAP_8BIT);
-    size_t free_internal = heap_caps_get_free_size(MALLOC_CAP_INTERNAL);
-    size_t free_spiram = heap_caps_get_free_size(MALLOC_CAP_SPIRAM);
-
-    ESP_LOGI(TAG, "内存状态检查:");
-    ESP_LOGI(TAG, "  - 总可用内存: %zu KB", free_heap / 1024);
-    ESP_LOGI(TAG, "  - 内部RAM: %zu KB", free_internal / 1024);
-    ESP_LOGI(TAG, "  - PSRAM: %zu KB", free_spiram / 1024);
 
     if (free_heap < 100 * 1024)
     {
@@ -723,7 +673,6 @@ extern "C" void app_main(void)
     }
 
     // 从模型目录加载所有可用的语音识别模型
-    ESP_LOGI(TAG, "开始加载模型文件...");
 
     // 临时添加错误处理和重试机制
     srmodel_list_t *models = NULL;
@@ -732,8 +681,6 @@ extern "C" void app_main(void)
 
     while (models == NULL && retry_count < max_retries)
     {
-        ESP_LOGI(TAG, "尝试加载模型 (第%d次)...", retry_count + 1);
-
         // 在每次重试前等待一下
         if (retry_count > 0)
         {
@@ -765,8 +712,6 @@ extern "C" void app_main(void)
         return;
     }
 
-    ESP_LOGI(TAG, "✓ 选择唤醒词模型: %s", model_name);
-
     // 获取唤醒词检测接口
     esp_wn_iface_t *wakenet = (esp_wn_iface_t *)esp_wn_handle_from_name(model_name);
     if (wakenet == NULL)
@@ -785,7 +730,6 @@ extern "C" void app_main(void)
     }
 
     // ========== 第五步：初始化命令词识别模型 ==========
-    ESP_LOGI(TAG, "正在初始化命令词识别模型...");
 
     // 获取中文命令词识别模型（MultiNet7）
     char *mn_name = esp_srmodel_filter(models, ESP_MN_PREFIX, ESP_MN_CHINESE);
@@ -795,8 +739,6 @@ extern "C" void app_main(void)
         ESP_LOGE(TAG, "请确保已正确配置并烧录MultiNet7中文模型");
         return;
     }
-
-    ESP_LOGI(TAG, "✓ 选择命令词模型: %s", mn_name);
 
     // 获取命令词识别接口
     multinet = esp_mn_handle_from_name(mn_name);
@@ -815,14 +757,12 @@ extern "C" void app_main(void)
     }
 
     // 配置自定义命令词
-    ESP_LOGI(TAG, "正在配置命令词...");
     esp_err_t cmd_config_ret = configure_custom_commands(multinet, mn_model_data);
     if (cmd_config_ret != ESP_OK)
     {
         ESP_LOGE(TAG, "命令词配置失败");
         return;
     }
-    ESP_LOGI(TAG, "✓ 命令词配置完成");
 
     // ========== 第六步：准备音频缓冲区 ==========
     // 获取模型要求的音频数据块大小（样本数 × 每样本字节数）
@@ -838,13 +778,7 @@ extern "C" void app_main(void)
     }
 
     // 显示系统配置信息
-    ESP_LOGI(TAG, "✓ 智能语音助手系统配置完成:");
-    ESP_LOGI(TAG, "  - 唤醒词模型: %s", model_name);
-    ESP_LOGI(TAG, "  - 命令词模型: %s", mn_name);
-    ESP_LOGI(TAG, "  - 音频块大小: %d 字节", audio_chunksize);
-    ESP_LOGI(TAG, "  - 检测置信度: 90%%");
-    ESP_LOGI(TAG, "正在启动智能语音助手...");
-    ESP_LOGI(TAG, "请对着麦克风说出唤醒词 '你好小智'");
+    ESP_LOGI(TAG, "本地模型就绪：唤醒=%s | 命令=%s | 音频=16kHz/单声道/16bit", model_name, mn_name);
 
     // ========== 第七步：主循环 - 实时音频采集与语音识别 ==========
     ESP_LOGI(TAG, "系统启动完成，等待唤醒词 '你好小智'...");
@@ -871,42 +805,35 @@ extern "C" void app_main(void)
 
             if (wn_state == WAKENET_DETECTED)
             {
-                ESP_LOGI(TAG, "🎉 检测到唤醒词 '你好小智'！");
-                printf("=== 唤醒词检测成功！模型: %s ===\n", model_name);
+                ESP_LOGI(TAG, "已唤醒，播放欢迎音");
 
                 // 播放欢迎音频
-                ESP_LOGI(TAG, "播放欢迎音频...");
                 esp_err_t audio_ret = bsp_play_audio(welcome, welcome_len);
                 if (audio_ret != ESP_OK)
                 {
                     ESP_LOGE(TAG, "音频播放失败: %s", esp_err_to_name(audio_ret));
-                }
-                else
-                {
-                    ESP_LOGI(TAG, "✓ 欢迎音频播放成功");
                 }
 
                 ai_interaction_result_t ai_result = run_ai_bridge_conversation(audio_chunksize);
                 if (ai_result == AI_INTERACTION_OK)
                 {
                     current_state = STATE_WAITING_WAKEUP;
-                    ESP_LOGI(TAG, "AI bridge interaction finished, returning to wake word mode");
+                    ESP_LOGI(TAG, "本次会话结束，等待唤醒词“你好小智”");
                     continue;
                 }
                 if (ai_result == AI_INTERACTION_NO_SPEECH)
                 {
                     current_state = STATE_WAITING_WAKEUP;
-                    ESP_LOGI(TAG, "AI bridge interaction ended without speech, returning to wake word mode");
+                    ESP_LOGI(TAG, "未检测到开口，等待唤醒词“你好小智”");
                     continue;
                 }
-                ESP_LOGW(TAG, "AI bridge interaction skipped or failed, entering local command mode");
+                ESP_LOGW(TAG, "AI交互不可用，回到本地命令模式");
 
                 // 切换到命令词识别状态
                 current_state = STATE_WAITING_COMMAND;
                 command_timeout_start = xTaskGetTickCount();
                 multinet->clean(mn_model_data); // 清理命令词识别缓冲区
-                ESP_LOGI(TAG, "进入命令词识别模式，请说出指令...");
-                ESP_LOGI(TAG, "支持的指令: '帮我开灯'（顺时针45°）、'帮我关灯'（逆时针45°）或 '拜拜'");
+                ESP_LOGI(TAG, "本地命令：帮我开灯 / 帮我关灯 / 拜拜（5秒无指令退出）");
             }
         }
         else if (current_state == STATE_WAITING_COMMAND)
@@ -924,13 +851,12 @@ extern "C" void app_main(void)
                     float prob = mn_result->prob[0];
 
                     const char *cmd_desc = get_command_description(command_id);
-                    ESP_LOGI(TAG, "🎯 检测到命令词: ID=%d, 置信度=%.2f, 内容=%s, 命令='%s'",
-                             command_id, prob, mn_result->string, cmd_desc);
+                    ESP_LOGI(TAG, "本地命令：%s | 置信度=%.2f | 机器控制=%s", cmd_desc, prob,
+                             machine_control_enabled ? "开启" : "关闭");
 
                     // 处理具体命令
                     if (command_id == COMMAND_TURN_ON_LIGHT)
                     {
-                        ESP_LOGI(TAG, "🔄 执行开灯命令 - 舵机顺时针旋转45度");
                         if (machine_control_enabled)
                         {
                             robot_motions.actionHappy();
@@ -938,14 +864,13 @@ extern "C" void app_main(void)
 
                         // 播放开灯确认音频
                         esp_err_t audio_ret = bsp_play_audio(light_on, light_on_len);
-                        if (audio_ret == ESP_OK)
+                        if (audio_ret != ESP_OK)
                         {
-                            ESP_LOGI(TAG, "✓ 舵机旋转确认音频播放成功");
+                            ESP_LOGE(TAG, "命令确认音播放失败：%s", esp_err_to_name(audio_ret));
                         }
                     }
                     else if (command_id == COMMAND_TURN_OFF_LIGHT)
                     {
-                        ESP_LOGI(TAG, "🔄 执行关灯命令 - 舵机逆时针旋转45度");
                         if (machine_control_enabled)
                         {
                             robot_motions.actionShy();
@@ -953,14 +878,13 @@ extern "C" void app_main(void)
 
                         // 播放关灯确认音频
                         esp_err_t audio_ret = bsp_play_audio(light_off, light_off_len);
-                        if (audio_ret == ESP_OK)
+                        if (audio_ret != ESP_OK)
                         {
-                            ESP_LOGI(TAG, "✓ 舵机旋转确认音频播放成功");
+                            ESP_LOGE(TAG, "命令确认音播放失败：%s", esp_err_to_name(audio_ret));
                         }
                     }
                     else if (command_id == COMMAND_BYE_BYE)
                     {
-                        ESP_LOGI(TAG, "👋 检测到拜拜命令，立即退出");
                         execute_exit_logic();
                         continue; // 跳过后续的超时重置逻辑，直接进入下一次循环
                     }
@@ -973,8 +897,7 @@ extern "C" void app_main(void)
                 // 命令处理完成，重新开始5秒倒计时，继续等待下一个命令
                 command_timeout_start = xTaskGetTickCount();
                 multinet->clean(mn_model_data); // 清理命令词识别缓冲区
-                ESP_LOGI(TAG, "舵机控制命令执行完成，重新开始5秒倒计时");
-                ESP_LOGI(TAG, "可以继续说出指令: '帮我开灯'（顺时针45°）、'帮我关灯'（逆时针45°）或 '拜拜'");
+                ESP_LOGI(TAG, "可继续说本地命令（5秒无指令退出）");
             }
             else if (mn_state == ESP_MN_STATE_TIMEOUT)
             {

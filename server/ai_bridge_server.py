@@ -11,7 +11,7 @@ from services.asr_service import transcribe_audio, warm_up_asr
 from services.audio_utils import normalize_pcm_s16le, pcm_s16le_stats
 from services.dialogue_service import generate_healing_reply, warm_up_dialogue_model
 from services.tts_service import synthesize_reply
-from services.latency_trace import RequestTrace, measure_stage
+from services.latency_trace import RequestTrace, measure_stage, log_line, quoted
 from server_config import AUDIO_NORMALIZE_TARGET_PEAK
 
 
@@ -35,16 +35,16 @@ def warm_up_models() -> None:
     from server_config import MODEL_WARMUP_ENABLED
 
     if not MODEL_WARMUP_ENABLED:
-        print("[ai_bridge] model warm-up disabled", flush=True)
+        log_line("[服务端] 模型预热已关闭")
         return
     started = time.perf_counter()
     asr_result = warm_up_asr()
     llm_result = warm_up_dialogue_model()
     elapsed = time.perf_counter() - started
-    print(
-        f"[ai_bridge] model warm-up: asr={asr_result}, llm={llm_result}, elapsed={elapsed:.1f}s",
-        flush=True,
-    )
+    log_line(f"[服务端] 模型预热：ASR={asr_result['status']} | LLM={llm_result['status']} | 耗时={elapsed:.1f}s")
+    for label, result in (("ASR", asr_result), ("LLM", llm_result)):
+        if result["status"] != "ok":
+            log_line(f"[服务端] {label}预热提示：{quoted(result.get('detail', ''))}")
 
 
 def pcm_to_wav(pcm_bytes: bytes, wav_path: Path, sample_rate: int) -> None:
@@ -236,11 +236,6 @@ async def voice_interact(request: Request, http_response: Response):
         trace.event("prepare_audio_start", prepare_start)
         trace.event("prepare_audio_end", prepare_end, recording=wav_path.name)
 
-        print(
-            f"[ai_bridge] received {len(body)} bytes, request_id={trace.request_id}, "
-            f"format={audio_format}, sample_rate={sample_rate}, "
-            f"pcm={pcm_path.name}, wav={wav_path.name}", flush=True,
-        )
         response = run_ai_pipeline(wav_path, audio_stats={
             "raw": raw_stats, "normalized": normalized_stats,
             "normalize_target_peak": AUDIO_NORMALIZE_TARGET_PEAK,
@@ -249,28 +244,11 @@ async def voice_interact(request: Request, http_response: Response):
             "body_receive": int((receive_end - receive_start) * 1000),
             "prepare_audio": int((prepare_end - prepare_start) * 1000),
         })
-        print(
-            f"[ai_bridge] request_id={trace.request_id}, recognized='{response['recognized_text']}', "
-            f"asr={response['asr_status']}/{response['asr_backend']}/{response['asr_model']}, "
-            f"reply='{response['reply_text']}', "
-            f"persona={response['reply_persona']}, style={response['reply_style']}, "
-            f"emotion={response['reply_emotion']}, "
-            f"llm={response['llm_status']}/{response['llm_backend']}, "
-            f"tts={response['tts_status']}/{response['tts_backend']}, "
-            f"audio_url={response['audio_url']}, timings_ms={response['timings_ms']}, "
-            f"motion={response['motion']}", flush=True,
-        )
-        timings = response["timings_s"]
-        print(
-            "[ai_bridge] timings: "
-            f"understand={timings['understand']:.1f}s, reply={timings['reply']:.1f}s, "
-            f"tts={timings['tts']:.1f}s, total={timings['total']:.1f}s", flush=True,
-        )
         ready = time.perf_counter()
         # Handler entry -> response dict ready. NOT HTTP serialization/send time.
         response["timings_ms"]["total_request"] = int((ready - trace.started) * 1000)
         trace.event("response_ready", ready, status="ok", timings_ms=response["timings_ms"],
-                    recording=wav_path.name, audio_url=response["audio_url"])
+                    recording=wav_path.name, audio_url=response["audio_url"], response=response)
         return response
     except Exception as exc:
         trace.event("request_failed", status="failed", error_type=type(exc).__name__)

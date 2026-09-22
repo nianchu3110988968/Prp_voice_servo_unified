@@ -6,7 +6,7 @@
 
 ## 项目指南
 
-- `项目指南/voice_latency_logging.md`：ESP32录音/上传/JSON/下载/播放时间点、服务端timings_ms、同请求编号关联、测量边界和采集命令。
+- `项目指南/voice_latency_logging.md`：中文演示日志、旧debug含义对照、ESP32录音/上传/JSON/下载/播放时间点、服务端timings_ms对齐、字幕幻觉排查证据与验证入口。
 - 当前 manbo 唯一数据与校对入口：`E:\Projects2026\Prp_voice_servo_unified\voice_data\manbo\README.md`；旧manbo素材/权重路径已失效，训练网页只在用户外部浏览器操作。
 - `项目指南/ai_bridge_plan.md`：AI 电脑服务器桥接方案。
 - `项目指南/AI桥接测试步骤.md`：AI bridge 手把手测试步骤。

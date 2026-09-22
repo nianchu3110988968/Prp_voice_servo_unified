@@ -95,26 +95,24 @@ RECORDING
 
 ## 日志
 
-2026-09-15日志增强：`2026-09-15-latency-v1`在录音调用前后增加同请求ID的`recording_start/recording_end`，并关联上传、JSON、下载、播放和服务器耗时；未改本文件中的端点参数/录音状态机。`recording_end`是函数返回时刻，不等同用户最后音节结束，端点静音等待仍在录音阶段内。具体定义见 `E:\Projects2026\Prp_voice_servo_unified\docs\项目指南\voice_latency_logging.md`。本版需编译验证后由用户另行确认烧录，不能把代码事件当作已经取得的硬件数据。
+2026-09-22改为中文演示日志，源码版本`2026-09-22-demo-log-v1`。仅合并日志，未改上述端点参数/录音状态机。已由用户在VS Code完成编译和离线测试，未烧录。录音结束是函数返回时刻，不等同最后音节结束，端点静音等待仍在录音阶段内；定义、旧日志对照和误识别证据见 `voice_latency_logging.md`。
 
 串口日志应能看到：
 
 ```text
-Endpoint recorder calibrating noise: sample=500 ms, timeout=...
-AI bridge recording started: endpoint=1, fixed_duration=5000 ms
-Endpoint recorder waiting for speech: noise_floor=..., start_threshold=..., stop_threshold=...
-Speech detected: rms=..., peak=..., noise_floor=..., start_threshold=..., preroll=... bytes
-Endpoint recorder finished: ... ms, ... bytes, reason=silence_end/max_duration
-AI bridge follow-up listening: turn=1/8, timeout=30000 ms
+[esp-...] 开始监听=0ms（含校准/等待开口；以下时间点相对本轮起点）
+录音统计：...ms/...字节 | 结束=连续静音/达到时限/缓冲已满 | 最大帧RMS=.../峰值=... | 噪声底=.../开口阈值=...
+[esp-...] 录音结束=...ms | 录音流程耗时=...ms
+继续聆听：第1/8轮，30000ms内可直接说话
 ```
 
 如果欢迎音播放后直接出现：
 
 ```text
-进入命令词识别模式，请说出指令...
+AI交互不可用，回到本地命令模式
 ```
 
-且没有看到 `AI bridge recording started` 或 `Endpoint recorder waiting for speech`，说明程序没有进入端点检测录音。优先检查：
+且没有看到“开始监听”，说明程序没有进入录音。优先检查：
 
 - `status ai bridge` 中 `AI bridge ready` 是否为 `1`。
 - `Wi-Fi status` 是否为 `connected`。
@@ -124,8 +122,9 @@ AI bridge follow-up listening: turn=1/8, timeout=30000 ms
 服务端日志应能看到：
 
 ```text
-[ai_bridge] received ... bytes
-[ai_bridge] recognized='...', ... llm=ok/ollama, tts=ok/windows_sapi
+[服务端][esp-...] 识别："..." | 回复："..."
+[服务端][esp-...] 后端：ASR=ok/faster_whisper | LLM=ok/ollama | TTS=ok/gpt_sovits
+[服务端][esp-...] 输入音频：RMS=... | 峰值=... | 归一化倍率≈...倍 | 录音=...
 ```
 
 ## 调参建议
@@ -178,11 +177,7 @@ Wi-Fi status: connected
 AI bridge ready: 1
 ```
 
-电脑服务器日志：
-
-```powershell
-Get-Content E:\Projects2026\Prp_voice_servo_unified\server\uvicorn.out.log -Wait -Encoding UTF8
-```
+电脑服务器日志直接看正在运行AI bridge的VS Code终端，不追旧后台日志。重启方法见《项目重启后服务启动指南》。
 
 测试短句：
 
@@ -194,5 +189,6 @@ Get-Content E:\Projects2026\Prp_voice_servo_unified\server\uvicorn.out.log -Wait
 
 - ESP32 不再固定等待 5 秒。
 - 服务端收到的 PCM 字节数随实际说话长短变化。
-- `llm=ok/ollama`，`tts=ok/windows_sapi`。
-- 第一次回复播放后，串口应进入 `AI bridge follow-up listening`，可直接继续说下一句话。
+- 服务端 `LLM=ok/ollama`，`TTS=ok/gpt_sovits`；若显示fallback是备用声音。
+- 第一次回复播放后，串口应出现“继续聆听”，可直接继续说下一句话。
+- 不开口超时只显示“未检测到开口(no_speech)”，不是录音硬件错误。背景声也可能跨过能量阈值，本轮尚未加入真正的人声VAD或幻觉过滤。

@@ -1,102 +1,114 @@
-# 完整语音链路分段延迟日志
+# 语音演示日志与分段延迟
 
-实现版本：`2026-09-15-latency-v1`。本轮仅增加观测，不调整录音阈值、连续对话轮数、超时、缓冲容量、上传/下载方式、动作顺序、音频播放方式或TTS后端。未烧录，硬件实测待用户确认后进行。串口日志本身存在少量开销，不能声称对运行时间完全没有影响。
+源码版本：`2026-09-22-demo-log-v1`。这次重做的是日志，不是语音算法：录音阈值、增益、ASR/VAD、模型、连续对话、上传/下载方式、超时、动作和播放流程均未在本轮调整。当前编译与实测状态见 `../工作留档/task_progress.md`，不能把源码版本当作板上版本。
 
-## 请求关联与时钟
+## 1. 演示时看什么
 
-- 每轮有效进入录音流程时生成独立`esp-…`请求编号；续聊每轮有不同编号。
-- ESP32通过`X-Request-ID`发送给`POST /voice/interact`，服务器在响应头原样回显合法编号。缺失或不合法编号由服务器生成，不破坏旧固件调用。
-- ESP32的`VOICE_TRACE/VOICE_SUMMARY/VOICE_SERVER/VOICE_HTTP/VOICE_DOWNLOAD`均带`id`；服务器`[voice_trace]`后为JSON，带`request_id`。服务器`response_ready`关联本轮录音文件、回复音频URL与`timings_ms`。
-- ESP使用`esp_timer_get_time()`微秒单调时钟；服务器使用`time.perf_counter()`。两个时钟没有同步，**只能通过编号关联，不能将两边绝对时间相减**。`logged_utc`是服务器实际打印时间，仅便于找日志。
-- 某些事件在操作完成后延迟打印，分析时按事件内的`t_us/mono_us`排序，不以串口行顺序推断操作顺序。
+ESP32每轮主要看“识别内容、回复内容、三个服务端耗时、录音结束至播放”。其余起止时间用于发现慢在哪一段。每行的 `esp-…` 是同一轮请求编号，续聊下一轮会换编号。
 
-## ESP32事件含义
+下面仅为格式示意，不是新固件实测数据；省略ESP-IDF自动添加的 `I (时间) 标签:` 前缀：
 
-| event | 计时边界 |
+```text
+[esp-example] 开始监听=0ms（含校准/等待开口；以下时间点相对本轮起点）
+录音统计：1440ms/46080字节 | 结束=连续静音 | 最大帧RMS=381/峰值=561 | 噪声底=49/开口阈值=229
+[esp-example] 录音结束=1500ms | 录音流程耗时=1500ms
+[esp-example] 上传开始=1502ms → 上传结束=1573ms | 上传耗时=71ms | HTTP往返=4565ms | 写入=46080字节/尝试=1
+[esp-example] 收到JSON=6065ms | 录音结束至JSON=4565ms
+[esp-example] 识别：你好
+[esp-example] 回复：你好呀
+[esp-example] 服务端：语音识别=1628ms | 大模型响应时间=551ms | 语音合成=2218ms
+[esp-example] 服务端：收包=66ms | 音频预处理=11ms | AI流水线=4400ms | 整请求=4483ms
+[esp-example] 下载开始=6110ms → 下载结束=6398ms | 下载耗时=288ms
+[esp-example] 播放开始=6710ms | 录音结束至播放=5210ms
+[esp-example] 播放结束=10478ms | 播放耗时=3768ms
+[esp-example] 本轮结果=完成(ok) | 录音结束至播放结束=8978ms（-1=未到达）
+```
+
+正常每轮约13行（不含唤醒/续聊提示和第三方库日志），不再同时输出旧 `VOICE_TRACE/VOICE_SUMMARY/VOICE_HTTP/VOICE_DOWNLOAD/VOICE_SERVER`、JSON全文和重复回复。保留错误、回退、版本、联网与显式串口命令反馈。没有删除录音、旧日志文件或 `/debug/*` 接口，也没有全局屏蔽ESP-IDF/模型库的警告和启动诊断。
+
+服务端正常每轮6行：收到请求、识别/回复、AI三阶段耗时、收包/预处理/总耗时、实际后端、输入音频统计/录音文件。模型回退或失败会额外提示详情。Uvicorn的 `POST ... 200 OK` / 音频 `GET ... 200 OK` 属于框架访问记录，仍保留，不是第二次推理。
+
+## 2. 每种时间的准确含义
+
+所有阶段耗时单位都是ms；`=1500ms` 这种时间点表示从本轮“开始监听”经过1500ms，不是电脑墙钟。`I (2112442)` 则是设备启动后的日志打印时刻，不能与服务端墙钟直接相减。
+
+| 日志 | 测量边界 / 注意事项 |
 | --- | --- |
-| recording_start | 进入录音流程，包括等待开口/噪声校准；不是检测到用户发声的时刻 |
-| recording_end | 录音函数返回；包含端点静音判定，不等于最后一个字的声学结束时刻；失败也会返回此边界，须结合summary结果 |
-| request_start / request_end | 原`esp_http_client_perform`调用前后，包含连接、上传、服务器处理和响应接收 |
-| upload_start | HTTP头发送后，本轮请求体第一次transport write调用前 |
-| upload_end | 成功写入累计PCM请求体字节数达到预期的最后一次transport write返回后；是本机网络栈接受请求体，不代表服务器已收到/确认所有字节 |
-| json_received | HTTP完成回调时刻，在JSON解析成功后才输出这个事件 |
-| json_parsed | JSON解析成功的时刻 |
-| download_start / download_end | 回复音频GET的perform调用前后；end在失败时也记录，结合HTTP返回码判断 |
-| playback_start / playback_end | 原`bsp_play_audio`调用前后；是软件API边界，不是用麦克风测出的扬声器首声/尾声 |
+| 开始监听 | 进入录音函数前，包含噪声校准、等待开口，不代表已经说话 |
+| 录音统计中的音频时长 | 实际保留的PCM采样时长，包含预录与末尾静音；不同于整个录音函数耗时 |
+| 录音结束 | 录音函数返回；包含端点的静音等待，不是最后一个字的声学结束时刻；失败也记录返回点 |
+| 上传开始 / 结束 | HTTP头发出后首次请求体transport write调用前，到累计正写入字节达到PCM长度的返回后；是本机网络栈接受字节，不是服务器确认收到 |
+| HTTP往返 | `esp_http_client_perform`前后，包含连接、上传、服务器处理及响应接收；不能称为“上传耗时” |
+| 收到JSON | HTTP完成回调的时刻；JSON解析成功后才打印此先前记录的时间。解析失败另报错误，不能把失败当成成功收到可用JSON |
+| 下载开始 / 结束 | 回复WAV的GET perform前后；结束也可能是失败返回，必须看错误及本轮结果 |
+| 播放开始 / 结束 | `bsp_play_audio`前后；包含I2S写入及排空等待，仅为软件API边界，不是扬声器声学首尾声 |
+| 录音结束至播放 | 用户等待回复的主要软件近似指标，不能当成声学端到端测量 |
+| 本轮结果 | `ok`、`no_speech`、`no_audio`、`recording_failed`、`request_failed`、`audio_failed`；成功与失败要分开统计 |
 
-IDF 5.5只有`HEADERS_SENT`，没有`BODY_SENT`回调。`main/voice_trace.cc`使用链接器`--wrap=esp_transport_write`透明观测：只对绑定任务在HEADERS_SENT之后累计正数写入，参数原样转发一次，原返回值原样返回，不替换`esp_http_client_perform`或SDK文件，也不在写入钩子里打印日志。其他任务/下载不计入上传。重定向/认证重试保留最后一次尝试的时刻，`upload_attempts>1`单独分析；SDK升级必须重新验证链接与事件边界。
+未观测/未到达的值为 `-1`，不是0ms。例如不开口超时不会产生上传/下载事件，也不会发给服务器。若背景声跨过开口阈值，仍可能录音上传——本轮未修改这项行为。
 
-`VOICE_SUMMARY`中各值单位为毫秒：
+上传起止成对在HTTP返回后打印，下载起止成对在下载返回后打印；这样不会在transport写入钩子内做串口输出。不能按日志行的打印顺序推断所有事件的真实发生顺序。HTTP未返回时，上传摘要也尚未输出。
 
-- `record_call_ms`：录音流程耗时，包含等待开口。
-- `request_ms`：完整HTTP请求耗时，不是纯上传耗时。
-- `upload_ms`：请求体写入耗时，不含前面的DNS/连接/HTTP头。
-- `download_ms`、`playback_call_ms`：下载和播放API耗时。
-- `record_end_to_json_ms`、`record_end_to_play_start_ms`、`record_end_to_play_end_ms`：录音函数返回到JSON收到、播放调用开始和播放调用返回。
-- 未到达的阶段使用`-1`而非0。`result`区分`ok/no_audio/no_speech/recording_failed/request_failed/audio_failed`，不把失败混入正常延迟样本。
-- `VOICE_HTTP`记录返回码、HTTP状态、响应缓存是否截断；`VOICE_CORRELATION match=1`表示服务端回显编号匹配。旧服务器不回显或不提供新字段时，不阻止交互；新增服务器耗时字段显示`-1`。
+## 3. 与服务端 timings_ms 对齐
 
-## 服务端timings_ms
+ESP32发送 `X-Request-ID`，服务端回显合法编号并在每行使用 `[服务端][同一编号]`。未回显、编号不匹配、响应截断或上传未能观测时，ESP32额外打印“HTTP观测异常”；匹配正常时不再单独打印一行。旧客户端不带编号时服务端生成编号；旧服务器缺少耗时字段时ESP显示 `-1`，不阻断原交互。
 
-原有`asr/dialogue/tts/total_pipeline`含义保留；新增字段：
+| JSON字段 | 中文日志 | 范围 |
+| --- | --- | --- |
+| `body_receive` | 收包 | handler等待 `request.body()`；ASGI可能已缓存部分内容，不等于完整上行网络时间 |
+| `prepare_audio` | 音频预处理 | 读取参数、PCM统计/归一化、PCM/WAV写盘 |
+| `asr` | 语音识别 | 完整 `transcribe_audio` 调用 |
+| `dialogue` | 大模型响应时间 | 完整回复生成调用；包括规则/LLM回退，不是首token时间。遇回退须看后端状态 |
+| `tts` | 语音合成 | 完整合成调用，含格式转换及可能的SAPI回退 |
+| `total_pipeline` | AI流水线 | ASR→回复→TTS及内部开销，不含前面的收包/预处理 |
+| `total_request` | 整请求 | handler入口至响应字典就绪，不含最终摘要打印、FastAPI序列化/发送、ESP下载/播放 |
 
-| 字段 | 含义 |
+两端日志中的服务耗时都直接使用同一个 `timings_ms`，不是二次计算。兼容的 `timings_s` 仍返回，但不再重复打印。两端分别用单调时钟，只按编号关联；不能跨设备直接相减绝对时间，也不能把“HTTP往返−AI流水线”命名为纯网络延迟。
+
+`TTS=ok/gpt_sovits_fallback_windows_sapi` 仍是备用声音，即便status为ok也额外提示回退。`asr_status=ok`只代表识别调用成功，不代表识别的每个字正确。软件播放成功也不证明扬声器实际发声。
+
+## 4. 旧日志分别是什么
+
+| 附件中的旧内容 | 含义 / 新版处理 |
 | --- | --- |
-| body_receive | handler内等待`request.body()`；ASGI可能已缓存部分内容，不能当作完整上行网络时间 |
-| prepare_audio | 读取音频头参数、统计/归一化、写PCM/WAV |
-| asr | `transcribe_audio`调用时间，包含实际后端内部开销 |
-| dialogue | 回复生成调用，包括规则/LLM回退；不是只计模型token生成 |
-| tts | 整个`synthesize_reply`，包含TTS请求、WAV规范化及可能的SAPI回退 |
-| total_pipeline | ASR＋回复＋TTS及流水线内部开销，不包含body_receive/prepare_audio |
-| total_request | handler入口到回复字典准备完成，包含预处理与流水线；不含FastAPI JSON序列化、发送与ESP下载/播放 |
+| Boot、模型/命令词列表、内存打印 | 启动初始化；收敛为版本、模型就绪与必要联网信息 |
+| `Endpoint recorder calibrating/waiting` | 校准底噪、计算能量阈值；不再逐段输出 |
+| `Speech detected` | 能量连续超阈值，不是真正确认有人讲话；并入录音统计 |
+| `Endpoint recorder finished` | PCM时长/结束原因/能量；保留一条中文统计 |
+| `VOICE_TRACE` | 某个事件时间点；改为中文，上传/下载起止成对 |
+| `VOICE_CORRELATION/VOICE_HTTP` | 请求编号回显、HTTP状态与缓存截断；仅异常额外提示 |
+| `AI reply/AI bridge response text` | ASR文字、回复和控制字段；识别、回复只各打印一次 |
+| `AI latency/VOICE_SERVER` | 服务器阶段耗时与HTTP往返；取消重复，以 `timings_ms` 为准 |
+| `VOICE_DOWNLOAD/I2S写入/播放成功` | 下载与音频API调用；取消重复成功提示，保留失败与时间点 |
+| `VOICE_SUMMARY` | 整轮结果与重复计时字段；改为一行中文结果/整轮耗时 |
+| `follow-up listening` | 正在等待续聊；改成中文轮次及等待时间 |
+| `I/W/E` | 信息/警告/错误；不开口超时为正常会话结束，不再打印录音错误 |
 
-服务器同时输出body_receive、prepare_audio、asr、dialogue、tts的开始/结束事件；失败输出`request_failed`并保持原异常路径。`response_ready`不是“JSON已经传到设备”。阶段日志中的`status=ok`表示函数正常返回，实际是否走回退仍看原响应的`asr_status/llm_status/tts_status`。
+RMS是音频能量指标；峰值是最大采样绝对值，PCM16范围约0～32768；噪声底用于动态阈值。ESP的“最大帧RMS/峰值”统计范围含校准和等待，不等于保存PCM的全段RMS。服务端“原始”PCM已包含ESP的采集增益，“归一化倍率”是后续服务端再次缩放的倍率，不是信噪比。
 
-不要将`request_ms-total_pipeline`命名为“网络延迟”，差值还含服务器预处理/调度、连接和响应开销。首声等待以`record_end_to_play_start_ms`作为软件近似值，正式声学延迟需额外测量。单次数据和模拟测试不构成论文P50/P90结论。
+## 5. “字幕by索兰娅”排查结论（2026-09-22）
 
-## 代码位置
+用户附件中板上为 `2026-09-15-audio-v1`。请求 `esp-404cf46dba571f01-7d14f4b6`：能量363跨过动态开口阈值229，随后保存1440ms/46080字节；ASR返回“字幕by索兰娅”，LLM据此回复。另一轮再次出现同句，不是固件默认台词。
 
-工程根目录：`E:\Projects2026\Prp_voice_servo_unified`。
+按该轮请求时间、PCM长度和回复文件时间匹配的 `recording_20260922_212452_259514_16000hz.pcm/.wav`，只读统计为：原PCM峰值561、RMS117.95；归一化WAV峰值24575、RMS5166.76，放大约43.8倍。未试听、未重新调用真实ASR，因此不是最终声学定因。
 
-- `main\voice_trace.h/.cc`：请求编号、时刻、汇总、只观测的上传写入钩子。
-- `main\CMakeLists.txt`：编译新模块、链接包装transport write。
-- `main\main.cc::run_ai_bridge_interaction`：录音边界、响应耗时、整轮结果；固件版本号更新。
-- `main\ai_client.h/.cc::ai_client_send_pcm`：请求头、HTTP/JSON边界和新timings字段。
-- `main\audio_reply_player.h/.cc::audio_reply_play_from_url`：下载和播放边界，不改先完整下载再播放的行为。
-- `server\services\latency_trace.py`：安全请求编号和结构化阶段日志。
-- `server\ai_bridge_server.py::voice_interact/run_ai_pipeline`：保持业务结果，附加timings与请求关联。
-- `server\tests\test_latency_trace.py`：离线协议/异常/时序测试，无真实模型调用。
-- `tests\firmware\voice_trace_test.cc`与`tests\firmware_stubs`：编译真实上传观测代码做主机模拟；不代替ESP32网络与硬件测试。
+现有实现：ESP按能量判断开口；`ASR_VAD_FILTER=False`；归一化将非零输入峰值拉到75%满量程且未限最大倍率。结合用户没有说话的反馈，最可能是背景噪声误触发并被放大，Whisper产生字幕类幻觉；服务端把识别文字照常交给LLM。当前证据不支持把问题归为扬声器损坏或TTS默认读字幕。
 
-## 验证与后续实测命令
+这轮仅增加可验证诊断，没有修复/过滤误识别。后续应单独批准行为改动，用同一批静音/风扇声/小声/正常语音样本对照VAD、最大归一化增益及无语音拒绝条件，确认降低误触发且不吞小声讲话；不要仅靠屏蔽这一句话宣布修好。
 
-```powershell
-cd E:\Projects2026\Prp_voice_servo_unified
-python -X utf8 -m unittest discover -s server/tests -p test_latency_trace.py -v
-platformio run
-```
+## 6. 验证和生效
 
-预期：服务端5项测试通过、固件构建SUCCESS。没有upload参数，不会烧录。
-
-以下仅为获得烧录确认并完成烧录后的串口采集步骤，本轮不要直接烧录：
+在VS Code新建空闲PowerShell，不占用服务和监视器终端：
 
 ```powershell
-cd E:\Projects2026\Prp_voice_servo_unified
-pio device monitor --port COM7 --baud 115200 --filter log2file
+powershell -NoProfile -ExecutionPolicy Bypass -File 'E:\Projects2026\Prp_voice_servo_unified\tools\verify_voice_logging.ps1'
 ```
 
-预期固件版本`2026-09-15-latency-v1`；首轮及连续问答每轮一个新ID，有完整VOICE_TRACE与VOICE_SUMMARY。日志保存在启动目录的`device-monitor-*.log`（以monitor实际提示为准）；Ctrl+C退出并释放串口。
+该脚本依次运行服务端9项离线测试、`platformio run`、MSVC主机观测测试。模型调用均为测试替身；无端口监听、无真实服务请求、无烧录。需要当前可运行AI bridge的 `python`、`platformio` 和已安装的MSVC C++工具链。缺依赖/任一步失败立即停止，不能把未运行当通过。
 
-服务器重启后才使用新日志代码。保留现有启动脚本与环境变量；以原个性化语音启动器为例，另开PowerShell：
+- ESP32：编译通过后仍须另行确认烧录才生效，本轮不执行烧录。
+- 服务端：保持现有配置，之后在原VS Code终端手动停止/重启AI bridge才加载新版日志；不要额外开启第二份8000。日常启动仍只看《项目重启后服务启动指南》，不要再使用旧参考音频启动器。
+- 主机测试覆盖真实 `voice_trace.cc` 的透明写入、分块、失败、任务隔离、重试、中文时间点和缺失阶段；不能代替上板网络或声学测试。
+- 后续上板分别采集正常、不开口、上传失败、下载失败、播放失败、TTS回退。先核对同ID和时间边界，再做20～50轮P50/P90；当前没有新硬件延迟统计。
 
-```powershell
-cd E:\Projects2026\Prp_voice_servo_unified
-$latencyStamp = Get-Date -Format yyyyMMdd_HHmmss
-& .\server\tools\start_ai_bridge_gpt_sovits.ps1 *> ".\server\voice_latency_$latencyStamp.log"
-```
-
-这会按该脚本原配置启动服务并保存输出，不是把新manbo音色接入。若8000已被占用，先识别原服务，不要重复启动或随意结束进程。测试时同时保存ESP日志、服务日志、固件版本、后端配置、参考声音与冷热启动状态。先核对同ID事件，再采集至少20～50轮计算P50/P90。
-
-## Git范围
-
-本项目已建立本地Git。每阶段验证和文档更新后提交。真实`main\network_config.h`不入库，换电脑时从`main\network_config.example.h`复制并自行填写；录音、模型、构建缓存不入库。本地原文件不删除。GPT-SoVITS安装目录位于项目外，本仓库不会自动备份其外部代码/权重。提交与远程推送状态见最新task_progress。
+核心实现：`main/voice_trace.cc`负责计时/中文成对输出；`main/ai_client.cc`负责HTTP关联/JSON与7项timings；`main/audio_reply_player.cc`标记下载/播放；`main/main.cc`输出识别/回复与服务器耗时；`server/services/latency_trace.py`统一服务端摘要，`server/ai_bridge_server.py`维持业务顺序和响应协议。

@@ -11,6 +11,10 @@ typedef struct
     char recognized_text[256];
     char asr_status[32];
     char asr_backend[32];
+    char llm_status[32];
+    char llm_backend[32];
+    char tts_status[32];
+    char tts_backend[32];
     char motion[32];
     char audio_url[160];
     int asr_ms;

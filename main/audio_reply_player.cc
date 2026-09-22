@@ -5,7 +5,6 @@
 #include "esp_heap_caps.h"
 #include "esp_http_client.h"
 #include "esp_log.h"
-#include "esp_timer.h"
 #include "network_config.h"
 
 static const char *TAG = "audio_reply_player";
@@ -145,8 +144,6 @@ esp_err_t audio_reply_play_from_url(const char *audio_url, voice_trace_t *trace)
     config.event_handler = download_event_handler;
     config.user_data = &buffer;
 
-    int64_t download_start_us = esp_timer_get_time();
-    ESP_LOGI(TAG, "Downloading reply audio: %s", full_url);
     esp_http_client_handle_t client = esp_http_client_init(&config);
     if (client == nullptr)
     {
@@ -164,12 +161,10 @@ esp_err_t audio_reply_play_from_url(const char *audio_url, voice_trace_t *trace)
     int status = esp_http_client_get_status_code(client);
     esp_http_client_cleanup(client);
 
-    int download_ms = (int)((esp_timer_get_time() - download_start_us) / 1000);
-    if (trace) ESP_LOGI(TAG, "VOICE_DOWNLOAD id=%s ret=%s status=%d bytes=%u",
-                       trace->request_id, esp_err_to_name(ret), status, (unsigned)buffer.len);
     if (ret != ESP_OK || status < 200 || status >= 300)
     {
-        ESP_LOGE(TAG, "Reply audio download failed: ret=%s, status=%d", esp_err_to_name(ret), status);
+        ESP_LOGE(TAG, "[%s] 音频下载失败：%s，HTTP=%d，已收=%u字节",
+                 trace ? trace->request_id : "-", esp_err_to_name(ret), status, (unsigned)buffer.len);
         heap_caps_free(storage);
         return ret == ESP_OK ? ESP_FAIL : ret;
     }
@@ -183,13 +178,11 @@ esp_err_t audio_reply_play_from_url(const char *audio_url, voice_trace_t *trace)
         return ESP_ERR_INVALID_RESPONSE;
     }
 
-    ESP_LOGI(TAG, "Reply audio downloaded: wav=%u bytes, pcm=%u bytes, download_ms=%d",
-             (unsigned)buffer.len, (unsigned)pcm_len, download_ms);
-    ESP_LOGI(TAG, "Reply audio playback starting");
     if (trace) voice_trace_mark(trace, "playback_start", &trace->playback_start_us);
     ret = bsp_play_audio(pcm, pcm_len);
     if (trace) voice_trace_mark(trace, "playback_end", &trace->playback_end_us);
-    ESP_LOGI(TAG, "Reply audio playback finished: %s", esp_err_to_name(ret));
+    if (ret != ESP_OK)
+        ESP_LOGE(TAG, "[%s] 播放失败：%s", trace ? trace->request_id : "-", esp_err_to_name(ret));
 
     heap_caps_free(storage);
     return ret;

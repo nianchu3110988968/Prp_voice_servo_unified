@@ -1,6 +1,7 @@
 #include "voice_trace.h"
 
 #include <stdio.h>
+#include <string.h>
 #include "esp_log.h"
 #include "esp_random.h"
 #include "esp_timer.h"
@@ -8,7 +9,7 @@
 #include "freertos/FreeRTOS.h"
 #include "freertos/task.h"
 
-static const char *TAG = "voice_trace";
+static const char *TAG = "语音";
 static portMUX_TYPE watch_lock = portMUX_INITIALIZER_UNLOCKED;
 static voice_trace_t *watched_trace = nullptr;
 static TaskHandle_t watched_task = nullptr;
@@ -37,8 +38,32 @@ void voice_trace_init(voice_trace_t *trace)
 void voice_trace_event(const voice_trace_t *trace, const char *event, int64_t at_us)
 {
     if (trace == nullptr || at_us < 0) return;
-    ESP_LOGI(TAG, "VOICE_TRACE id=%s event=%s t_us=%lld since_start_ms=%lld",
-             trace->request_id, event, (long long)at_us, elapsed_ms(trace->started_us, at_us));
+    // Pair boundaries into one line; transport writes remain free of log I/O.
+    const long long at_ms = elapsed_ms(trace->started_us, at_us);
+    if (strcmp(event, "recording_start") == 0)
+        ESP_LOGI(TAG, "[%s] 开始监听=0ms（含校准/等待开口；以下时间点相对本轮起点）", trace->request_id);
+    else if (strcmp(event, "recording_end") == 0)
+        ESP_LOGI(TAG, "[%s] 录音结束=%lldms | 录音流程耗时=%lldms", trace->request_id, at_ms, at_ms);
+    else if (strcmp(event, "request_end") == 0)
+        ESP_LOGI(TAG, "[%s] 上传开始=%lldms → 上传结束=%lldms | 上传耗时=%lldms | HTTP往返=%lldms | 写入=%u字节/尝试=%u",
+                 trace->request_id, elapsed_ms(trace->started_us, trace->upload_start_us),
+                 elapsed_ms(trace->started_us, trace->upload_end_us),
+                 elapsed_ms(trace->upload_start_us, trace->upload_end_us),
+                 elapsed_ms(trace->request_start_us, trace->request_end_us),
+                 (unsigned)trace->upload_bytes, trace->upload_attempts);
+    else if (strcmp(event, "json_received") == 0)
+        ESP_LOGI(TAG, "[%s] 收到JSON=%lldms | 录音结束至JSON=%lldms", trace->request_id, at_ms,
+                 elapsed_ms(trace->recording_end_us, at_us));
+    else if (strcmp(event, "download_end") == 0)
+        ESP_LOGI(TAG, "[%s] 下载开始=%lldms → 下载结束=%lldms | 下载耗时=%lldms", trace->request_id,
+                 elapsed_ms(trace->started_us, trace->download_start_us), at_ms,
+                 elapsed_ms(trace->download_start_us, at_us));
+    else if (strcmp(event, "playback_start") == 0)
+        ESP_LOGI(TAG, "[%s] 播放开始=%lldms | 录音结束至播放=%lldms", trace->request_id, at_ms,
+                 elapsed_ms(trace->recording_end_us, at_us));
+    else if (strcmp(event, "playback_end") == 0)
+        ESP_LOGI(TAG, "[%s] 播放结束=%lldms | 播放耗时=%lldms", trace->request_id, at_ms,
+                 elapsed_ms(trace->playback_start_us, at_us));
 }
 
 void voice_trace_mark(voice_trace_t *trace, const char *event, int64_t *slot)
@@ -50,19 +75,16 @@ void voice_trace_mark(voice_trace_t *trace, const char *event, int64_t *slot)
 
 void voice_trace_finish(const voice_trace_t *trace, const char *result)
 {
-    ESP_LOGI(TAG,
-             "VOICE_SUMMARY id=%s result=%s record_call_ms=%lld request_ms=%lld upload_ms=%lld "
-             "upload_bytes=%u upload_attempts=%u download_ms=%lld playback_call_ms=%lld "
-             "record_end_to_json_ms=%lld record_end_to_play_start_ms=%lld record_end_to_play_end_ms=%lld",
-             trace->request_id, result, elapsed_ms(trace->started_us, trace->recording_end_us),
-             elapsed_ms(trace->request_start_us, trace->request_end_us),
-             elapsed_ms(trace->upload_start_us, trace->upload_end_us),
-             (unsigned)trace->upload_bytes, trace->upload_attempts,
-             elapsed_ms(trace->download_start_us, trace->download_end_us),
-             elapsed_ms(trace->playback_start_us, trace->playback_end_us),
-             elapsed_ms(trace->recording_end_us, trace->json_received_us),
-             elapsed_ms(trace->recording_end_us, trace->playback_start_us),
-             elapsed_ms(trace->recording_end_us, trace->playback_end_us));
+    if (trace == nullptr) return;
+    const char *label = result;
+    if (strcmp(result, "ok") == 0) label = "完成";
+    else if (strcmp(result, "no_speech") == 0) label = "未检测到开口";
+    else if (strcmp(result, "no_audio") == 0) label = "未返回音频";
+    else if (strcmp(result, "recording_failed") == 0) label = "录音失败";
+    else if (strcmp(result, "request_failed") == 0) label = "请求失败";
+    else if (strcmp(result, "audio_failed") == 0) label = "下载或播放失败";
+    ESP_LOGI(TAG, "[%s] 本轮结果=%s(%s) | 录音结束至播放结束=%lldms（-1=未到达）",
+             trace->request_id, label, result, elapsed_ms(trace->recording_end_us, trace->playback_end_us));
 }
 
 bool voice_trace_watch_upload(voice_trace_t *trace, size_t expected_bytes)

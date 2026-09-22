@@ -21,6 +21,7 @@ typedef struct
     voice_trace_t *trace;
     int64_t finished_us;
     bool truncated;
+    int correlation; // -1: old server/no header, 0: mismatch, 1: matched.
 } response_buffer_t;
 
 static esp_err_t http_event_handler(esp_http_client_event_t *evt)
@@ -33,8 +34,7 @@ static esp_err_t http_event_handler(esp_http_client_event_t *evt)
         response->finished_us = esp_timer_get_time();
     if (response != nullptr && evt->event_id == HTTP_EVENT_ON_HEADER &&
         strcasecmp(evt->header_key, "X-Request-ID") == 0 && response->trace != nullptr)
-        ESP_LOGI(TAG, "VOICE_CORRELATION id=%s server_id=%s match=%d", response->trace->request_id,
-                 evt->header_value, strcmp(response->trace->request_id, evt->header_value) == 0);
+        response->correlation = strcmp(response->trace->request_id, evt->header_value) == 0 ? 1 : 0;
 
     if (evt->event_id == HTTP_EVENT_ON_DATA && response != nullptr && evt->data_len > 0)
     {
@@ -90,6 +90,7 @@ esp_err_t ai_client_send_pcm(const int16_t *samples, size_t byte_len, uint32_t s
         .trace = trace,
         .finished_us = -1,
         .truncated = false,
+        .correlation = -1,
     };
 
     esp_http_client_config_t config = {};
@@ -114,7 +115,6 @@ esp_err_t ai_client_send_pcm(const int16_t *samples, size_t byte_len, uint32_t s
     if (trace) esp_http_client_set_header(client, "X-Request-ID", trace->request_id);
     esp_http_client_set_post_field(client, (const char *)samples, byte_len);
 
-    ESP_LOGI(TAG, "Uploading PCM to AI server: %u bytes -> %s", (unsigned)byte_len, AI_SERVER_URL);
     if (trace) voice_trace_mark(trace, "request_start", &trace->request_start_us);
     bool watching = voice_trace_watch_upload(trace, byte_len);
     esp_err_t ret = esp_http_client_perform(client);
@@ -124,16 +124,15 @@ esp_err_t ai_client_send_pcm(const int16_t *samples, size_t byte_len, uint32_t s
     {
         trace->request_end_us = request_end_us;
         // Emitted after perform to keep serial logging out of the upload writes.
-        voice_trace_event(trace, "upload_start", trace->upload_start_us);
-        voice_trace_event(trace, "upload_end", trace->upload_end_us);
         voice_trace_event(trace, "request_end", trace->request_end_us);
-        ESP_LOGI(TAG, "VOICE_HTTP id=%s ret=%s status=%d response_bytes=%d truncated=%d upload_observed=%d",
-                 trace->request_id, esp_err_to_name(ret), esp_http_client_get_status_code(client),
-                 response_buffer.len, response_buffer.truncated, watching);
+        if (response_buffer.correlation != 1 || response_buffer.truncated || !watching)
+            ESP_LOGW(TAG, "[%s] HTTP观测异常：编号匹配=%d(-1=无回显) | JSON截断=%d | 上传观测=%d | HTTP=%d",
+                     trace->request_id, response_buffer.correlation, response_buffer.truncated, watching,
+                     esp_http_client_get_status_code(client));
     }
     if (ret != ESP_OK)
     {
-        ESP_LOGE(TAG, "HTTP request failed: %s", esp_err_to_name(ret));
+        ESP_LOGE(TAG, "[%s] HTTP请求失败：%s", trace ? trace->request_id : "-", esp_err_to_name(ret));
         esp_http_client_cleanup(client);
         return ret;
     }
@@ -143,27 +142,31 @@ esp_err_t ai_client_send_pcm(const int16_t *samples, size_t byte_len, uint32_t s
 
     if (status < 200 || status >= 300)
     {
-        ESP_LOGE(TAG, "AI server returned HTTP status %d", status);
+        ESP_LOGE(TAG, "[%s] 服务器返回HTTP错误：%d", trace ? trace->request_id : "-", status);
         return ESP_FAIL;
     }
 
     cJSON *root = cJSON_Parse(response_storage);
     if (root == nullptr)
     {
-        ESP_LOGE(TAG, "Failed to parse AI server JSON: %s", response_storage);
+        ESP_LOGE(TAG, "[%s] JSON解析失败：收到%d字节，截断=%d", trace ? trace->request_id : "-",
+                 response_buffer.len, response_buffer.truncated);
         return ESP_FAIL;
     }
     if (trace)
     {
         trace->json_received_us = response_buffer.finished_us;
         voice_trace_event(trace, "json_received", trace->json_received_us);
-        voice_trace_event(trace, "json_parsed", esp_timer_get_time());
     }
 
     copy_json_string(root, "reply_text", response->reply_text, sizeof(response->reply_text));
     copy_json_string(root, "recognized_text", response->recognized_text, sizeof(response->recognized_text));
     copy_json_string(root, "asr_status", response->asr_status, sizeof(response->asr_status));
     copy_json_string(root, "asr_backend", response->asr_backend, sizeof(response->asr_backend));
+    copy_json_string(root, "llm_status", response->llm_status, sizeof(response->llm_status));
+    copy_json_string(root, "llm_backend", response->llm_backend, sizeof(response->llm_backend));
+    copy_json_string(root, "tts_status", response->tts_status, sizeof(response->tts_status));
+    copy_json_string(root, "tts_backend", response->tts_backend, sizeof(response->tts_backend));
     copy_json_string(root, "motion", response->motion, sizeof(response->motion));
     copy_json_string(root, "audio_url", response->audio_url, sizeof(response->audio_url));
     cJSON *timings = cJSON_GetObjectItem(root, "timings_ms");
@@ -179,8 +182,5 @@ esp_err_t ai_client_send_pcm(const int16_t *samples, size_t byte_len, uint32_t s
     }
     cJSON_Delete(root);
 
-    ESP_LOGI(TAG, "AI reply: recognized='%s', asr_status='%s', asr_backend='%s', text='%s', motion='%s', audio_url='%s', server_ms=%d",
-             response->recognized_text, response->asr_status, response->asr_backend,
-             response->reply_text, response->motion, response->audio_url, response->total_pipeline_ms);
     return ESP_OK;
 }
