@@ -130,3 +130,9 @@ E:/Projects2026/Prp_voice_servo_unified
 - `mechanical/v0/output/PRP_V0_with_hardware.step`及`PRP_V0_frame_only.step`：含硬件包络/仅打印结构的装配评审。
 - `mechanical/v0/output/step_parts/`、`stl_parts/`：32个分件；`stl_trial/`：5种优先试装样件。
 - `mechanical/v0/output/validation.json`、`assembly_preview.png`：几何验证和真实模型预览；无承重/热/疲劳实测。
+
+## 2026-09-22 硬件草模独立交付（替代当前骨架设计任务）
+
+- `mechanical/硬件草模/`：七种硬件独立 STEP、八种硬件展示总览、使用说明和提取核验；坐标已归一。
+- `mechanical/硬件草模/占位_未定尺寸/`：INMP441 20×20×10 暂定占位，不能当作真实尺寸。
+- 用户因尺寸与连接复杂度不接受 V0，改为自行设计骨架；`mechanical/v0/` 保留作历史及尺寸证据，不再是当前实施方案。

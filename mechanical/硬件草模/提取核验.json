@@ -1,0 +1,130 @@
+{
+  "source": "E:\\Projects2026\\Prp_voice_servo_unified\\mechanical\\v0\\output\\PRP_V0_with_hardware.step",
+  "source_sha256": "4966952b3f867660b6dab858f7a5e9c0c70e7991d561d2bad29ab2ea6f79bb6e",
+  "units": "mm",
+  "origin": "XY footprint center; lowest face Z=0; PCB component side +Z; SG90 output axis +Z",
+  "models": [
+    {
+      "file": "01_SG90_舵机.step",
+      "source_entities": [
+        "REF_SG90_tail"
+      ],
+      "dimensions_mm": [
+        32.5,
+        12.0,
+        27.3
+      ],
+      "valid": true,
+      "solids": 1,
+      "source_volume_preserved": true,
+      "step_roundtrip_valid": true
+    },
+    {
+      "file": "02_ESP32-S3_开发板.step",
+      "source_entities": [
+        "REF_ESP_board_outline",
+        "REF_ESP_component_height_ASSUMED"
+      ],
+      "dimensions_mm": [
+        63.389,
+        27.94,
+        11.6
+      ],
+      "valid": true,
+      "solids": 1,
+      "source_volume_preserved": true,
+      "step_roundtrip_valid": true
+    },
+    {
+      "file": "03_PCA9685_驱动板.step",
+      "source_entities": [
+        "REF_PCA_board_outline",
+        "REF_PCA_component_height_ASSUMED"
+      ],
+      "dimensions_mm": [
+        60.0,
+        25.0,
+        11.6
+      ],
+      "valid": true,
+      "solids": 1,
+      "source_volume_preserved": true,
+      "step_roundtrip_valid": true
+    },
+    {
+      "file": "04_电池_68x36x18_型号待核对.step",
+      "source_entities": [
+        "REF_battery_68x36x18_UNCONFIRMED_SKU"
+      ],
+      "dimensions_mm": [
+        68.0,
+        36.0,
+        18.0
+      ],
+      "valid": true,
+      "solids": 1,
+      "source_volume_preserved": true,
+      "step_roundtrip_valid": true
+    },
+    {
+      "file": "05_降压板_60x30x16_型号待核对.step",
+      "source_entities": [
+        "REF_converter_60x30x16_UNCONFIRMED_SKU_-34"
+      ],
+      "dimensions_mm": [
+        60.0,
+        30.0,
+        16.0
+      ],
+      "valid": true,
+      "solids": 1,
+      "source_volume_preserved": true,
+      "step_roundtrip_valid": true
+    },
+    {
+      "file": "06_MAX98357A_功放_高度暂定.step",
+      "source_entities": [
+        "REF_MAX98357_18x19_height_ASSUMED"
+      ],
+      "dimensions_mm": [
+        18.0,
+        19.0,
+        10.0
+      ],
+      "valid": true,
+      "solids": 1,
+      "source_volume_preserved": true,
+      "step_roundtrip_valid": true
+    },
+    {
+      "file": "07_扬声器_35x25_厚度暂定.step",
+      "source_entities": [
+        "REF_speaker_35x25x7p8_allowance"
+      ],
+      "dimensions_mm": [
+        35.0,
+        25.0,
+        7.8
+      ],
+      "valid": true,
+      "solids": 1,
+      "source_volume_preserved": true,
+      "step_roundtrip_valid": true
+    },
+    {
+      "file": "占位_未定尺寸/08_INMP441_仅20x20x10占位.step",
+      "source_entities": [
+        "REF_microphone_RESERVE_20x20x10"
+      ],
+      "dimensions_mm": [
+        20.0,
+        20.0,
+        10.0
+      ],
+      "valid": true,
+      "solids": 1,
+      "source_volume_preserved": true,
+      "step_roundtrip_valid": true
+    }
+  ]
+}
