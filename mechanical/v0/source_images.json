@@ -1,0 +1,44 @@
+{
+  "date": "2026-09-22",
+  "sources": [
+    {
+      "file": "硬件参数/4欧3瓦扬声器.webp",
+      "bytes": 76954,
+      "sha256": "3a030214f94f7345f54ce54d8bcbf2f03b6a155d835f6eb9a96472359dbddfa0"
+    },
+    {
+      "file": "硬件参数/ESP32.webp",
+      "bytes": 171406,
+      "sha256": "5611a9147b6e66336f5f0547f113c5852d7a728b6906b7a8f0b46e3f4358b51f"
+    },
+    {
+      "file": "硬件参数/MAX98357.webp",
+      "bytes": 91272,
+      "sha256": "82570cdd2ed7bce75b1f06aa028528172a88be93a97b730ff3d410819ee7a1c0"
+    },
+    {
+      "file": "硬件参数/PCA9685.webp",
+      "bytes": 171774,
+      "sha256": "1649336c470431958920963380a8ed41c134232f172ccb4a03bd1dbab967a413"
+    },
+    {
+      "file": "硬件参数/SG90.jpg",
+      "bytes": 33629,
+      "sha256": "56d3f5fa18cb9bc2bdce16ab0d7b17f02e09ce8e39c0cbc8a8732853042d1882"
+    },
+    {
+      "file": "硬件参数/电池.webp",
+      "bytes": 150716,
+      "sha256": "7f7033c627a12ff8c871672c32162b11ddbf35d4139fc4e41a4f3d7557f3d79a"
+    },
+    {
+      "file": "硬件参数/降压板.webp",
+      "bytes": 70130,
+      "sha256": "d06250b47a9a0e322f650162af71a22ff8c222d31692d88cac95109893a35df8"
+    }
+  ],
+  "excluded_from_commit": [
+    "硬件参数/打印参数.png",
+    "硬件参数/ESP32_2.webp"
+  ]
+}

@@ -1,0 +1,30 @@
+{
+  "frame_length": 150,
+  "frame_width": 94,
+  "frame_top": 65,
+  "wall": 3,
+  "hip_x": 60,
+  "hip_z": 42,
+  "servo_axis_x": 24,
+  "servo_mount_center_x": 29.3,
+  "servo_hole_pitch": 27.8,
+  "servo_hole_d": 2.2,
+  "servo_panel_clearance_hole": 2.4,
+  "servo_opening": [
+    23.6,
+    12.6
+  ],
+  "crank_radius": 10,
+  "link_centers": 36,
+  "leg_length": 52,
+  "pivot_bore": 6.25,
+  "axle_clearance": 4.3,
+  "battery_pocket": [
+    72,
+    40,
+    21
+  ],
+  "board_thickness_assumed": 1.6,
+  "printed_sliding_clearance": 0.3,
+  "nominal_leg_sweep_deg": 15
+}

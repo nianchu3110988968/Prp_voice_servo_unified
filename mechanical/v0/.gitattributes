@@ -1,0 +1,4 @@
+*.step binary
+*.stl binary
+*.SLDASM binary
+*.png binary

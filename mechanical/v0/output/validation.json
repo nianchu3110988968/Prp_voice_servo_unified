@@ -1,0 +1,449 @@
+{
+  "status": "FIT_PROTOTYPE_NOT_LOAD_VALIDATED",
+  "parts": [
+    {
+      "name": "01_main_frame",
+      "bbox_mm": [
+        150.007,
+        94.007,
+        65.004
+      ],
+      "volume_mm3": 98102.9,
+      "solid_PLA_mass_g": 121.65,
+      "brep_valid": true,
+      "solids": 1,
+      "stl_watertight": true
+    },
+    {
+      "name": "02_battery_cradle",
+      "bbox_mm": [
+        90.004,
+        46.004,
+        12.503
+      ],
+      "volume_mm3": 14101.97,
+      "solid_PLA_mass_g": 17.49,
+      "brep_valid": true,
+      "solids": 1,
+      "stl_watertight": true
+    },
+    {
+      "name": "03_lower_electronics_deck",
+      "bbox_mm": [
+        144.003,
+        61,
+        3.003
+      ],
+      "volume_mm3": 20518.16,
+      "solid_PLA_mass_g": 25.44,
+      "brep_valid": true,
+      "solids": 1,
+      "stl_watertight": true
+    },
+    {
+      "name": "04_PCA_edge_rail_-1",
+      "bbox_mm": [
+        52,
+        9.7,
+        7.001
+      ],
+      "volume_mm3": 1104.19,
+      "solid_PLA_mass_g": 1.37,
+      "brep_valid": true,
+      "solids": 1,
+      "stl_watertight": true
+    },
+    {
+      "name": "04_PCA_edge_rail_1",
+      "bbox_mm": [
+        52,
+        9.7,
+        7.001
+      ],
+      "volume_mm3": 1104.19,
+      "solid_PLA_mass_g": 1.37,
+      "brep_valid": true,
+      "solids": 1,
+      "stl_watertight": true
+    },
+    {
+      "name": "04_ESP_edge_rail_-1",
+      "bbox_mm": [
+        52,
+        9.7,
+        7.001
+      ],
+      "volume_mm3": 1104.19,
+      "solid_PLA_mass_g": 1.37,
+      "brep_valid": true,
+      "solids": 1,
+      "stl_watertight": true
+    },
+    {
+      "name": "04_ESP_edge_rail_1",
+      "bbox_mm": [
+        52,
+        9.7,
+        7.001
+      ],
+      "volume_mm3": 1104.19,
+      "solid_PLA_mass_g": 1.37,
+      "brep_valid": true,
+      "solids": 1,
+      "stl_watertight": true
+    },
+    {
+      "name": "05_upper_power_deck",
+      "bbox_mm": [
+        144.004,
+        80.004,
+        3.004
+      ],
+      "volume_mm3": 27934.25,
+      "solid_PLA_mass_g": 34.64,
+      "brep_valid": true,
+      "solids": 1,
+      "stl_watertight": true
+    },
+    {
+      "name": "06_converter_sled_-34",
+      "bbox_mm": [
+        66.003,
+        36.003,
+        6.004
+      ],
+      "volume_mm3": 3449.99,
+      "solid_PLA_mass_g": 4.28,
+      "brep_valid": true,
+      "solids": 1,
+      "stl_watertight": true
+    },
+    {
+      "name": "06_converter_sled_34",
+      "bbox_mm": [
+        66.003,
+        36.003,
+        6.004
+      ],
+      "volume_mm3": 3449.99,
+      "solid_PLA_mass_g": 4.28,
+      "brep_valid": true,
+      "solids": 1,
+      "stl_watertight": true
+    },
+    {
+      "name": "07_accessory_strip",
+      "bbox_mm": [
+        123.003,
+        31.003,
+        2.003
+      ],
+      "volume_mm3": 6873.87,
+      "solid_PLA_mass_g": 8.52,
+      "brep_valid": true,
+      "solids": 1,
+      "stl_watertight": true
+    },
+    {
+      "name": "08_hip_fork_front_R",
+      "bbox_mm": [
+        28,
+        48,
+        33.003
+      ],
+      "volume_mm3": 16716.89,
+      "solid_PLA_mass_g": 20.73,
+      "brep_valid": true,
+      "solids": 1,
+      "stl_watertight": true
+    },
+    {
+      "name": "09_leg_front_R",
+      "bbox_mm": [
+        25.006,
+        70.703,
+        23.006
+      ],
+      "volume_mm3": 8910.51,
+      "solid_PLA_mass_g": 11.05,
+      "brep_valid": true,
+      "solids": 1,
+      "stl_watertight": true
+    },
+    {
+      "name": "10_link_front_R",
+      "bbox_mm": [
+        43.605,
+        7.605,
+        2.005
+      ],
+      "volume_mm3": 619.83,
+      "solid_PLA_mass_g": 0.77,
+      "brep_valid": true,
+      "solids": 1,
+      "stl_watertight": true
+    },
+    {
+      "name": "11_horn_adapter_front_R",
+      "bbox_mm": [
+        12.004,
+        19.896,
+        2.008
+      ],
+      "volume_mm3": 274.28,
+      "solid_PLA_mass_g": 0.34,
+      "brep_valid": true,
+      "solids": 1,
+      "stl_watertight": true
+    },
+    {
+      "name": "08_hip_fork_front_L",
+      "bbox_mm": [
+        28,
+        48,
+        33.003
+      ],
+      "volume_mm3": 16716.89,
+      "solid_PLA_mass_g": 20.73,
+      "brep_valid": true,
+      "solids": 1,
+      "stl_watertight": true
+    },
+    {
+      "name": "09_leg_front_L",
+      "bbox_mm": [
+        25.006,
+        70.703,
+        23.006
+      ],
+      "volume_mm3": 8910.51,
+      "solid_PLA_mass_g": 11.05,
+      "brep_valid": true,
+      "solids": 1,
+      "stl_watertight": true
+    },
+    {
+      "name": "10_link_front_L",
+      "bbox_mm": [
+        43.605,
+        7.605,
+        2.005
+      ],
+      "volume_mm3": 619.83,
+      "solid_PLA_mass_g": 0.77,
+      "brep_valid": true,
+      "solids": 1,
+      "stl_watertight": true
+    },
+    {
+      "name": "11_horn_adapter_front_L",
+      "bbox_mm": [
+        12.004,
+        19.896,
+        2.008
+      ],
+      "volume_mm3": 274.28,
+      "solid_PLA_mass_g": 0.34,
+      "brep_valid": true,
+      "solids": 1,
+      "stl_watertight": true
+    },
+    {
+      "name": "08_hip_fork_rear_R",
+      "bbox_mm": [
+        28,
+        48,
+        33.003
+      ],
+      "volume_mm3": 16716.89,
+      "solid_PLA_mass_g": 20.73,
+      "brep_valid": true,
+      "solids": 1,
+      "stl_watertight": true
+    },
+    {
+      "name": "09_leg_rear_R",
+      "bbox_mm": [
+        25.006,
+        70.703,
+        23.006
+      ],
+      "volume_mm3": 8910.51,
+      "solid_PLA_mass_g": 11.05,
+      "brep_valid": true,
+      "solids": 1,
+      "stl_watertight": true
+    },
+    {
+      "name": "10_link_rear_R",
+      "bbox_mm": [
+        43.605,
+        7.605,
+        2.005
+      ],
+      "volume_mm3": 619.83,
+      "solid_PLA_mass_g": 0.77,
+      "brep_valid": true,
+      "solids": 1,
+      "stl_watertight": true
+    },
+    {
+      "name": "11_horn_adapter_rear_R",
+      "bbox_mm": [
+        12.004,
+        19.896,
+        2.008
+      ],
+      "volume_mm3": 274.28,
+      "solid_PLA_mass_g": 0.34,
+      "brep_valid": true,
+      "solids": 1,
+      "stl_watertight": true
+    },
+    {
+      "name": "08_hip_fork_rear_L",
+      "bbox_mm": [
+        28,
+        48,
+        33.003
+      ],
+      "volume_mm3": 16716.89,
+      "solid_PLA_mass_g": 20.73,
+      "brep_valid": true,
+      "solids": 1,
+      "stl_watertight": true
+    },
+    {
+      "name": "09_leg_rear_L",
+      "bbox_mm": [
+        25.006,
+        70.703,
+        23.006
+      ],
+      "volume_mm3": 8910.51,
+      "solid_PLA_mass_g": 11.05,
+      "brep_valid": true,
+      "solids": 1,
+      "stl_watertight": true
+    },
+    {
+      "name": "10_link_rear_L",
+      "bbox_mm": [
+        43.605,
+        7.605,
+        2.005
+      ],
+      "volume_mm3": 619.83,
+      "solid_PLA_mass_g": 0.77,
+      "brep_valid": true,
+      "solids": 1,
+      "stl_watertight": true
+    },
+    {
+      "name": "11_horn_adapter_rear_L",
+      "bbox_mm": [
+        12.004,
+        19.896,
+        2.008
+      ],
+      "volume_mm3": 274.28,
+      "solid_PLA_mass_g": 0.34,
+      "brep_valid": true,
+      "solids": 1,
+      "stl_watertight": true
+    },
+    {
+      "name": "12_tail_servo_mount",
+      "bbox_mm": [
+        43.001,
+        64,
+        10.001
+      ],
+      "volume_mm3": 3616.35,
+      "solid_PLA_mass_g": 4.48,
+      "brep_valid": true,
+      "solids": 1,
+      "stl_watertight": true
+    },
+    {
+      "name": "13_tail_horn_arm",
+      "bbox_mm": [
+        46.006,
+        10.006,
+        3.006
+      ],
+      "volume_mm3": 1181.1,
+      "solid_PLA_mass_g": 1.46,
+      "brep_valid": true,
+      "solids": 1,
+      "stl_watertight": true
+    },
+    {
+      "name": "14_speaker_front_cage",
+      "bbox_mm": [
+        31.5,
+        61,
+        14.001
+      ],
+      "volume_mm3": 6777.05,
+      "solid_PLA_mass_g": 8.4,
+      "brep_valid": true,
+      "solids": 1,
+      "stl_watertight": true
+    },
+    {
+      "name": "15_speaker_retainer_-1",
+      "bbox_mm": [
+        18,
+        7,
+        2.002
+      ],
+      "volume_mm3": 233.9,
+      "solid_PLA_mass_g": 0.29,
+      "brep_valid": true,
+      "solids": 1,
+      "stl_watertight": true
+    },
+    {
+      "name": "15_speaker_retainer_1",
+      "bbox_mm": [
+        18,
+        7,
+        2.002
+      ],
+      "volume_mm3": 233.9,
+      "solid_PLA_mass_g": 0.29,
+      "brep_valid": true,
+      "solids": 1,
+      "stl_watertight": true
+    }
+  ],
+  "trials": [
+    "T01_SG90_panel",
+    "T02_holes_2p4_3p3_4p3_6p25",
+    "T03_accessory_edge_clip",
+    "T04_original_horn_adapter",
+    "T05_leg_pivot_bushing_fit"
+  ],
+  "limitations": [
+    "SKU mismatch battery/converter",
+    "PCB heights / some hole diameters unverified",
+    "Horn pattern/spline height require physical fit",
+    "No load, fatigue, heat, or physical gait tests"
+  ],
+  "cad_engine": "2.6.1",
+  "printed_part_intersections": [],
+  "all_envelope_intersections": [],
+  "leg_sweep_intersections": [],
+  "solid_PLA_total_g": 368.26,
+  "NOTE_mass": "100% CAD solid density estimate; not slicer mass or measured mass",
+  "assembly_bbox_mm": [
+    220.7,
+    166,
+    104
+  ],
+  "step_readback": {
+    "valid": true,
+    "solids": 56
+  }
+}

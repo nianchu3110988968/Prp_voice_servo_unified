@@ -119,3 +119,14 @@ E:/Projects2026/Prp_voice_servo_unified
 - 当前源码及板上固件版本为 `2026-09-15-audio-v1`：保留连续对话和分段延迟日志，并修复 I2S 写入后立即停钟可能截断音频、频繁唤醒功放的问题；已烧录且两次本地音频自检均完成 I2S 写入，实际扬声器听感待用户确认。
 - 舵机部分最近一次硬件实测仍为 `2026-09-08-five-servo-v2` 阶段：通道 0 的 `servo fl 80/100` 已验证，其余四路与组合动作未系统实测；后来固件保留这些代码，但未重新做舵机回归测试。
 - 服务器端 ASR、Ollama、TTS 链路已实现；实际运行状态需要每次测试前重新检查端口、日志和 `/config`。
+
+## 2026-09-22 机械骨架V0（试装版）
+
+- `硬件参数/`：用户提供的尺寸图片；打印服务截图含账户界面，仅留本地。
+- `mechanical/v0/硬件尺寸与孔位核对.md`：硬件/孔位台账，区分图示值与预留值。
+- `mechanical/v0/generate_frame.py`：独立CadQuery几何生成、STL与干涉检查、渲染；不连接固件或服务端。
+- `mechanical/v0/README.md`：装配、标准件、PLA打印和待实测验收；`source_images.json`记录图片哈希。
+- `mechanical/v0/output/PRP_V0_with_hardware.SLDASM`：已在SolidWorks保存的STEP导入装配，依赖同目录STEP；不是原生草图建模或已建立运动配合的装配。
+- `mechanical/v0/output/PRP_V0_with_hardware.step`及`PRP_V0_frame_only.step`：含硬件包络/仅打印结构的装配评审。
+- `mechanical/v0/output/step_parts/`、`stl_parts/`：32个分件；`stl_trial/`：5种优先试装样件。
+- `mechanical/v0/output/validation.json`、`assembly_preview.png`：几何验证和真实模型预览；无承重/热/疲劳实测。
