@@ -11,6 +11,20 @@ static constexpr size_t MOTION_QUEUE_LENGTH = 8;
 static constexpr uint32_t MOTION_TASK_STACK_SIZE = 4096;
 static constexpr UBaseType_t MOTION_TASK_PRIORITY = 4;
 
+namespace {
+class OutputLock {
+public:
+    explicit OutputLock(SemaphoreHandle_t mutex) : mutex_(mutex) {
+        xSemaphoreTake(mutex_, portMAX_DELAY);
+    }
+    ~OutputLock() { xSemaphoreGive(mutex_); }
+    OutputLock(const OutputLock &) = delete;
+    OutputLock &operator=(const OutputLock &) = delete;
+private:
+    SemaphoreHandle_t mutex_;
+};
+}
+
 static int clampInt(int value, int min_value, int max_value) {
     if (value < min_value) {
         return min_value;
@@ -22,8 +36,12 @@ static int clampInt(int value, int min_value, int max_value) {
 }
 
 esp_err_t RobotMotions::init() {
+    output_mutex_ = xSemaphoreCreateMutex();
+    if (output_mutex_ == nullptr) return ESP_ERR_NO_MEM;
     esp_err_t ret = pwm_.init();
     if (ret != ESP_OK) {
+        vSemaphoreDelete(output_mutex_);
+        output_mutex_ = nullptr;
         return ret;
     }
 
@@ -33,6 +51,8 @@ esp_err_t RobotMotions::init() {
 
     command_queue_ = xQueueCreate(MOTION_QUEUE_LENGTH, sizeof(MotionCommand));
     if (command_queue_ == nullptr) {
+        vSemaphoreDelete(output_mutex_);
+        output_mutex_ = nullptr;
         ESP_LOGE(TAG, "failed to create motion command queue");
         return ESP_ERR_NO_MEM;
     }
@@ -49,13 +69,80 @@ esp_err_t RobotMotions::init() {
         ready_ = false;
         vQueueDelete(command_queue_);
         command_queue_ = nullptr;
+        vSemaphoreDelete(output_mutex_);
+        output_mutex_ = nullptr;
         ESP_LOGE(TAG, "failed to create robot motion task");
         return ESP_ERR_NO_MEM;
     }
 
-    actionReset();
-    ESP_LOGI(TAG, "five-servo non-blocking motion task ready");
+    ESP_LOGI(TAG, "five-servo motion task ready; PWM outputs remain disabled");
+    ESP_LOGI(TAG, "舵机通道：左前=%u 右前=%u 左后=%u 右后=%u 尾部=%u（PWM尚未启用）",
+             SERVO_FRONT_LEFT, SERVO_FRONT_RIGHT, SERVO_REAR_LEFT, SERVO_REAR_RIGHT, SERVO_TAIL);
     return ESP_OK;
+}
+
+esp_err_t RobotMotions::enableOutputsAtHome() {
+    return enableChannelsAtHome(SERVO_ALL_CHANNEL_MASK, -1);
+}
+
+esp_err_t RobotMotions::enableSingleServoAtHome(uint8_t channel) {
+    if (findServoLimit(channel) == nullptr) return ESP_ERR_INVALID_ARG;
+    return enableChannelsAtHome(servoChannelMask(channel), channel);
+}
+
+esp_err_t RobotMotions::enableChannelsAtHome(uint16_t channel_mask, int single_channel) {
+    if (!ready_ || command_queue_ == nullptr) {
+        return ESP_ERR_INVALID_STATE;
+    }
+
+    OutputLock lock(output_mutex_);
+    // A new session requires explicit stop. Repeated enable must not jump home.
+    if (control_enabled_) return ESP_ERR_INVALID_STATE;
+    control_enabled_ = false;
+    single_channel_ = -1;
+    ++generation_;
+    xQueueReset(command_queue_);
+    esp_err_t ret = pwm_.setOutputsEnabled(false);
+    if (ret != ESP_OK) return ret;
+    // Stage every home value with its own FULL OFF bit still set.
+    for (size_t i = 0; i < SERVO_LIMIT_COUNT; ++i) {
+        const ServoLimit &limit = SERVO_LIMITS[i];
+        if ((channel_mask & servoChannelMask(limit.channel)) == 0) continue;
+        const int pulse = SERVO_US_MIN +
+                          ((limit.home_angle * (SERVO_US_MAX - SERVO_US_MIN)) / 180);
+        ret = pwm_.writeMicroseconds(limit.channel, pulse);
+        if (ret != ESP_OK) {
+            pwm_.setOutputsEnabled(false);
+            return ret;
+        }
+        current_angles_[i] = limit.home_angle;
+    }
+
+    ret = pwm_.setOutputsEnabled(true, channel_mask);
+    if (ret == ESP_OK) {
+        single_channel_ = single_channel;
+        control_enabled_ = true;
+        if (single_channel_ < 0) ESP_LOGI(TAG, "servo PWM outputs enabled at home pose");
+        else ESP_LOGI(TAG, "单路调试：仅通道%d启用，其余15路PWM关闭", single_channel_);
+    }
+    return ret;
+}
+
+esp_err_t RobotMotions::disableOutputs() {
+    if (!ready_ || command_queue_ == nullptr) {
+        return ESP_ERR_INVALID_STATE;
+    }
+
+    OutputLock lock(output_mutex_);
+    control_enabled_ = false;
+    single_channel_ = -1;
+    ++generation_;
+    xQueueReset(command_queue_);
+    esp_err_t ret = pwm_.setOutputsEnabled(false);
+    if (ret == ESP_OK) {
+        ESP_LOGI(TAG, "servo PWM outputs disabled (FULL OFF)");
+    }
+    return ret;
 }
 
 bool RobotMotions::isReady() const {
@@ -82,14 +169,6 @@ void RobotMotions::actionReset() {
     enqueueCommand(CommandType::Reset);
 }
 
-void RobotMotions::cancelPendingAndReset() {
-    if (!ready_ || command_queue_ == nullptr) {
-        return;
-    }
-    xQueueReset(command_queue_);
-    enqueueCommand(CommandType::Reset);
-}
-
 bool RobotMotions::requestServoAngle(uint8_t channel, int angle) {
     const ServoLimit *limit = findServoLimit(channel);
     if (limit == nullptr || angle < limit->min_angle || angle > limit->max_angle) {
@@ -109,6 +188,7 @@ void RobotMotions::motionTask() {
     MotionCommand command = {};
     while (true) {
         if (xQueueReceive(command_queue_, &command, portMAX_DELAY) == pdTRUE) {
+            executing_generation_ = command.generation;
             executeCommand(command);
         }
     }
@@ -122,7 +202,11 @@ bool RobotMotions::enqueueCommand(CommandType type, uint8_t channel, int angle) 
         return false;
     }
 
-    MotionCommand command = {type, channel, angle};
+    OutputLock lock(output_mutex_);
+    if (!control_enabled_) return false;
+    if (single_channel_ >= 0 &&
+        (type != CommandType::SetServo || !singleServoRequestAllowed(channel, angle))) return false;
+    MotionCommand command = {type, channel, angle, generation_};
     if (xQueueSend(command_queue_, &command, 0) != pdTRUE) {
         ESP_LOGW(TAG, "motion queue full; command dropped");
         return false;
@@ -131,6 +215,7 @@ bool RobotMotions::enqueueCommand(CommandType type, uint8_t channel, int angle) 
 }
 
 void RobotMotions::executeCommand(const MotionCommand &command) {
+    if (!currentMotionAllowed()) return;
     switch (command.type) {
     case CommandType::Reset:
         executeReset();
@@ -204,8 +289,14 @@ void RobotMotions::moveToPose(const int target_angles[SERVO_LIMIT_COUNT]) {
     int safe_targets[SERVO_LIMIT_COUNT] = {};
     int maximum_delta = 0;
 
+    {
+        OutputLock lock(output_mutex_);
+        if (!control_enabled_ || executing_generation_ != generation_) return;
+        for (size_t i = 0; i < SERVO_LIMIT_COUNT; ++i) {
+            start_angles[i] = current_angles_[i];
+        }
+    }
     for (size_t i = 0; i < SERVO_LIMIT_COUNT; ++i) {
-        start_angles[i] = current_angles_[i];
         safe_targets[i] = limitAngle(SERVO_LIMITS[i].channel, target_angles[i]);
         const int delta = abs(safe_targets[i] - start_angles[i]);
         if (delta > maximum_delta) {
@@ -216,7 +307,7 @@ void RobotMotions::moveToPose(const int target_angles[SERVO_LIMIT_COUNT]) {
     const int steps = (maximum_delta + SERVO_STEP_DEGREES - 1) / SERVO_STEP_DEGREES;
     if (steps == 0) {
         for (size_t i = 0; i < SERVO_LIMIT_COUNT; ++i) {
-            writeServoAngle(SERVO_LIMITS[i].channel, safe_targets[i]);
+            if (!writeServoAngle(SERVO_LIMITS[i].channel, safe_targets[i])) return;
         }
         return;
     }
@@ -225,7 +316,7 @@ void RobotMotions::moveToPose(const int target_angles[SERVO_LIMIT_COUNT]) {
         for (size_t i = 0; i < SERVO_LIMIT_COUNT; ++i) {
             const int delta = safe_targets[i] - start_angles[i];
             const int angle = start_angles[i] + (delta * step_index) / steps;
-            writeServoAngle(SERVO_LIMITS[i].channel, angle);
+            if (!writeServoAngle(SERVO_LIMITS[i].channel, angle)) return;
         }
         if (step_index < steps) {
             vTaskDelay(pdMS_TO_TICKS(SERVO_STEP_DELAY_MS));
@@ -236,7 +327,12 @@ void RobotMotions::moveToPose(const int target_angles[SERVO_LIMIT_COUNT]) {
 void RobotMotions::setAngle(uint8_t channel, int angle) {
     const int target_angle = limitAngle(channel, angle);
     const size_t index = servoIndex(channel);
-    const int current_angle = current_angles_[index];
+    int current_angle;
+    {
+        OutputLock lock(output_mutex_);
+        if (!control_enabled_ || executing_generation_ != generation_) return;
+        current_angle = current_angles_[index];
+    }
 
     if (current_angle == target_angle) {
         writeServoAngle(channel, target_angle);
@@ -250,32 +346,54 @@ void RobotMotions::setAngle(uint8_t channel, int angle) {
         if ((step > 0 && position > target_angle) || (step < 0 && position < target_angle)) {
             position = target_angle;
         }
-        writeServoAngle(channel, position);
+        if (!writeServoAngle(channel, position)) return;
         if (position != target_angle) {
             vTaskDelay(pdMS_TO_TICKS(SERVO_STEP_DELAY_MS));
         }
     }
 }
 
-void RobotMotions::writeServoAngle(uint8_t channel, int angle) {
+bool RobotMotions::currentMotionAllowed() const {
+    OutputLock lock(output_mutex_);
+    return control_enabled_ && executing_generation_ == generation_;
+}
+
+bool RobotMotions::writeServoAngle(uint8_t channel, int angle) {
+    OutputLock lock(output_mutex_);
+    if (!control_enabled_ || executing_generation_ != generation_) return false;
+    if (!singleServoRequestAllowed(channel, angle)) return false;
     const ServoLimit *limit = findServoLimit(channel);
     if (limit == nullptr) {
         if (log_enabled_) {
             ESP_LOGW(TAG, "unknown servo channel: %u", channel);
         }
-        return;
+        return false;
     }
 
     const int safe_angle = limitAngle(channel, angle);
     const int pulse = SERVO_US_MIN + ((safe_angle * (SERVO_US_MAX - SERVO_US_MIN)) / 180);
     esp_err_t ret = pwm_.writeMicroseconds(channel, pulse);
     if (ret != ESP_OK) {
-        if (log_enabled_) {
-            ESP_LOGW(TAG, "servo channel %u write failed: %s", channel, esp_err_to_name(ret));
-        }
-        return;
+        // Stop this session on a bus failure; never continue a partly applied pose.
+        control_enabled_ = false;
+        single_channel_ = -1;
+        ++generation_;
+        xQueueReset(command_queue_);
+        esp_err_t stop_ret = pwm_.setOutputsEnabled(false);
+        ESP_LOGE(TAG, "舵机写入失败：通道%u，%s；停止会话，PWM关闭结果=%s。若异常仍持续请切断舵机电源",
+                 channel, esp_err_to_name(ret), esp_err_to_name(stop_ret));
+        return false;
     }
     current_angles_[servoIndex(channel)] = safe_angle;
+    return true;
+}
+
+bool RobotMotions::singleServoRequestAllowed(uint8_t channel, int angle) const {
+    if (single_channel_ < 0) return true;
+    const ServoLimit *limit = findServoLimit(channel);
+    return channel == single_channel_ && limit != nullptr &&
+           angle >= limit->home_angle - SERVO_DEBUG_SPAN_DEGREES &&
+           angle <= limit->home_angle + SERVO_DEBUG_SPAN_DEGREES;
 }
 
 int RobotMotions::limitAngle(uint8_t channel, int angle) const {

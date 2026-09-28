@@ -64,7 +64,7 @@ extern "C"
 
 static const char *TAG = "主控";
 static const char *FIRMWARE_NAME = "PRP voice-servo AI bridge";
-static const char *FIRMWARE_VERSION = "2026-09-22-phrase-cache-v1";
+static const char *FIRMWARE_VERSION = "2026-09-28-servo-map-v1";
 
 // 系统状态定义
 typedef enum
@@ -108,6 +108,8 @@ static RobotMotions robot_motions;
 static TouchInputs touch_inputs;
 static bool machine_log_enabled = false;
 static bool machine_control_enabled = false;
+// Serial-only single-output session. Never opens voice/AI/touch motion gates.
+static bool single_servo_debug_enabled = false;
 static bool ai_bridge_ready = false;
 
 typedef enum
@@ -199,7 +201,7 @@ static void handle_serial_servo_command(const char *line)
 
     if (!robot_motions.requestServoAngle(channel, angle))
     {
-        ESP_LOGW(TAG, "Servo command not queued; check PCA9685 status and motion queue");
+        ESP_LOGW(TAG, "Servo command rejected: check mode/channel, debug home +/-5 degrees, PCA9685 and queue");
         return;
     }
     ESP_LOGI(TAG, "Servo command queued: %s channel=%u angle=%d", name, channel, angle);
@@ -236,15 +238,76 @@ static void serial_command_task(void *arg)
         }
         else if (strcmp(line, "start machine control") == 0)
         {
-            machine_control_enabled = true;
-            ESP_LOGI(TAG, "Machine control enabled (touch inputs compiled %s)",
-                     TOUCH_INPUTS_ENABLED ? "on" : "off");
+            if (single_servo_debug_enabled)
+            {
+                ESP_LOGW(TAG, "单路调试中禁止启用整机，请先输入 end servo debug");
+            }
+            else if (machine_control_enabled)
+            {
+                ESP_LOGI(TAG, "Machine control is already enabled");
+            }
+            else
+            {
+                esp_err_t output_ret = robot_motions.enableOutputsAtHome();
+                if (output_ret == ESP_OK)
+                {
+                    machine_control_enabled = true;
+                    ESP_LOGI(TAG, "Machine control enabled at home pose (touch inputs compiled %s)",
+                             TOUCH_INPUTS_ENABLED ? "on" : "off");
+                }
+                else
+                {
+                    ESP_LOGE(TAG, "Machine control enable failed; verify PWM off or disconnect servo power: %s",
+                             esp_err_to_name(output_ret));
+                }
+            }
         }
-        else if (strcmp(line, "end machine control") == 0)
+        else if (strncmp(line, "start servo debug ", 18) == 0 || strcmp(line, "start servo debug") == 0)
+        {
+            char name[8] = {};
+            char extra = '\0';
+            uint8_t channel = 0;
+            if (sscanf(line, "start servo debug %7s %c", name, &extra) != 1 ||
+                !servo_channel_from_name(name, &channel))
+            {
+                ESP_LOGW(TAG, "Usage: start servo debug <fl|fr|rl|rr|tail>");
+            }
+            else if (machine_control_enabled || single_servo_debug_enabled)
+            {
+                ESP_LOGW(TAG, "请先停止当前舵机会话：end machine control 或 end servo debug");
+            }
+            else
+            {
+                esp_err_t output_ret = robot_motions.enableSingleServoAtHome(channel);
+                if (output_ret == ESP_OK)
+                {
+                    single_servo_debug_enabled = true;
+                    const ServoLimit *limit = get_servo_limit(channel);
+                    ESP_LOGI(TAG, "单路调试 %s → 通道%u，中位%d°，只接受%d～%d°；语音动作保持关闭",
+                             name, channel, limit->home_angle,
+                             limit->home_angle - SERVO_DEBUG_SPAN_DEGREES,
+                             limit->home_angle + SERVO_DEBUG_SPAN_DEGREES);
+                }
+                else
+                {
+                    ESP_LOGE(TAG, "单路启用失败：%s；确认PWM关闭，必要时断开舵机电源", esp_err_to_name(output_ret));
+                }
+            }
+        }
+        else if (strcmp(line, "end machine control") == 0 || strcmp(line, "end servo debug") == 0)
         {
             machine_control_enabled = false;
-            robot_motions.cancelPendingAndReset();
-            ESP_LOGI(TAG, "Machine control disabled");
+            single_servo_debug_enabled = false;
+            esp_err_t output_ret = robot_motions.disableOutputs();
+            if (output_ret == ESP_OK)
+            {
+                ESP_LOGI(TAG, "Machine control disabled; all servo PWM outputs are off");
+            }
+            else
+            {
+                ESP_LOGE(TAG, "Machine control disabled but PWM shutdown failed: %s",
+                         esp_err_to_name(output_ret));
+            }
         }
         else if (strcmp(line, "test audio") == 0)
         {
@@ -285,9 +348,9 @@ static void serial_command_task(void *arg)
         }
         else if (strncmp(line, "servo ", 6) == 0)
         {
-            if (!machine_control_enabled)
+            if (!machine_control_enabled && !single_servo_debug_enabled)
             {
-                ESP_LOGW(TAG, "Machine control is disabled; run 'start machine control' first");
+                ESP_LOGW(TAG, "舵机未启用；首次测试请用 start servo debug tail，仅开启尾部");
             }
             else
             {

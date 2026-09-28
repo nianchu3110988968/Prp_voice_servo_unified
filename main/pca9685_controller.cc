@@ -10,6 +10,8 @@ static constexpr uint8_t PCA9685_ADDR = 0x40;
 static constexpr uint8_t MODE1 = 0x00;
 static constexpr uint8_t PRESCALE = 0xFE;
 static constexpr uint8_t LED0_ON_L = 0x06;
+static constexpr uint8_t ALL_LED_OFF_H = 0xFD;
+static constexpr uint8_t FULL_OFF = 0x10;
 static constexpr uint8_t RESTART = 0x80;
 static constexpr uint8_t SLEEP = 0x10;
 static constexpr uint8_t AI = 0x20;
@@ -44,13 +46,49 @@ esp_err_t Pca9685Controller::init() {
 
     const float prescale_value = 25000000.0f / (4096.0f * SERVO_FREQ_HZ) - 1.0f;
     const uint8_t prescale = static_cast<uint8_t>(prescale_value + 0.5f);
-    ESP_ERROR_CHECK_WITHOUT_ABORT(writeRegister(PRESCALE, prescale));
-    ESP_ERROR_CHECK_WITHOUT_ABORT(writeRegister(MODE1, AI));
+    // ALL_LED registers broadcast into every channel register (datasheet 7.3.4).
+    // Disable before restarting the oscillator, including after an ESP-only reset.
+    ret = writeRegister(ALL_LED_OFF_H, FULL_OFF);
+    if (ret != ESP_OK) return ret;
+    ret = writeRegister(PRESCALE, prescale);
+    if (ret != ESP_OK) return ret;
+    ret = writeRegister(MODE1, AI);
+    if (ret != ESP_OK) return ret;
     vTaskDelay(pdMS_TO_TICKS(5));
-    ESP_ERROR_CHECK_WITHOUT_ABORT(writeRegister(MODE1, RESTART | AI));
+    ret = writeRegister(MODE1, RESTART | AI);
+    if (ret != ESP_OK) return ret;
 
     initialized_ = true;
+    enabled_channels_ = 0;
     ESP_LOGI(TAG, "PCA9685 initialized on SDA=%d SCL=%d", ROBOT_I2C_SDA_PIN, ROBOT_I2C_SCL_PIN);
+    return ESP_OK;
+}
+
+esp_err_t Pca9685Controller::setOutputsEnabled(bool enabled, uint16_t channel_mask) {
+    if (!initialized_) {
+        return ESP_ERR_INVALID_STATE;
+    }
+
+    // Disable first, including when switching from a wider mask to a single servo.
+    // Cached pulses from a prior session must never enable an unselected channel.
+    enabled_channels_ = 0;
+    esp_err_t ret = writeRegister(ALL_LED_OFF_H, FULL_OFF);
+    if (ret != ESP_OK || !enabled) return ret;
+
+    // Never clear ALL_LED_OFF_H globally: that overwrites the high count bits.
+    // Restore complete per-channel values; unused channels remain FULL OFF.
+    for (uint8_t channel = 0; channel < 16; ++channel) {
+        const bool selected = (channel_mask & servoChannelMask(channel)) != 0;
+        ret = writeChannel(channel, pulse_counts_[channel], !selected || pulse_counts_[channel] == 0);
+        if (ret != ESP_OK) {
+            esp_err_t stop_ret = writeRegister(ALL_LED_OFF_H, FULL_OFF);
+            if (stop_ret != ESP_OK) {
+                ESP_LOGE(TAG, "PWM shutdown also failed; disconnect servo power: %s", esp_err_to_name(stop_ret));
+            }
+            return ret;
+        }
+    }
+    enabled_channels_ = channel_mask;
     return ESP_OK;
 }
 
@@ -69,13 +107,19 @@ esp_err_t Pca9685Controller::writeMicroseconds(uint8_t channel, int pulse_us) {
     }
 
     const uint16_t off_count = static_cast<uint16_t>((pulse_us * 4096L) / 20000L);
+    esp_err_t ret = writeChannel(channel, off_count, (enabled_channels_ & servoChannelMask(channel)) == 0);
+    if (ret == ESP_OK) pulse_counts_[channel] = off_count;
+    return ret;
+}
+
+esp_err_t Pca9685Controller::writeChannel(uint8_t channel, uint16_t off_count, bool full_off) {
     const uint8_t reg = LED0_ON_L + 4 * channel;
     uint8_t data[5] = {
         reg,
         0x00,
         0x00,
         static_cast<uint8_t>(off_count & 0xFF),
-        static_cast<uint8_t>((off_count >> 8) & 0x0F),
+        static_cast<uint8_t>(((off_count >> 8) & 0x0F) | (full_off ? FULL_OFF : 0)),
     };
 
     return i2c_master_write_to_device(

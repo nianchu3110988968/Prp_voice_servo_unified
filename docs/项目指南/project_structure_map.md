@@ -1,6 +1,6 @@
 # 项目结构地图
 
-最后核对日期：2026-09-22
+最后核对日期：2026-09-29
 
 本文是项目目录与关键文件职责的维护入口。后续新建文档、增加功能模块、调整入口文件或改变运行链路时，必须同步更新本文，避免后续交接时只依赖过期 README 或口头记忆。
 
@@ -19,6 +19,16 @@ docs/assets/project_structure_map_snapshot_20260915.png
 - 如果根目录 README 与当前源码冲突，以当前源码、`docs/README.md` 和 `docs/工作留档/task_progress.md` 为准。
 
 ## 当前目录地图
+
+2026-09-28～29 自定义通道与尾部单路调试（源码`2026-09-28-servo-map-v1`；9月29日VS Code编译/离线回归PASS，未烧录）：
+
+- `main/robot_config.h::SERVO_CHANNELS`：唯一五部位通道配置，fl/fr/rl/rr/tail=15/11/7/3/0；编译期范围/重复检查，动作数组仍按部位顺序。
+- `main/pca9685_controller.h/.cc`：逐通道使能掩码；恢复缓存脉宽时也保持非选中通道FULL OFF，不让旧会话残留值重新使能腿部。
+- `main/robot_motions.h/.cc`：单路home使能、home±5°边界、其他部位/组合动作拒绝、会话代次隔离；写入失败停止并尝试关PWM。
+- `main/main.cc`：串口`start servo debug <name>`和`end servo debug`，保持语音/AI/触摸动作入口关闭，与整机模式互斥；语音日志/模型链路不变。
+- `tests/firmware/servo_channels_test.cc`、`tests/servo_stubs/`：真实驱动/动作层的I2C寄存器广播和队列/延时模拟，不是实物或真实RTOS并发验证。
+- `tools/verify_servo_channels.ps1`：在VS Code可见终端串联既有词库/日志/固件编译与新增舵机主机测试，不烧录、不开串口/服务。
+- `docs/项目指南/servo_channel_setup.md`：当前接线、尾部测试门槛、已安装舵盘/无万用表/200g真实行走目标的限制；尚未实现新坐下/前进动作或机械零位校准。
 
 2026-09-22 Excel词库/缓存先播（源码`2026-09-22-phrase-cache-v1`，离线验证通过、未烧录）：
 
@@ -142,7 +152,7 @@ E:/Projects2026/Prp_voice_servo_unified
 ## 当前状态提醒
 
 - `README.md` 仍含早期单舵机 GPIO18 示例，不应作为当前五舵机结构依据。
-- 当前`2026-09-22-phrase-cache-v1`及URL修正已由用户在VS Code完整验证：18项新离线测试、9项原日志测试、固件编译及两种主机回归PASS（RAM14.8%、Flash72.2%）。仍叠加既有servo-power-safety-v2改动，词库任务不再改舵机；未烧录、未硬件复测。板上附件最后确认仍为 `2026-09-15-audio-v1`；舵机子系统导致无声的具体电气原因仍未逐项定位。
+- 当前源码`2026-09-28-servo-map-v1`包含已有词库/URL修正和舵机安全依赖；9月29日用户在VS Code完成词库/日志、trace/音频/舵机主机回归及platformio run（114.95s，RAM48,640=14.8%、Flash1,479,531=72.2%），均PASS。未烧录、未硬件复测；板上附件最后确认仍为 `2026-09-15-audio-v1`。舵机子系统导致无声的具体电气原因仍未逐项定位，离线通过不能代替供电与机械验收。
 - 舵机部分最近一次硬件实测仍为 `2026-09-08-five-servo-v2` 阶段：通道 0 的 `servo fl 80/100` 已验证，其余四路与组合动作未系统实测；后来固件保留这些代码，但未重新做舵机回归测试。
 - 服务器端 ASR、Ollama、TTS 链路已实现；实际运行状态需要每次测试前重新检查端口、日志和 `/config`。
 
