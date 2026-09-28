@@ -2,7 +2,7 @@
 
 源码版本：`2026-09-28-servo-map-v1`。当前编译/烧录/实测结果以 `../工作留档/task_progress.md` 为准；写入源码不代表板上已生效。
 
-2026-09-29验证：用户在VS Code运行完整验证脚本，固件编译、既有词库/语音回归及新增舵机主机测试均PASS。尚未烧录或实际运动；若源码未再改变，无需为进入下一步重复运行同一验证。
+2026-09-29验证：用户在VS Code运行完整验证脚本，固件编译、既有词库/语音回归及新增舵机主机测试均PASS；随后经明确授权在COM7烧录，写入Hash校验成功并自动复位（31.25s）。目前仍待串口确认运行版本、欢迎音完整播放；尚未实际运动。源码未再改变，无需重复验证或烧录。
 
 ## 1. 已确认的方向和接线
 
@@ -42,6 +42,25 @@ powershell -NoProfile -ExecutionPolicy Bypass -File 'E:\Projects2026\Prp_voice_s
 脚本先执行既有词库/语音日志离线测试、platformio run、音频和trace主机测试，再链接真实PCA9685/RobotMotions源码做主机模拟。覆盖非连续通道、单路掩码、FULL OFF广播和计数高位、错误返回、命令隔离、停止/重新启用时旧动作失效。没有串口访问、真实I2C、真实模型、服务启动或烧录。
 
 `-HostOnly`仅运行舵机主机测试，不能代替固件编译。模拟器在延时边界注入停止/重启，不能替代FreeRTOS实际并发、电气或机械测试。
+
+### 烧录后先验证版本和音频
+
+保持舵机外部电源断开、ESP32通过USB供电；只打开一个监视器。在VS Code空闲PowerShell执行（COM7为9月29日实际枚举的CH343端口，之后更换接口需重新确认）：
+
+```powershell
+Set-Location 'E:\Projects2026\Prp_voice_servo_unified'
+platformio device monitor -p COM7 -b 115200
+```
+
+进入监视器后逐条输入并回车，不是在PowerShell提示符下执行：
+
+```text
+status ai bridge
+end machine control
+test audio
+```
+
+预期版本为`2026-09-28-servo-map-v1`。`test audio`仅播放内置欢迎音，不依赖服务器；需要同时核对日志和实际听感。I2S写入成功不等于扬声器已发声。若版本不符、关闭PWM报错或欢迎音不完整，先贴回日志，不进入下一节。不要输入start或servo动作指令；运动仍需确认5V、极性及机械空间。检查结束用Ctrl+C退出监视器，释放COM7。
 
 ## 4. 后续批准上板后的尾部步骤
 
