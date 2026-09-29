@@ -8,3 +8,8 @@
 - 用户已确认本项目提交身份：`nianchu3110988968 <nianchu3110988968@gmail.com>`，GitHub默认账号`nianchu3110988968`。正常阶段提交不要重复询问该身份；新目标仓库及可见性不能自行猜测。
 - 已授权远程为私有仓库`https://github.com/nianchu3110988968/Prp_voice_servo_unified.git`，正常阶段提交后推送`origin`；不强推、不改为公开。失败如实报告，不暴露凭据。用户名/邮箱仅配置本项目。
 - `main/network_config.h` 是本地敏感配置，不提交；模板为 `main/network_config.example.h`。不把真实 Wi-Fi 密码写进文档或示例。
+
+## 终端命令交付检查（2026-09-29复盘）
+
+- 在用户VS Code可见PowerShell中运行本项目已审阅的.ps1时，必须使用`powershell.exe -NoProfile -ExecutionPolicy Bypass -File "脚本绝对路径"`，不能退回裸`& .\xxx.ps1`；`& { ... }`不能解除执行策略限制，不修改全局执行策略。
+- 发出整个命令块前必须核对外层Shell/执行策略、路径/引号、中文编码、实际Python/Core以及逐步退出码；优先复用已验证入口，不让用户承担已知环境问题的重复试错。项目具体检查表与本次原因见`docs/工作规范/agent_working_memory.md`的“终端命令交付前检查”和“执行策略遗漏复盘”。

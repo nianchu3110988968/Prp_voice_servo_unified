@@ -2,6 +2,24 @@
 
 本文件记录本项目中需要长期遵守的协作方式和已发生问题的复盘。后续工作前应优先参考。
 
+## 终端命令交付前检查
+
+每次把可复制命令发给用户前，agent必须对最终完整命令块逐项复核，不得只检查被调用脚本。
+
+1. **Shell与执行策略**：本机最新transcript确认VS Code为Windows PowerShell 5.1；不能默认为PowerShell 7，也不能假定当前会话允许.ps1。已审阅的本项目脚本统一用`powershell.exe -NoProfile -ExecutionPolicy Bypass -File "脚本绝对路径"`运行。禁止无依据改回裸`& .\xxx.ps1`；外层`& { ... }`不会放行策略。仅对该子进程生效，不要求用户修改CurrentUser/LocalMachine策略。若组织策略仍阻止，停下报告具体原因。
+2. **目录、参数与编码**：代码块自带当前项目Set-Location或完整路径；含空格/中文路径正确引用，区分PowerShell与串口命令。按PS5.1核对语法、脚本文件编码和Python UTF-8输入输出；不假定另一终端的变量、PATH、已激活环境或权限会保留。
+3. **固定已验证工具**：PlatformIO只用`C:\Users\ASUS\.platformio\penv\Scripts\python.exe -I -X utf8 -m platformio`（已验证Core6.2.0），不裸调PATH上的platformio。启动器上次打包为Python3.13，已核实入口为`C:\Users\ASUS\scoop\apps\python313\current\python.exe`；打包/包内字节码比对使用相同小版本，并区分生产bridge实际Python与测试/打包Python。缺失先说明，不自动换环境或重装。
+4. **失败传播**：每次外部程序（包括子PowerShell）后立即检查`$LASTEXITCODE`并在非零时throw；`$ErrorActionPreference = "Stop"`和Start/Stop-Transcript不证明外部程序成功。任一步失败不得继续依赖它的打包、烧录或验收，不同时跑两套构建。
+5. **保留已验证包装**：从历史成功命令改写时，逐项比对保留`-NoProfile -ExecutionPolicy Bypass -File`、专用解释器、隔离/UTF-8参数及错误检查；不能只因重组为一个代码块就删掉这些参数。发出前检索规范中的已知故障，不再让用户验证已经知道会失败的调用方式。
+6. **边界与证据**：构建/串口/服务仍在用户可见终端进行，先查服务与串口归属；已有烧录授权保持有效，但舵机断电/机器控制关闭要求不变。只做静态复核必须写明未运行；通过入口不等于功能/硬件PASS。修正失败时给完整替换命令，不要求用户自行拼接参数。
+
+### 执行策略遗漏复盘（2026-09-29）
+
+- 用户执行agent提供的完整代码块时，第一条`& .\tools\verify_roles_launcher.ps1`即被执行策略拒绝（UnauthorizedAccess）。transcript只包含同秒的开始/结束，没有测试、构建或打包结果；不能归因为Python、依赖或固件错误，也不能从“已停止脚本”推断通过。
+- 可观察的流程原因：agent已读过采用`powershell -NoProfile -ExecutionPolicy Bypass -File`的项目入口，却在重组交付命令时改成直接调用；复核覆盖了脚本内部Python/Core，没有覆盖外层PowerShell能否启动脚本。现有规范强调可见终端，但缺少执行策略和整块命令的强制检查，修复经验仍依赖临时聊天上下文。
+- 责任在agent交付检查遗漏，不要求用户通过反复尝试来发现已知前提。不能把这一流程判断冒充对模型内部记忆机制的确定诊断；可采取的修正是把前提持久化为上方检查表，并在全局/项目AGENTS入口重复提示。
+- 已给出子PowerShell临时Bypass并逐步检查退出码的完整替换命令；尚未收到其执行结果，不宣称验证、打包或烧录完成。
+
 ## 用户工作偏好
 
 - 需要用户执行命令时，直接在普通聊天里提供可复制的PowerShell代码框，并简述用途和预期结果；不要把长命令放进异步问答卡片。命令末尾不附中文句号，避免复制成参数的一部分。
