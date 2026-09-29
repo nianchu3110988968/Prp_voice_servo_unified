@@ -1,6 +1,6 @@
 {
   "id": "New_ManBoo",
-  "display_name": "糯糯",
-  "character_name": "糯糯",
+  "display_name": "曼波",
+  "character_name": "曼波",
   "prompt_file": "server/prompts/New_ManBoo.txt"
 }

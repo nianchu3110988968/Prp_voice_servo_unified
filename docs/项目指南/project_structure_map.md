@@ -20,10 +20,10 @@ docs/assets/project_structure_map_snapshot_20260915.png
 
 ## 2026-09-29 多角色与桌面启动器（离线测试/编译及exe打包烟测通过，真实联调待验证）
 
-- `server/roles/*.example.json`：可提交角色模板；同目录 `*.local.json` 为唯一现行本地角色数据源，不提交。New_ManBoo保持当前糯糯人格和已登记权重/参考组合。
+- `server/personas/New_ManBoo.example.json`及同名本地档案：曼波人格名称和正文入口；`server/roles/`保留组合预设及旧角色兼容，本地JSON不提交。9月29日New_ManBoo名称统一为“曼波”，权重/参考组合不变。
 - `server/services/role_config.py`：字段/ID/路径/UTF-8提示词/权重对SHA256验证；不反序列化或训练模型。
 - `server/services/role_runtime.py`：当前角色、成对热切换、失败回滚与主TTS隔离、历史清空；交互/TTS/预制生成共享事务锁。
-- `server/prompts/New_ManBoo.txt`：默认角色独立人格；保留历史nuonuo_v1.txt。`dialogue_service.py`仅保留通用安全/JSON协议，不固定角色身份或外貌。
+- `server/prompts/New_ManBoo.txt`：曼波专属抽象/搞怪人格，9月29日已改写并静态核验，尚未加载或真实试听；保留历史nuonuo_v1.txt。`dialogue_service.py`仍叠加通用边界、cute/encourage风格及JSON协议，按用户要求留待后续处理。
 - `tts_service.py`动态读取当前参考参数；`phrase_library.py`按角色ID/配置摘要隔离目录，参考内容参与指纹；旧缓存保留，不自动批量合成。
 - `ai_bridge_server.py`提供本机维护头保护的角色接口、预热/实际TTS状态，旧角色后台任务在切换后取消，响应协议继续兼容ESP32。
 - `server/launcher_core.py`：标准库服务监督器、11434/9880/8000健康复用、顺序就绪检查、仅停止持有句柄的自有进程，PID记录只作审计。

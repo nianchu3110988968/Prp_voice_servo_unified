@@ -288,7 +288,7 @@ nuonuo_story_v1
 
 每个角色一份 `server/roles/<id>.local.json`，复制 `New_ManBoo.example.json` 填写；不要提交真实本地路径、模型或音频。字段包括id、display_name、character_name、persona_prompt_file、gpt_weights、sovits_weights、gpt_sovits_version、reference_wav、reference_text、prompt_language、text_language、phrase_voice_revision，以及weight_pair。
 
-ID必须字母开头，只包含字母、数字、下划线和短横线，最长64字符，与文件名一致。人格文件是 `server/prompts/` 下的UTF-8文本，每角色独立；New_ManBoo沿用当前糯糯人格和现行权重/参考组合。更换人格不再修改对话服务。通用安全约束与JSON协议仍由服务端维护。
+ID必须字母开头，只包含字母、数字、下划线和短横线，最长64字符，与文件名一致。人格文件是 `server/prompts/` 下的UTF-8文本，每角色独立；New_ManBoo在2026-09-29已改为“曼波”抽象/搞怪人格，名称和正文均已保存，现行权重/参考组合未变；本轮未加载新人格或实测风格。更换人格不再修改对话服务；服务端仍叠加通用边界、cute/encourage风格与JSON协议，风格约束按用户要求另行处理。
 
 `weight_pair` 包含明确配对id、version、gpt_sha256、sovits_sha256；在可见PowerShell用 `Get-FileHash -Algorithm SHA256 -LiteralPath <权重路径>` 获取哈希，写成小写。配对由提供者确认同实验/兼容版本后登记，不按文件名自动猜测。加载时验证两份哈希，防止单文件替换或写错路径；哈希是已登记配对的完整性检查，不是模型架构/音色质量鉴定，不反序列化第三方checkpoint。实际兼容性仍由API加载与试听验收。
 
