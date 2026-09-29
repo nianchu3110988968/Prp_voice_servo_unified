@@ -125,7 +125,7 @@ def run_ai_pipeline(wav_path: Path, audio_stats: dict | None = None, trace: Requ
                 if entry:
                     audio_url = phrase_library.audio_for(entry, manifest)
                     style = choose_reply_style(recognized_text)
-                    emotion, motion = enforce_emotion_motion_consistency(recognized_text, entry.reply, "", "")
+                    emotion, motion = enforce_emotion_motion_consistency(recognized_text, entry.reply, "", entry.motion)
                     cache.update(id=entry.id, audio_url=audio_url)
                     # Do not pass fixed replies through the ordinary 48-char truncation.
                     return {"reply_text": entry.reply, "style": style, "emotion": emotion, "motion": motion,

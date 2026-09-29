@@ -10,7 +10,17 @@ try {
     if ($LASTEXITCODE -ne 0) { throw 'Server log tests failed; stop before firmware build.' }
 
     Write-Host '[2/3] platformio run (build only; no upload)'
-    & platformio run
+    # Use VS Code's dedicated Core, not a different pip-installed Core on PATH.
+    # Mixing Cores can replace the shared tool-scons package during a build.
+    $pioPython = Join-Path ([Environment]::GetFolderPath('UserProfile')) '.platformio\penv\Scripts\python.exe'
+    if (-not (Test-Path -LiteralPath $pioPython -PathType Leaf)) {
+        throw "Dedicated PlatformIO Python not found: $pioPython. Repair the VS Code PlatformIO environment; no PATH fallback was used."
+    }
+    Write-Host "[PlatformIO] Python: $pioPython"
+    # Isolated mode ignores external PYTHONPATH and user-site packages.
+    & $pioPython -I -X utf8 -m platformio --version
+    if ($LASTEXITCODE -ne 0) { throw 'Dedicated PlatformIO Core could not start; no PATH fallback was used.' }
+    & $pioPython -I -X utf8 -m platformio run
     if ($LASTEXITCODE -ne 0) { throw 'Firmware build failed; do not flash.' }
 
     Write-Host '[3/3] Native observer regression test (MSVC)'

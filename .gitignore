@@ -61,3 +61,4 @@ server/voices/*.local.json
 server/prompts/*.txt
 !server/prompts/New_ManBoo.txt
 !server/prompts/nuonuo_v1.txt
+!server/prompts/motion_selection.txt

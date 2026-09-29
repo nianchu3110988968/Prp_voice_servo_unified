@@ -33,9 +33,16 @@ docs/assets/project_structure_map_snapshot_20260915.png
 - `server/tests/test_roles_launcher.py`：临时文件/模拟HTTP与进程的配置、回滚、身份、缓存和归属测试；`tools/verify_roles_launcher.ps1`在用户可见终端串联服务端测试与platformio run。
 - `tools/build_launcher.ps1`：PyInstaller构建并打开真实Tk窗口检查退出；不自动启动模型服务。测试/打包/真实联调/硬件状态以进度记录为准。
 
-## 2026-09-29 独立预制对话（已纠正需求，动作扩展待实现）
+## 2026-09-29 独立预制对话与起播动作（离线回归/固件构建通过，未烧录实测）
 
-- `docs/项目指南/phrase_library_demo.md`顶部已撤销错误的严格顺序方案，明确每行独立输入A→固定回复B，可乱序/重复触发，演示顺序由用户掌控。沿用两列词库基础，后续可选动作列；不引入下一句编号、剧情进度或推进确认接口。动作起播同步仍待实现，用户Excel与程序未改。
+- `docs/项目指南/phrase_library_demo.md`：每行独立A→B，可乱序/重复触发，沿用两列词库并支持可选动作；不引入下一句编号、剧情进度或推进确认接口。用户工作簿不由程序覆盖。
+- `docs/项目指南/voice_motion_selection.md`：模型选动作的阶段、中文规则/目录维护、起播事件、安全与验证入口。
+- `server/services/motion_policy.py`、`server/prompts/motion_selection.txt`、`server/configs/motion_catalog.json`：动态读取选择规则、动作说明/启用项，只允许固件既有ID；无效配置/模型动作退none。`dialogue_service.py`不再用关键词覆盖模型动作，风格约束保持。
+- `server/services/phrase_library.py`：首表只读可选动作、相同回复不同动作的独立ID和音频复用；同一次真实Ollama请求匹配词条并选择动作，固定动作优先。
+- `main/audio_playback_gate.h`、`bsp_board.cc`、`audio_reply_player.cc`：统一播放占用/准备后起播回调，保留DMA排空和数字静音；WAV格式不符或播放准备失败不触发动作。
+- `main/robot_motions.cc::tryStartVoiceMotion`：起播点非阻塞准入，仅整机控制开启且动作空闲时接受，首写超过40ms拒绝迟到动作；15/11/7/3/0通道、限位和单路隔离保持。
+- `server/tests/test_phrase_motion.py`与既有音频/舵机主机测试：独立词条、动作配置、同调用选择、起播顺序、失败/忙碌/过期隔离；`tools/verify_servo_channels.ps1`串联离线测试、platformio run和主机测试，不烧录/启动服务。
+- `tools/verify_voice_logging.ps1`：上述验证链的固件构建步骤固定使用用户目录`.platformio/penv/Scripts/python.exe`，以隔离模式运行`-m platformio`并打印入口/版本；不再使用PATH上的另一套Core，缺失时停止。用户复跑确认Core6.2.0与156.66s固件构建成功，词库/日志及trace/音频起播/舵机主机回归通过；预期故障注入日志不代表服务失败，细节见进度记录。未烧录或真实模型/硬件验收。
 
 ## 当前目录地图
 
@@ -171,7 +178,7 @@ E:/Projects2026/Prp_voice_servo_unified
 ## 当前状态提醒
 
 - `README.md` 仍含早期单舵机 GPIO18 示例，不应作为当前五舵机结构依据。
-- 当前源码`2026-09-28-servo-map-v1`包含已有词库/URL修正和舵机安全依赖；9月29日用户在VS Code完成词库/日志、trace/音频/舵机主机回归及platformio run（114.95s，RAM48,640=14.8%、Flash1,479,531=72.2%），均PASS。随后经授权在COM7烧录成功（31.25s，应用写入1,479,936字节，Hash校验通过并RTS复位）；串口已确认新版本、Wi-Fi connected、关闭PWM成功，用户确认本地“Hi朋友”完整播放，且明确本次舵机外部电源已断开。该条件下音频基线通过，舵机通电/运动与音频共存未验收；历史无声的具体电气根因仍未逐项定位。
+- 板上最近确认版本`2026-09-28-servo-map-v1`包含已有词库/URL修正和舵机安全依赖；9月29日用户在VS Code完成词库/日志、trace/音频/舵机主机回归及platformio run（114.95s，RAM48,640=14.8%、Flash1,479,531=72.2%），均PASS。随后经授权在COM7烧录成功（31.25s，应用写入1,479,936字节，Hash校验通过并RTS复位）；串口已确认该版本、Wi-Fi connected、关闭PWM成功，用户确认本地“Hi朋友”完整播放，且明确本次舵机外部电源已断开。该条件下音频基线通过，舵机通电/运动与音频共存未验收；历史无声的具体电气根因仍未逐项定位。后续phrase-motion-v1仅完成离线回归和编译，尚未烧录。
 - 舵机部分最近一次硬件实测仍为 `2026-09-08-five-servo-v2` 阶段：通道 0 的 `servo fl 80/100` 已验证，其余四路与组合动作未系统实测；后来固件保留这些代码，但未重新做舵机回归测试。
 - 服务器端 ASR、Ollama、TTS 链路已实现；实际运行状态需要每次测试前重新检查端口、日志和 `/config`。
 

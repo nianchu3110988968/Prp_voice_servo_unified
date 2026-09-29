@@ -1,6 +1,8 @@
 #include "robot_motions.h"
 
 #include <stdlib.h>
+#include <string.h>
+#include "esp_timer.h"
 
 #include "esp_log.h"
 #include "freertos/FreeRTOS.h"
@@ -102,6 +104,7 @@ esp_err_t RobotMotions::enableChannelsAtHome(uint16_t channel_mask, int single_c
     single_channel_ = -1;
     ++generation_;
     xQueueReset(command_queue_);
+    pending_commands_ = 0;
     esp_err_t ret = pwm_.setOutputsEnabled(false);
     if (ret != ESP_OK) return ret;
     // Stage every home value with its own FULL OFF bit still set.
@@ -138,6 +141,7 @@ esp_err_t RobotMotions::disableOutputs() {
     single_channel_ = -1;
     ++generation_;
     xQueueReset(command_queue_);
+    pending_commands_ = 0;
     esp_err_t ret = pwm_.setOutputsEnabled(false);
     if (ret == ESP_OK) {
         ESP_LOGI(TAG, "servo PWM outputs disabled (FULL OFF)");
@@ -169,6 +173,26 @@ void RobotMotions::actionReset() {
     enqueueCommand(CommandType::Reset);
 }
 
+bool RobotMotions::tryStartVoiceMotion(const char *motion) {
+    if (!ready_ || !command_queue_ || !motion) return false;
+    CommandType type;
+    if (strcmp(motion, "happy") == 0) type = CommandType::Happy;
+    else if (strcmp(motion, "shy") == 0) type = CommandType::Shy;
+    else if (strcmp(motion, "comfort") == 0 || strcmp(motion, "curious") == 0)
+        type = CommandType::Curious; // Existing physical mapping, not a new pose.
+    else return false;
+    if (xSemaphoreTake(output_mutex_, 0) != pdTRUE) return false;
+    bool accepted = false;
+    if (control_enabled_ && single_channel_ < 0 && pending_commands_ == 0) {
+        // A delayed scheduler must drop this action, not perform it mid-sentence.
+        MotionCommand command = {type, 0, 0, generation_, esp_timer_get_time() + 40000};
+        accepted = xQueueSend(command_queue_, &command, 0) == pdTRUE;
+        if (accepted) ++pending_commands_;
+    }
+    xSemaphoreGive(output_mutex_);
+    return accepted;
+}
+
 bool RobotMotions::requestServoAngle(uint8_t channel, int angle) {
     const ServoLimit *limit = findServoLimit(channel);
     if (limit == nullptr || angle < limit->min_angle || angle > limit->max_angle) {
@@ -189,7 +213,11 @@ void RobotMotions::motionTask() {
     while (true) {
         if (xQueueReceive(command_queue_, &command, portMAX_DELAY) == pdTRUE) {
             executing_generation_ = command.generation;
-            executeCommand(command);
+            executing_deadline_us_ = command.start_deadline_us;
+            if (command.start_deadline_us == 0 || esp_timer_get_time() <= command.start_deadline_us)
+                executeCommand(command);
+            OutputLock lock(output_mutex_);
+            if (command.generation == generation_ && pending_commands_ > 0) --pending_commands_;
         }
     }
 }
@@ -206,11 +234,12 @@ bool RobotMotions::enqueueCommand(CommandType type, uint8_t channel, int angle) 
     if (!control_enabled_) return false;
     if (single_channel_ >= 0 &&
         (type != CommandType::SetServo || !singleServoRequestAllowed(channel, angle))) return false;
-    MotionCommand command = {type, channel, angle, generation_};
+    MotionCommand command = {type, channel, angle, generation_, 0};
     if (xQueueSend(command_queue_, &command, 0) != pdTRUE) {
         ESP_LOGW(TAG, "motion queue full; command dropped");
         return false;
     }
+    ++pending_commands_;
     return true;
 }
 
@@ -371,6 +400,11 @@ bool RobotMotions::writeServoAngle(uint8_t channel, int angle) {
     }
 
     const int safe_angle = limitAngle(channel, angle);
+    // Recheck under the write lock: obtaining this lock may itself be delayed.
+    if (executing_deadline_us_ != 0) {
+        if (esp_timer_get_time() > executing_deadline_us_) return false;
+        executing_deadline_us_ = 0; // Only the first physical write is deadline-bound.
+    }
     const int pulse = SERVO_US_MIN + ((safe_angle * (SERVO_US_MAX - SERVO_US_MIN)) / 180);
     esp_err_t ret = pwm_.writeMicroseconds(channel, pulse);
     if (ret != ESP_OK) {
@@ -379,6 +413,7 @@ bool RobotMotions::writeServoAngle(uint8_t channel, int angle) {
         single_channel_ = -1;
         ++generation_;
         xQueueReset(command_queue_);
+        pending_commands_ = 0;
         esp_err_t stop_ret = pwm_.setOutputsEnabled(false);
         ESP_LOGE(TAG, "舵机写入失败：通道%u，%s；停止会话，PWM关闭结果=%s。若异常仍持续请切断舵机电源",
                  channel, esp_err_to_name(ret), esp_err_to_name(stop_ret));

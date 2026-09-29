@@ -26,6 +26,7 @@ std::vector<std::unique_ptr<bool>> mutexes;
 void (*task_entry)(void *) = nullptr;
 void *task_arg = nullptr;
 std::function<void()> delay_hook;
+int64_t fake_time_us = 0, time_read_step_us = 0;
 struct TaskIdle {};
 
 uint16_t active_mask() {
@@ -49,6 +50,7 @@ void reset_fake() {
     bus_down = false;
     writes.clear(); logs.clear(); queues.clear(); mutexes.clear();
     delay_hook = {}; task_entry = nullptr; task_arg = nullptr;
+    fake_time_us = 0; time_read_step_us = 0;
 }
 void run_queued() {
     assert(task_entry);
@@ -112,8 +114,10 @@ void vQueueDelete(QueueHandle_t) {}
 SemaphoreHandle_t xSemaphoreCreateMutex() {
     mutexes.push_back(std::make_unique<bool>(false)); return mutexes.back().get();
 }
-BaseType_t xSemaphoreTake(SemaphoreHandle_t handle, TickType_t) {
-    auto *locked = static_cast<bool *>(handle); assert(!*locked); *locked = true; return pdTRUE;
+BaseType_t xSemaphoreTake(SemaphoreHandle_t handle, TickType_t timeout) {
+    auto *locked = static_cast<bool *>(handle);
+    if (*locked && timeout == 0) return pdFALSE;
+    assert(!*locked); *locked = true; return pdTRUE;
 }
 BaseType_t xSemaphoreGive(SemaphoreHandle_t handle) {
     auto *locked = static_cast<bool *>(handle); assert(*locked); *locked = false; return pdTRUE;
@@ -122,7 +126,11 @@ void vSemaphoreDelete(SemaphoreHandle_t) {}
 BaseType_t xTaskCreate(void (*entry)(void *), const char *, uint32_t, void *arg, UBaseType_t, TaskHandle_t *) {
     task_entry = entry; task_arg = arg; return pdPASS;
 }
-void vTaskDelay(TickType_t) {
+int64_t esp_timer_get_time() {
+    int64_t result = fake_time_us; fake_time_us += time_read_step_us; return result;
+}
+void vTaskDelay(TickType_t ticks) {
+    fake_time_us += ticks * 1000;
     if (delay_hook) { auto callback = std::move(delay_hook); delay_hook = {}; callback(); }
 }
 
@@ -225,5 +233,41 @@ int main() {
     // The fake hardware remains enabled when the bus is down: software cannot promise power removal.
     assert(active_mask() == 1);
     bus_down = false; assert(robot.disableOutputs() == ESP_OK && active_mask() == 0);
+    assert(!robot.tryStartVoiceMotion("happy"));
+    assert(robot.enableSingleServoAtHome(SERVO_TAIL) == ESP_OK);
+    assert(!robot.tryStartVoiceMotion("happy")); // Never bypass tail-only isolation.
+    assert(robot.disableOutputs() == ESP_OK);
+    assert(robot.enableOutputsAtHome() == ESP_OK);
+    assert(!robot.tryStartVoiceMotion("dance") && !robot.tryStartVoiceMotion("none"));
+    *mutexes.back() = true;
+    assert(!robot.tryStartVoiceMotion("happy")); // Must not wait on a busy I2C owner.
+    *mutexes.back() = false;
+    robot.actionShy();
+    assert(!robot.tryStartVoiceMotion("happy")); // Old queued motion is not a voice queue.
+    run_queued();
+    start = writes.size();
+    assert(robot.tryStartVoiceMotion("happy"));
+    assert(writes.size() == start); // Callback only schedules; it never performs blocking I2C.
+    assert(!robot.tryStartVoiceMotion("shy"));
+    delay_hook = [&] { assert(!robot.tryStartVoiceMotion("curious")); };
+    run_queued();
+    assert(writes.size() > start);
+    start = writes.size();
+    assert(robot.tryStartVoiceMotion("shy"));
+    fake_time_us += 40001;
+    run_queued();
+    assert(writes.size() == start); // Expired actions are dropped, never played late.
+    time_read_step_us = 25000;
+    assert(robot.tryStartVoiceMotion("shy"));
+    run_queued();
+    assert(writes.size() == start); // Expires between task dispatch and first locked write.
+    time_read_step_us = 0;
+    assert(robot.tryStartVoiceMotion("curious"));
+    run_queued();
+    assert(writes.size() > start);
+    assert(robot.tryStartVoiceMotion("happy"));
+    assert(robot.disableOutputs() == ESP_OK);
+    start = writes.size(); run_queued(); assert(writes.size() == start);
+    puts("voice motion tests: PASS (disabled/single-only/busy/expired rejected, no delayed queue, stop invalidates)");
     puts("servo channel host tests: PASS (15/11/7/3/0 map, masks, tail-only, bounds, broadcast, failures, stop/restart)");
 }

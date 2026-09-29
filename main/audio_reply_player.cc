@@ -97,19 +97,30 @@ static bool find_wav_data_chunk(const uint8_t *wav, size_t wav_len, const uint8_
     }
 
     size_t offset = 12;
+    bool valid_format = false;
     while (offset + 8 <= wav_len)
     {
         const uint8_t *chunk = wav + offset;
         uint32_t chunk_size = read_le32(chunk + 4);
         offset += 8;
 
-        if (offset + chunk_size > wav_len)
+        if (chunk_size > wav_len - offset)
         {
             return false;
         }
 
+        if (memcmp(chunk, "fmt ", 4) == 0)
+        {
+            const uint8_t *fmt = wav + offset;
+            valid_format = chunk_size >= 16 && fmt[0] == 1 && fmt[1] == 0 &&
+                fmt[2] == 1 && fmt[3] == 0 && read_le32(fmt + 4) == 16000 &&
+                read_le32(fmt + 8) == 32000 && fmt[12] == 2 && fmt[13] == 0 &&
+                fmt[14] == 16 && fmt[15] == 0;
+            if (!valid_format) return false;
+        }
         if (memcmp(chunk, "data", 4) == 0)
         {
+            if (!valid_format || chunk_size == 0 || chunk_size % 2 != 0) return false;
             *pcm = wav + offset;
             *pcm_len = chunk_size;
             return true;
@@ -121,7 +132,24 @@ static bool find_wav_data_chunk(const uint8_t *wav, size_t wav_len, const uint8_
     return false;
 }
 
-static esp_err_t download_reply(const char *audio_url, voice_trace_t *trace, bool play)
+struct PlaybackStart {
+    voice_trace_t *trace;
+    audio_reply_start_callback_t callback;
+    void *context;
+    bool started;
+};
+
+static void playback_started(void *context)
+{
+    auto *start = static_cast<PlaybackStart *>(context);
+    if (start->started) return;
+    start->started = true;
+    if (start->trace) voice_trace_mark(start->trace, "playback_start", &start->trace->playback_start_us);
+    if (start->callback) start->callback(start->context);
+}
+
+static esp_err_t download_reply(const char *audio_url, voice_trace_t *trace, bool play,
+                               audio_reply_start_callback_t on_start = nullptr, void *context = nullptr)
 {
     char full_url[256];
     if (!build_absolute_url(audio_url, full_url, sizeof(full_url)))
@@ -190,9 +218,9 @@ static esp_err_t download_reply(const char *audio_url, voice_trace_t *trace, boo
         return ESP_ERR_INVALID_RESPONSE;
     }
 
-    if (trace) voice_trace_mark(trace, "playback_start", &trace->playback_start_us);
-    ret = bsp_play_audio(pcm, pcm_len);
-    if (trace) voice_trace_mark(trace, "playback_end", &trace->playback_end_us);
+    PlaybackStart start = {trace, on_start, context, false};
+    ret = bsp_play_audio_with_start(pcm, pcm_len, playback_started, &start);
+    if (trace && start.started) voice_trace_mark(trace, "playback_end", &trace->playback_end_us);
     if (ret != ESP_OK)
         ESP_LOGE(TAG, "[%s] 播放失败：%s", trace ? trace->request_id : "-", esp_err_to_name(ret));
 
@@ -200,9 +228,10 @@ static esp_err_t download_reply(const char *audio_url, voice_trace_t *trace, boo
     return ret;
 }
 
-esp_err_t audio_reply_play_from_url(const char *audio_url, voice_trace_t *trace)
+esp_err_t audio_reply_play_from_url(const char *audio_url, voice_trace_t *trace,
+                                   audio_reply_start_callback_t on_start, void *context)
 {
-    return download_reply(audio_url, trace, true);
+    return download_reply(audio_url, trace, true, on_start, context);
 }
 
 esp_err_t audio_reply_download_only(const char *audio_url, voice_trace_t *trace)

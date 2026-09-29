@@ -64,7 +64,7 @@ extern "C"
 
 static const char *TAG = "主控";
 static const char *FIRMWARE_NAME = "PRP voice-servo AI bridge";
-static const char *FIRMWARE_VERSION = "2026-09-28-servo-map-v1";
+static const char *FIRMWARE_VERSION = "2026-09-29-phrase-motion-v1";
 
 // 系统状态定义
 typedef enum
@@ -411,8 +411,9 @@ static void handle_touch_event()
     }
 }
 
-static void dispatch_ai_motion(const char *motion)
+static void dispatch_ai_motion(void *context)
 {
+    const char *motion = static_cast<const char *>(context);
     if (motion == NULL || motion[0] == '\0' || strcmp(motion, "none") == 0)
     {
         return;
@@ -427,21 +428,9 @@ static void dispatch_ai_motion(const char *motion)
         return;
     }
 
-    if (strcmp(motion, "happy") == 0)
+    if (!robot_motions.tryStartVoiceMotion(motion) && machine_log_enabled)
     {
-        robot_motions.actionHappy();
-    }
-    else if (strcmp(motion, "shy") == 0)
-    {
-        robot_motions.actionShy();
-    }
-    else if (strcmp(motion, "comfort") == 0 || strcmp(motion, "curious") == 0)
-    {
-        robot_motions.actionCurious();
-    }
-    else
-    {
-        ESP_LOGW(TAG, "Unknown AI motion intent: %s", motion);
+        ESP_LOGI(TAG, "AI动作未启动（禁用/忙碌/无效），语音继续：%s", motion);
     }
 }
 
@@ -525,11 +514,10 @@ static ai_interaction_result_t run_ai_bridge_interaction(int audio_chunksize, ui
     else
         ESP_LOGI(TAG, "[%s] 首包：语音识别=%dms | 大模型响应时间=%dms | 后台合成待完成（耗时稍后输出）",
                  trace.request_id, response.asr_ms, response.dialogue_ms);
-    dispatch_ai_motion(response.motion);
     const char *trace_result = "no_audio";
     if (response.audio_url[0] != '\0')
     {
-        esp_err_t play_ret = audio_reply_play_from_url(response.audio_url, &trace);
+        esp_err_t play_ret = audio_reply_play_from_url(response.audio_url, &trace, dispatch_ai_motion, response.motion);
         if (response.phrase_hit && play_ret != ESP_OK && trace.playback_start_us < 0)
         {
             // If the cached GET failed, wait on the already running real TTS,
@@ -540,7 +528,7 @@ static ai_interaction_result_t run_ai_bridge_interaction(int audio_chunksize, ui
             if (play_ret == ESP_OK)
             {
                 trace.cached_playback = false;
-                play_ret = audio_reply_play_from_url(fallback.audio_url, &trace);
+                play_ret = audio_reply_play_from_url(fallback.audio_url, &trace, dispatch_ai_motion, response.motion);
             }
             phrase_background_release();
             background_slot = false;

@@ -126,7 +126,10 @@ class LibraryTests(unittest.TestCase):
         model = Mock()
         model.json.return_value = {"response": json.dumps({"id": entries[0].id})}
         with patch.object(lib.config, "LLM_BACKEND", "ollama"), patch.object(lib.requests, "post", return_value=model) as post:
-            self.assertIs(lib.semantic_match("您好呀", entries), entries[0])
+            selected = lib.semantic_match("您好呀", entries)
+            self.assertEqual(selected.id, entries[0].id)
+            self.assertEqual(selected.reply, entries[0].reply)
+            self.assertEqual(selected.motion, "none") # Missing/invalid model action never moves.
             post.assert_called_once()
             self.assertIn("您好呀", post.call_args.kwargs["json"]["prompt"])
             model.json.return_value = {"response": '{"id": null}'}

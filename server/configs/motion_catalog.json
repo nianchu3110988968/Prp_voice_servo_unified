@@ -1,0 +1,7 @@
+[
+  {"id": "none", "enabled": true, "description": "不发起新动作。没有明确需要、严肃求助或不确定时选择。"},
+  {"id": "happy", "enabled": true, "description": "开心反馈，适合庆祝、得意和活泼的包袱；现有固件为交替小幅摆动并回中。"},
+  {"id": "shy", "enabled": true, "description": "害羞或认怂，适合被夸、尴尬和自我拆台；现有固件为收拢姿态并回中。"},
+  {"id": "comfort", "enabled": true, "description": "安慰反馈。当前固件暂与curious共用动作，不代表已实现独立安慰姿态。"},
+  {"id": "curious", "enabled": true, "description": "好奇反馈，适合疑惑、倾听或提问；现有固件为倾斜姿态并回中。"}
+]

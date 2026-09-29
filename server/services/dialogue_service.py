@@ -2,6 +2,7 @@ import json
 import re
 
 import requests
+from services.motion_policy import selection_prompt, sanitize_motion
 
 from server_config import (
     LLM_BACKEND,
@@ -171,7 +172,7 @@ def generate_healing_reply(user_text: str) -> dict:
             reply_text,
             style,
             "listening",
-            "comfort",
+            "none",
             "fallback_no_text",
             LLM_BACKEND,
         )
@@ -228,6 +229,8 @@ def generate_ollama_reply(user_text: str, style: str) -> dict:
 
     raw_reply = response.json().get("response", "").strip()
     parsed = parse_llm_json(raw_reply)
+    if not isinstance(parsed, dict):
+        raise ValueError("LLM returned a non-object response")
     reply_text = sanitize_reply_text(parsed.get("reply_text", ""))
     if not reply_text:
         raise ValueError("LLM returned empty reply_text")
@@ -264,7 +267,8 @@ def build_ollama_prompt(user_text: str, style: str) -> str:
         f"回复边界：\n{BASE_SYSTEM_STYLE}\n"
         f"{STYLE_PROMPTS[style]}\n"
         "你必须只输出一个 JSON 对象，字段为 reply_text、style、emotion、motion。"
-        "style 只能是 cute 或 encourage；motion 只能是 happy、shy、comfort、curious、none。"
+        "style 只能是 cute 或 encourage；motion只能从下面允许的动作ID中选择。"
+        f"\n{selection_prompt()}"
         "reply_text 必须使用简体中文，不超过 48 个汉字。"
         f"无论最近对话如何，都保持当前角色{CHARACTER_NAME}，不冒充人类或其他角色。\n"
         f"{history_block}"
@@ -288,7 +292,7 @@ def parse_llm_json(raw_reply: str) -> dict:
 def generate_rule_dialogue(user_text: str, style: str, status: str, detail: str = "") -> dict:
     reply_text = generate_rule_reply(user_text, style)
     emotion = infer_emotion(user_text, reply_text)
-    motion = infer_motion(user_text, reply_text)
+    motion = "none" # No model decision: don't silently replace it with a keyword action.
     return build_dialogue_result(reply_text, style, emotion, motion, status, LLM_BACKEND, detail)
 
 
@@ -350,37 +354,24 @@ def infer_emotion(user_text: str, reply_text: str) -> str:
     return "attentive"
 
 
-def infer_motion(user_text: str, reply_text: str) -> str:
-    text = f"{user_text} {reply_text}"
-    if any(word in text for word in ["开心", "高兴", "成功", "好棒", "亮起来"]):
-        return "happy"
-    if any(word in user_text for word in ["难过", "不开心", "伤心", "委屈", "哭", "累", "疲惫", "压力", "撑不住", "焦虑", "烦"]):
-        return "comfort"
-    if any(word in text for word in ["睡", "晚安", "休息", "轻轻", "安静"]):
-        return "shy"
-    if any(word in text for word in ["为什么", "怎么", "想知道"]):
-        return "curious"
-    if any(word in text for word in ["抱", "陪", "难过", "累", "压力", "焦虑", "烦"]):
-        return "comfort"
-    return "comfort"
-
-
 def enforce_emotion_motion_consistency(
     user_text: str,
     reply_text: str,
     proposed_emotion: str,
     proposed_motion: str,
 ) -> tuple[str, str]:
+    # Emotion may retain the old style rules, but motion belongs to the model
+    # plus the editable allow-list, not a hidden keyword override.
+    motion = sanitize_motion(proposed_motion)
     category = classify_text(user_text)
     if category in {"sad", "tired", "hug"}:
-        return "comforting", "comfort"
+        return "comforting", motion
     if category == "sleep":
-        return "calm", "shy"
+        return "calm", motion
     if category == "happy":
-        return "happy", "happy"
+        return "happy", motion
 
     emotion = sanitize_token(proposed_emotion, infer_emotion(user_text, reply_text))
-    motion = sanitize_motion(proposed_motion or infer_motion(user_text, reply_text))
     return emotion, motion
 
 
@@ -394,13 +385,6 @@ def sanitize_reply_text(reply_text: str) -> str:
 def sanitize_token(value: str, fallback: str) -> str:
     value = (value or "").strip().lower()
     return value if re.fullmatch(r"[a-z_]+", value) else fallback
-
-
-def sanitize_motion(value: str) -> str:
-    value = (value or "").strip().lower()
-    if value in {"happy", "shy", "comfort", "curious", "none"}:
-        return value
-    return "comfort"
 
 
 def stable_reply_index(text: str, option_count: int) -> int:

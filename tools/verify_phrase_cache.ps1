@@ -93,7 +93,7 @@ try {
     }
     if (-not $AudioOnly) {
         Write-Host '[1/3] Offline phrase library/pipeline/job tests (fake models only)'
-        Invoke-VisibleNative 'python' @('-X', 'utf8', '-m', 'unittest', 'discover', '-s', 'server/tests', '-p', 'test_phrase_library.py', '-v') 'Phrase library tests failed.'
+        Invoke-VisibleNative 'python' @('-X', 'utf8', '-m', 'unittest', 'discover', '-s', 'server/tests', '-p', 'test_phrase*.py', '-v') 'Phrase library tests failed.'
         Write-Host '[2/3] Existing logging tests + platformio run + observer host tests'
         & (Join-Path $PSScriptRoot 'verify_voice_logging.ps1') | Out-Host
     }

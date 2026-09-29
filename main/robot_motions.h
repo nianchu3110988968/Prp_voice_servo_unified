@@ -18,6 +18,8 @@ public:
     void actionHappy();
     void actionCurious();
     void actionReset();
+    // Called at audio onset. Never waits for old motion or a locked I2C path.
+    bool tryStartVoiceMotion(const char *motion);
     bool requestServoAngle(uint8_t channel, int angle);
 
 private:
@@ -34,6 +36,7 @@ private:
         uint8_t channel;
         int angle;
         uint32_t generation;
+        int64_t start_deadline_us;
     };
 
     static void motionTaskEntry(void *arg);
@@ -61,6 +64,8 @@ private:
     int single_channel_ = -1; // -1: whole robot; otherwise only this output is allowed.
     uint32_t generation_ = 0; // Invalidates dequeued/in-progress commands on stop/start.
     uint32_t executing_generation_ = 0; // Only accessed by the motion task.
+    int64_t executing_deadline_us_ = 0;
+    size_t pending_commands_ = 0; // Queued + executing, protected by output_mutex_.
     int current_angles_[SERVO_LIMIT_COUNT] = {};
     bool ready_ = false;
     bool log_enabled_ = false;

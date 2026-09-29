@@ -18,12 +18,16 @@ static size_t strlcat(char *dst, const char *src, size_t n)
     return length + strlcpy(dst + length, src, n - length);
 }
 #include "../../main/audio_reply_player.cc"
+#include "../../main/audio_playback_gate.h"
 
 static int allocations = 0, plays = 0, network_calls = 0;
 static int http_status = 200;
 static esp_err_t transport_result = ESP_OK;
 static std::vector<uint8_t> payload;
 static std::vector<std::string> events;
+static std::vector<std::string> onset_events;
+static int motion_starts = 0;
+static esp_err_t prepare_result = ESP_OK, write_result = ESP_OK;
 void test_log(const char *tag, const char *format, ...)
 {
     fprintf(stderr, "[host:%s] ", tag);
@@ -35,7 +39,22 @@ void test_log(const char *tag, const char *format, ...)
 }
 void *heap_caps_malloc(size_t n, unsigned) { ++allocations; return malloc(n); }
 void heap_caps_free(void *p) { if (p) --allocations; free(p); }
-extern "C" esp_err_t bsp_play_audio(const uint8_t *, size_t n) { ++plays; assert(n == 4); return ESP_OK; }
+extern "C" esp_err_t bsp_play_audio_with_start(const uint8_t *, size_t n,
+                                               bsp_audio_start_callback_t start, void *context) {
+    return audio_playback_run([&]() {
+        onset_events.emplace_back("prepared"); return prepare_result;
+    }, [&]() {
+        ++plays; assert(n == 4); onset_events.emplace_back("write"); return write_result;
+    }, start, context);
+}
+static void on_motion(void *context) {
+    assert(context == &motion_starts);
+    ++motion_starts;
+    onset_events.emplace_back("motion");
+    // The real gate is still held while starting motion; reentrant audio fails.
+    assert(audio_playback_run([] { assert(false); return ESP_OK; },
+                             [] { assert(false); return ESP_OK; }, nullptr, nullptr) == ESP_ERR_INVALID_STATE);
+}
 void voice_trace_mark(voice_trace_t *, const char *event, int64_t *slot)
 {
     events.emplace_back(event); *slot = (int64_t)events.size() * 1000;
@@ -96,7 +115,12 @@ int main()
     payload.resize(48, 0);
     memcpy(payload.data(), "RIFF", 4); memcpy(payload.data() + 8, "WAVE", 4);
     memcpy(payload.data() + 12, "fmt ", 4); payload[16] = 16;
+    payload[4] = 40; payload[20] = 1; payload[22] = 1;
+    payload[24] = 0x80; payload[25] = 0x3e; // 16000Hz
+    payload[28] = 0x00; payload[29] = 0x7d; // 32000 bytes/sec
+    payload[32] = 2; payload[34] = 16;
     memcpy(payload.data() + 36, "data", 4); payload[40] = 4; payload[44] = 1;
+    const auto good_wav = payload;
     esp_err_t first = audio_reply_download_only("/recordings/test.wav", &trace);
     fprintf(stderr, "[host] first download ret=%d, HTTP=%d, perform_calls=%d, bytes=%zu, trace_events=%zu\n",
             first, http_status, network_calls, payload.size(), events.size());
@@ -120,5 +144,43 @@ int main()
     payload.clear();
     assert(audio_reply_download_only("/empty.wav", &trace) != ESP_OK);
     assert(plays == 1 && allocations == 0);
+    payload = good_wav;
+    // Failed download, bad WAV, unavailable playback and a busy owner never
+    // start motion. A subsequent foreground fallback can start exactly once.
+    events.clear(); onset_events.clear();
+    trace.playback_start_us = -1;
+    http_status = 404;
+    assert(audio_reply_play_from_url("/cache.wav", &trace, on_motion, &motion_starts) != ESP_OK);
+    assert(motion_starts == 0 && trace.playback_start_us == -1);
+    http_status = 200;
+    for (size_t invalid : {size_t(20), size_t(22), size_t(24), size_t(32), size_t(34), size_t(40)}) {
+        payload = good_wav; payload[invalid] = 0;
+        assert(audio_reply_play_from_url("/invalid.wav", &trace, on_motion, &motion_starts) != ESP_OK);
+        assert(motion_starts == 0 && trace.playback_start_us == -1);
+    }
+    payload = good_wav;
+    {
+        AudioPlaybackGuard busy;
+        assert(busy.acquired());
+        assert(audio_reply_play_from_url("/busy.wav", &trace, on_motion, &motion_starts) == ESP_ERR_INVALID_STATE);
+        assert(motion_starts == 0 && trace.playback_start_us == -1);
+    }
+    prepare_result = ESP_FAIL;
+    assert(audio_reply_play_from_url("/amp-failed.wav", &trace, on_motion, &motion_starts) == ESP_FAIL);
+    assert(motion_starts == 0 && trace.playback_start_us == -1);
+    prepare_result = ESP_OK;
+    events.clear(); onset_events.clear();
+    assert(audio_reply_play_from_url("/fallback.wav", &trace, on_motion, &motion_starts) == ESP_OK);
+    assert(motion_starts == 1);
+    assert((onset_events == std::vector<std::string>{"prepared", "motion", "write"}));
+    assert((events == std::vector<std::string>{"download_start", "download_end", "playback_start", "playback_end"}));
+    assert(audio_reply_download_only("/background.wav", &trace) == ESP_OK);
+    assert(motion_starts == 1); // Never moves again for the discarded background audio.
+    write_result = ESP_FAIL;
+    trace.playback_start_us = -1;
+    assert(audio_reply_play_from_url("/write-failed.wav", &trace, on_motion, &motion_starts) == ESP_FAIL);
+    assert(motion_starts == 2 && trace.playback_start_us >= 0); // main must NOT retry a started playback.
+    assert(allocations == 0);
+    puts("audio onset tests: PASS (owner/prepare before motion, failure isolation, fallback once, background silent)");
     puts("audio download host tests: PASS (URL construction, real GET, no playback/allocation, failures, normal playback)");
 }

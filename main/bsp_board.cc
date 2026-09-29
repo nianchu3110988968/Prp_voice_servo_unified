@@ -19,6 +19,7 @@
 
 #include <string.h>
 #include "bsp_board.h"
+#include "audio_playback_gate.h"
 #include "driver/i2s_std.h"
 #include "soc/soc_caps.h"
 #include "driver/gpio.h"
@@ -333,60 +334,70 @@ esp_err_t bsp_audio_init(uint32_t sample_rate, int channel_format, int bits_per_
  */
 esp_err_t bsp_play_audio(const uint8_t *audio_data, size_t data_len)
 {
-    esp_err_t ret = ESP_OK;
-    size_t bytes_written = 0;
+    return bsp_play_audio_with_start(audio_data, data_len, nullptr, nullptr);
+}
 
-    if (tx_handle == nullptr)
-    {
-        ESP_LOGE(TAG, "I2S 发送通道未初始化");
-        return ESP_ERR_INVALID_STATE;
-    }
+esp_err_t bsp_play_audio_with_start(const uint8_t *audio_data, size_t data_len,
+                                   bsp_audio_start_callback_t on_start, void *context)
+{
+    return audio_playback_run([&]() -> esp_err_t {
+        esp_err_t ret = ESP_OK;
 
-    if (audio_data == nullptr || data_len == 0)
-    {
-        ESP_LOGE(TAG, "无效的音频数据");
-        return ESP_ERR_INVALID_ARG;
-    }
+        if (tx_handle == nullptr)
+        {
+            ESP_LOGE(TAG, "I2S 发送通道未初始化");
+            return ESP_ERR_INVALID_STATE;
+        }
 
-    // 确保 I2S 发送通道已启用（如果之前被停止了）
-    if (!tx_channel_enabled)
-    {
-        ret = i2s_channel_enable(tx_handle);
+        if (audio_data == nullptr || data_len == 0 || data_len % 2 != 0)
+        {
+            ESP_LOGE(TAG, "无效的音频数据");
+            return ESP_ERR_INVALID_ARG;
+        }
+
+        // 确保 I2S 发送通道已启用（如果之前被停止了）
+        if (!tx_channel_enabled)
+        {
+            ret = i2s_channel_enable(tx_handle);
+            if (ret != ESP_OK)
+            {
+                ESP_LOGE(TAG, "启用 I2S 发送通道失败: %s", esp_err_to_name(ret));
+                return ret;
+            }
+            tx_channel_enabled = true;
+            // Give MAX98357A stable clocks before sending non-zero samples.
+            vTaskDelay(pdMS_TO_TICKS(I2S_TX_AMP_WAKE_MS));
+        }
+
+        return ESP_OK;
+    }, [&]() -> esp_err_t {
+        // 将音频数据写入 I2S 发送通道（起播回调已在同一播放权内执行）
+        size_t bytes_written = 0;
+        esp_err_t ret = i2s_channel_write(tx_handle, audio_data, data_len, &bytes_written, portMAX_DELAY);
+
         if (ret != ESP_OK)
         {
-            ESP_LOGE(TAG, "启用 I2S 发送通道失败: %s", esp_err_to_name(ret));
+            ESP_LOGE(TAG, "写入 I2S 音频数据失败: %s", esp_err_to_name(ret));
             return ret;
         }
-        tx_channel_enabled = true;
-        // Give MAX98357A stable clocks before sending non-zero samples.
-        vTaskDelay(pdMS_TO_TICKS(I2S_TX_AMP_WAKE_MS));
-    }
 
-    // 将音频数据写入 I2S 发送通道
-    ret = i2s_channel_write(tx_handle, audio_data, data_len, &bytes_written, portMAX_DELAY);
+        // 检查写入的数据长度是否符合预期
+        if (bytes_written != data_len)
+        {
+            ESP_LOGW(TAG, "预期写入 %d 字节，实际写入 %d 字节", data_len, bytes_written);
+            return ESP_FAIL;
+        }
 
-    if (ret != ESP_OK)
-    {
-        ESP_LOGE(TAG, "写入 I2S 音频数据失败: %s", esp_err_to_name(ret));
-        return ret;
-    }
+        // The final samples may still be queued in DMA when write returns. Wait for
+        // one complete DMA ring plus a small margin. Auto-clear then sends zeros.
+        const uint32_t drain_ms =
+            (I2S_TX_DMA_DESC_NUM * I2S_TX_DMA_FRAME_NUM * 1000U + tx_sample_rate_hz - 1U) /
+                tx_sample_rate_hz +
+            I2S_TX_DRAIN_MARGIN_MS;
+        vTaskDelay(pdMS_TO_TICKS(drain_ms));
 
-    // 检查写入的数据长度是否符合预期
-    if (bytes_written != data_len)
-    {
-        ESP_LOGW(TAG, "预期写入 %d 字节，实际写入 %d 字节", data_len, bytes_written);
-        return ESP_FAIL;
-    }
-
-    // The final samples may still be queued in DMA when write returns. Wait for
-    // one complete DMA ring plus a small margin. Auto-clear then sends zeros.
-    const uint32_t drain_ms =
-        (I2S_TX_DMA_DESC_NUM * I2S_TX_DMA_FRAME_NUM * 1000U + tx_sample_rate_hz - 1U) /
-            tx_sample_rate_hz +
-        I2S_TX_DRAIN_MARGIN_MS;
-    vTaskDelay(pdMS_TO_TICKS(drain_ms));
-
-    return ESP_OK;
+        return ESP_OK;
+    }, on_start, context);
 }
 
 /**
@@ -400,6 +411,8 @@ esp_err_t bsp_play_audio(const uint8_t *audio_data, size_t data_len)
  */
 esp_err_t bsp_audio_stop(void)
 {
+    AudioPlaybackGuard guard;
+    if (!guard.acquired()) return ESP_ERR_INVALID_STATE;
     esp_err_t ret = ESP_OK;
 
     if (tx_handle == nullptr)

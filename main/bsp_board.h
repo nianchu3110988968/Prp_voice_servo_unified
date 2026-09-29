@@ -80,6 +80,12 @@ esp_err_t bsp_audio_init(uint32_t sample_rate, int channel_format, int bits_per_
  */
 esp_err_t bsp_play_audio(const uint8_t *audio_data, size_t data_len);
 
+// Synchronous callback after playback ownership/amp warm-up, just before the
+// first I2S write. Context lives until this blocking function returns.
+typedef void (*bsp_audio_start_callback_t)(void *context);
+esp_err_t bsp_play_audio_with_start(const uint8_t *audio_data, size_t data_len,
+                                   bsp_audio_start_callback_t on_start, void *context);
+
 /**
  * @brief Explicitly stop I2S output for shutdown or fault recovery
  *
