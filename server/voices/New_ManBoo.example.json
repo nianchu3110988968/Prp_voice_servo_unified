@@ -1,0 +1,18 @@
+{
+  "id": "New_ManBoo",
+  "display_name": "New_ManBoo",
+  "gpt_weights": "LOCAL_MODELS/model.ckpt",
+  "sovits_weights": "LOCAL_MODELS/model.pth",
+  "gpt_sovits_version": "v2ProPlus",
+  "reference_wav": "LOCAL_AUDIO/reference.wav",
+  "reference_text": "参考音频逐字原文",
+  "prompt_language": "zh",
+  "text_language": "zh",
+  "weight_pair": {
+    "id": "New_ManBoo",
+    "version": "v2ProPlus",
+    "gpt_sha256": "由导入向导自动计算",
+    "sovits_sha256": "由导入向导自动计算"
+  },
+  "voice_revision": "New_ManBoo-e5-e4_s80-v1"
+}

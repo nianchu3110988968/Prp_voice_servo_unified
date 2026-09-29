@@ -33,6 +33,9 @@ class Role:
     phrase_voice_revision: str
     weight_pair: dict
     persona_prompt: str = ""
+    persona_id: str = ""
+    voice_id: str = ""
+    voice_display_name: str = ""
 
     @property
     def cache_key(self):
@@ -55,7 +58,10 @@ def load_role(role_id, root=ROOT):
     root = Path(root).resolve()
     path = root / "server/roles" / (role_id + ".local.json")
     data = json.loads(path.read_text(encoding="utf-8-sig"))
-    fields = set(Role.__dataclass_fields__) - {"persona_prompt"}
+    if isinstance(data, dict) and set(data) == {"persona_id", "voice_id"}:
+        from services.profile_config import load_combination
+        return load_combination(data["persona_id"], data["voice_id"], root)
+    fields = set(Role.__dataclass_fields__) - {"persona_prompt", "persona_id", "voice_id", "voice_display_name"}
     if set(data) != fields or data.get("id") != role_id:
         raise ValueError("角色字段缺失、多余或ID与文件名不一致")
     for key in fields - {"weight_pair"}:

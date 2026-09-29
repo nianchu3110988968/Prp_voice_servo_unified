@@ -39,6 +39,23 @@ RECORDINGS_DIR = APP_ROOT / "recordings"
 RECORDINGS_DIR.mkdir(exist_ok=True)
 
 app = FastAPI(title="PRP Plush Robot AI Bridge")
+@app.middleware("http")
+async def desktop_request_trace(request: Request, call_next):
+    # Correlate controlled desktop HTTP operations without changing ESP32's flow.
+    if request.url.path.startswith(("/debug/dialogue", "/debug/tts", "/debug/text-chain", "/profiles/")):
+        trace = RequestTrace(request.headers.get("x-request-id"))
+        log_line(f"[服务端][{trace.request_id}] 桌面请求开始: {request.url.path}")
+        try:
+            response = await call_next(request)
+            response.headers["X-Request-ID"] = trace.request_id
+            log_line(f"[服务端][{trace.request_id}] 桌面请求结束: HTTP {response.status_code}, {round((time.perf_counter() - trace.started) * 1000)}ms")
+            return response
+        except Exception:
+            log_line(f"[服务端][{trace.request_id}] 桌面请求失败")
+            raise
+    return await call_next(request)
+
+
 phrase_library = PhraseLibrary(config.PHRASE_WORKBOOK, config.PHRASE_CACHE_DIR)
 phrase_jobs = PhraseJobs()
 # Preserve the existing single ordered ASR/dialogue/history lane. Long TTS jobs
@@ -59,9 +76,13 @@ def warm_up_models() -> None:
     role_id = os.getenv("PRP_ROLE_ID", "New_ManBoo")
     # Configuration errors fail fast. A model-service failure may use the existing
     # SAPI fallback, but must never silently use unconfirmed remote weights.
-    role_runtime.activate(load_role(role_id))
+    # Split selections override optional legacy preset at process startup.
+    from services.profile_config import load_combination
+    initial = (load_combination(os.environ["PRP_PERSONA_ID"], os.environ["PRP_VOICE_ID"])
+               if os.getenv("PRP_PERSONA_ID") and os.getenv("PRP_VOICE_ID") else load_role(role_id))
+    role_runtime.activate(initial)
     try:
-        role_runtime.switch_role(role_id)
+        role_runtime.switch_role(role_id, loader=lambda _: initial)
     except Exception as exc:
         log_line("[服务端] 音色未就绪：" + str(exc))
     if not MODEL_WARMUP_ENABLED:
@@ -260,7 +281,7 @@ def rebuild_phrase_library(request: Request):
 
 @app.get("/health")
 def health():
-    return {"status": "ok", "service": "prp-ai-bridge", "role_api": 1,
+    return {"status": "ok", "service": "prp-ai-bridge", "role_api": 2,
             "warmup": dict(warmup_status), **role_runtime.status()}
 
 
@@ -456,3 +477,42 @@ async def voice_interact(request: Request, http_response: Response):
     except Exception as exc:
         trace.event("request_failed", status="failed", error_type=type(exc).__name__)
         raise
+
+
+@app.post("/profiles/persona/{persona_id}")
+def switch_persona_profile(persona_id: str, request: Request):
+    require_role_maintenance(request)
+    try:
+        return role_runtime.switch_persona(persona_id)
+    except Exception as exc:
+        raise HTTPException(status_code=409, detail=str(exc)) from exc
+
+
+@app.post("/profiles/voice/{voice_id}")
+def switch_voice_profile(voice_id: str, request: Request):
+    require_role_maintenance(request)
+    try:
+        return role_runtime.switch_voice(voice_id)
+    except Exception as exc:
+        raise HTTPException(status_code=409, detail=str(exc)) from exc
+
+
+@app.post("/profiles/apply/{persona_id}/{voice_id}")
+def apply_profiles(persona_id: str, voice_id: str, request: Request):
+    require_role_maintenance(request)
+    try:
+        return role_runtime.apply_combination(persona_id, voice_id)
+    except Exception as exc:
+        raise HTTPException(status_code=409, detail=str(exc)) from exc
+
+
+@app.post("/debug/text-chain")
+def debug_text_chain(text: str, request: Request):
+    require_role_maintenance(request)
+    with role_runtime.lock, interaction_lock:
+        started = time.perf_counter()
+        dialogue = generate_healing_reply(text)
+        dialogue_ms = round((time.perf_counter() - started) * 1000)
+        tts = synthesize_reply(dialogue["reply_text"], RECORDINGS_DIR)
+        return {"dialogue": dialogue, "tts": tts, "dialogue_ms": dialogue_ms,
+                "total_ms": round((time.perf_counter() - started) * 1000), **role_runtime.status()}

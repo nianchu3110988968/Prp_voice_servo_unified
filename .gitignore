@@ -54,3 +54,10 @@ server/configs/*.local.json
 server/.runtime/
 dist/
 *.spec
+
+server/personas/*.local.json
+server/voices/*.local.json
+# Imported private persona texts stay local; explicit built-in prompts remain tracked.
+server/prompts/*.txt
+!server/prompts/New_ManBoo.txt
+!server/prompts/nuonuo_v1.txt

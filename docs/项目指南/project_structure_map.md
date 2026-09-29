@@ -187,3 +187,14 @@ E:/Projects2026/Prp_voice_servo_unified
 - `mechanical/硬件草模/`：七种硬件独立 STEP、八种硬件展示总览、使用说明和提取核验；坐标已归一。
 - `mechanical/硬件草模/占位_未定尺寸/`：INMP441 20×20×10 暂定占位，不能当作真实尺寸。
 - 用户因尺寸与连接复杂度不接受 V0，改为自行设计骨架；`mechanical/v0/` 保留作历史及尺寸证据，不再是当前实施方案。
+
+## 2026-09-29 独立人格、音色与项目控制台
+
+- server/services/profile_config.py：人格/音色解析、自动SHA256、导入、旧角色兼容迁移；roles为可选组合预设。
+- server/personas/*.example.json、server/voices/*.example.json：可提交字段示例；同目录.local.json忽略。
+- server/launcher_app.py：独立选择、实际状态、交互测试、串口与训练页面；追加日志不自动滚动。
+- server/launcher_imports.py：UTF-8人格及权重/WAV导入表单。
+- server/launcher_console.py：日志路由、按日期/容量分段持久化、独占串口。
+- server/logs/launcher/：本机运行日志（忽略，不自动删除）；server/prompts/导入正文忽略，既有版本化提示词保留。
+- server/tests/test_profiles_console.py：拆分配置、切换/回滚、缓存隔离、轮转和串口模拟。
+- tools/verify_roles_launcher.ps1：离线测试、源码Tk烟测、PIO编译；tools/build_launcher.ps1：EXE构建及开关烟测。
