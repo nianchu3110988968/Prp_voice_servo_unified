@@ -219,6 +219,7 @@ class PipelineTests(unittest.TestCase):
         self.assertEqual(result["reply_text"], "正常回复")
         semantic.assert_not_called()
         normal.assert_called_once()
+        self.assertIn("客户端未声明phrase-cache-v1", self.logs.getvalue())
 
     def test_hit_preserves_asr_fixed_reply_and_calls_tts_with_exact_text(self):
         result, semantic, normal, memory = self.invoke()
@@ -262,6 +263,7 @@ class PipelineTests(unittest.TestCase):
         result, _, normal, _ = self.invoke(match=False)
         self.assertNotIn("phrase_hit", result)
         normal.assert_called_once()
+        self.assertIn("未命中：Ollama未选择词条", self.logs.getvalue())
         self.library.audio_for.side_effect = FileNotFoundError("missing")
         result, _, normal, _ = self.invoke()
         self.assertNotIn("phrase_hit", result)

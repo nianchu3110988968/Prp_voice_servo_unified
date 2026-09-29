@@ -106,7 +106,16 @@ class LatencyTraceTests(unittest.TestCase):
     def test_chinese_summary_is_compact_and_uses_payload_timings(self):
         payload, _, _ = self.invoke("esp-demo-001")
         lines = self.logs.splitlines()
-        self.assertEqual(len(lines), 6)
+        # The legacy-client fixture now emits one explicit capability diagnostic.
+        # Keep the original six-line summary contract and reject any extra noise.
+        diagnostic_prefix = "[服务端][esp-demo-001] 词库："
+        diagnostics = [line for line in lines if line.startswith(diagnostic_prefix)]
+        self.assertEqual(diagnostics, [
+            diagnostic_prefix + "跳过：客户端未声明phrase-cache-v1（旧固件或后台槽位不可用）"
+        ])
+        summary_lines = [line for line in lines if not line.startswith(diagnostic_prefix)]
+        self.assertEqual(len(summary_lines), 6)
+        self.assertEqual(len(lines), 7)
         self.assertTrue(all(line.startswith("[服务端][esp-demo-001]") for line in lines))
         self.assertNotIn("[voice_trace]", self.logs)
         self.assertNotIn("[ai_bridge]", self.logs)

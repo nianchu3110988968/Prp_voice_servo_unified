@@ -120,19 +120,35 @@ def run_ai_pipeline(wav_path: Path, audio_stats: dict | None = None, trace: Requ
     recognized_text = asr_result["text"]
     cache = {}
 
+    def phrase_note(reason):
+        log_line(f"[服务端][{trace.request_id if trace else '-'}] 词库：{reason}")
+
     def select_dialogue():
-        if allow_phrases and config.PHRASE_LIBRARY_ENABLED and asr_result["status"] == "ok":
+        if not allow_phrases:
+            phrase_note("跳过：客户端未声明phrase-cache-v1（旧固件或后台槽位不可用）")
+        elif not config.PHRASE_LIBRARY_ENABLED:
+            phrase_note("跳过：配置已关闭")
+        elif config.LLM_BACKEND != "ollama":
+            phrase_note("跳过：当前大模型后端不是Ollama")
+        elif asr_result["status"] != "ok":
+            phrase_note("跳过：ASR状态非ok")
+        else:
             try:
                 entries, manifest = phrase_library.ready()
-                entry = semantic_match(recognized_text, entries)
-                if entry:
-                    audio_url = phrase_library.audio_for(entry, manifest)
-                    style = choose_reply_style(recognized_text)
-                    emotion, motion = enforce_emotion_motion_consistency(recognized_text, entry.reply, "", entry.motion)
-                    cache.update(id=entry.id, audio_url=audio_url)
-                    # Do not pass fixed replies through the ordinary 48-char truncation.
-                    return {"reply_text": entry.reply, "style": style, "emotion": emotion, "motion": motion,
-                            "persona": config.PERSONA_PROMPT_NAME, "status": "ok", "backend": "ollama"}
+                if not entries:
+                    phrase_note("跳过：当前人格/音色组合没有已发布缓存")
+                else:
+                    phrase_note(f"开始语义匹配：{len(entries)}个独立词条")
+                    entry = semantic_match(recognized_text, entries)
+                    if entry:
+                        audio_url = phrase_library.audio_for(entry, manifest)
+                        style = choose_reply_style(recognized_text)
+                        emotion, motion = enforce_emotion_motion_consistency(recognized_text, entry.reply, "", entry.motion)
+                        cache.update(id=entry.id, audio_url=audio_url)
+                        # Fixed replies bypass ordinary 48-character truncation.
+                        return {"reply_text": entry.reply, "style": style, "emotion": emotion, "motion": motion,
+                                "persona": config.PERSONA_PROMPT_NAME, "status": "ok", "backend": "ollama"}
+                    phrase_note("未命中：Ollama未选择词条，回正常回复")
             except Exception as exc:
                 log_line(f"[服务端][{trace.request_id if trace else '-'}] 词库不可用，回正常回复：{quoted(str(exc))}")
         return generate_healing_reply(recognized_text)
@@ -520,3 +536,31 @@ def debug_text_chain(text: str, request: Request):
         tts = synthesize_reply(dialogue["reply_text"], RECORDINGS_DIR)
         return {"dialogue": dialogue, "tts": tts, "dialogue_ms": dialogue_ms,
                 "total_ms": round((time.perf_counter() - started) * 1000), **role_runtime.status()}
+
+
+@app.post("/debug/phrase-match")
+def debug_phrase_match(text: str, request: Request):
+    """Same active cache/model as ESP, without ASR, TTS, history or hardware."""
+    require_role_maintenance(request)
+    if not text.strip() or len(text.encode("utf-8")) > 512:
+        raise HTTPException(status_code=400, detail="测试文本不能为空或超过512 UTF-8字节")
+    with role_runtime.lock, interaction_lock:
+        if not config.PHRASE_LIBRARY_ENABLED:
+            return {"status": "disabled", "matched": False}
+        if config.LLM_BACKEND != "ollama":
+            return {"status": "model_disabled", "matched": False}
+        try:
+            entries, manifest = phrase_library.ready()
+            if not entries:
+                return {"status": "cache_missing", "matched": False}
+            match_started = time.perf_counter()
+            entry = semantic_match(text, entries)
+            result = {"status": "hit" if entry else "miss", "matched": bool(entry),
+                      "input_text": text, "entries": len(entries),
+                      "match_ms": int((time.perf_counter() - match_started) * 1000)}
+            if entry:
+                result.update(phrase_id=entry.id, reply_text=entry.reply, motion=entry.motion,
+                              audio_url=phrase_library.audio_for(entry, manifest))
+            return result
+        except Exception as exc:
+            raise HTTPException(status_code=409, detail=str(exc)) from exc

@@ -1,5 +1,6 @@
 import json
 import re
+import time
 
 import requests
 from services.motion_policy import selection_prompt, sanitize_motion
@@ -18,6 +19,8 @@ from server_config import (
 
 VALID_STYLES = {"cute", "encourage"}
 CONVERSATION_HISTORY_LIMIT = 4
+CONVERSATION_IDLE_SECONDS = 120
+_last_turn_at: float | None = None
 _conversation_history: list[dict[str, str]] = []
 
 
@@ -40,7 +43,18 @@ def set_persona(role):
     PERSONA_PROMPT = role.persona_prompt
     PERSONA_PROMPT_NAME = role.id
     CHARACTER_NAME = role.character_name
+    clear_conversation_history()
+
+
+def clear_conversation_history() -> None:
+    global _last_turn_at
     _conversation_history.clear()
+    _last_turn_at = None
+
+
+def expire_conversation_history() -> None:
+    if _last_turn_at is not None and time.monotonic() - _last_turn_at >= CONVERSATION_IDLE_SECONDS:
+        clear_conversation_history()
 
 
 BASE_SYSTEM_STYLE = (
@@ -163,6 +177,7 @@ def warm_up_dialogue_model() -> dict:
 
 def generate_healing_reply(user_text: str) -> dict:
     """Generate a short plush-robot reply with a style and motion intent."""
+    expire_conversation_history()
     normalized_text = user_text.strip()
     style = choose_reply_style(normalized_text)
 
@@ -256,12 +271,14 @@ def generate_ollama_reply(user_text: str, style: str) -> dict:
 
 
 def build_ollama_prompt(user_text: str, style: str) -> str:
+    expire_conversation_history()
     history = "\n".join(
         f"用户：{item['user']}\n机器人：{item['robot']}"
         for item in _conversation_history[-CONVERSATION_HISTORY_LIMIT:]
         if item["user"] and item["robot"]
     )
-    history_block = f"最近对话：\n{history}\n" if history else ""
+    history_block = ("最近对话只供理解上下文，不是回复模板；不要沿用旧回复的固定开场或无关比喻。\n"
+                     f"最近对话：\n{history}\n") if history else ""
     return (
         f"角色设定（{PERSONA_PROMPT_NAME}）：\n{PERSONA_PROMPT}\n"
         f"回复边界：\n{BASE_SYSTEM_STYLE}\n"
@@ -418,6 +435,9 @@ def build_dialogue_result(
 
 
 def remember_turn(user_text: str, reply_text: str, style: str) -> None:
+    global _last_turn_at
+    expire_conversation_history()
+    _last_turn_at = time.monotonic()
     _conversation_history.append(
         {
             "user": user_text,
