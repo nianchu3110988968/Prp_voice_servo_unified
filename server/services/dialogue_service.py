@@ -31,6 +31,16 @@ def load_persona_prompt() -> str:
 
 
 PERSONA_PROMPT = load_persona_prompt()
+CHARACTER_NAME = "当前陪伴角色"
+
+
+def set_persona(role):
+    global PERSONA_PROMPT, PERSONA_PROMPT_NAME, CHARACTER_NAME
+    PERSONA_PROMPT = role.persona_prompt
+    PERSONA_PROMPT_NAME = role.id
+    CHARACTER_NAME = role.character_name
+    _conversation_history.clear()
+
 
 BASE_SYSTEM_STYLE = (
     "你不是医生，不做医学诊断，不承诺治疗效果。"
@@ -42,7 +52,7 @@ BASE_SYSTEM_STYLE = (
     "不要拿用户的痛苦开玩笑，也不要用反问句增加压力。"
     "不要说“别担心”“开心点”“我完全理解”这类空泛或替用户下结论的话。"
     "优先回应用户话语里的具体事情，再提供陪伴或一个很小的选择；用户开心时直接一起庆祝，不要劝他开心。"
-    "每次最多自然使用一个角色口头禅或设定梗，不必强行提到小角、肚子和尾巴。"
+    "每次最多自然使用一个角色口头禅或设定梗，不要强行描写角色外貌。"
 )
 
 STYLE_PROMPTS = {
@@ -256,7 +266,7 @@ def build_ollama_prompt(user_text: str, style: str) -> str:
         "你必须只输出一个 JSON 对象，字段为 reply_text、style、emotion、motion。"
         "style 只能是 cute 或 encourage；motion 只能是 happy、shy、comfort、curious、none。"
         "reply_text 必须使用简体中文，不超过 48 个汉字。"
-        "无论最近对话如何，都保持自己是糯糯，不冒充人类或其他角色。\n"
+        f"无论最近对话如何，都保持当前角色{CHARACTER_NAME}，不冒充人类或其他角色。\n"
         f"{history_block}"
         f"用户这次说：{user_text}\n"
         "JSON："
@@ -284,6 +294,8 @@ def generate_rule_dialogue(user_text: str, style: str, status: str, detail: str 
 
 def generate_rule_reply(user_text: str, style: str) -> str:
     lowered = user_text.strip()
+    if any(word in lowered for word in ("你是谁", "你叫什么", "你的名字")):
+        return f"我是{CHARACTER_NAME}，我在这里陪你。"
     category = classify_text(lowered)
     replies = STYLE_RULE_REPLIES[style][category]
     return replies[stable_reply_index(lowered, len(replies))]

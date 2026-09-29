@@ -7,6 +7,7 @@ import wave
 import threading
 
 import requests
+from services import role_runtime
 
 from server_config import (
     GPT_SOVITS_PROMPT_LANGUAGE,
@@ -26,8 +27,10 @@ _synthesis_lock = threading.Lock()
 def synthesize_reply(reply_text: str, output_dir: Path) -> dict:
     # GPT-SoVITS uses shared model state. Serialize foreground/cache-build/background
     # calls without blocking FastAPI's event loop or cached audio GETs.
-    with _synthesis_lock:
-        return _synthesize_reply(reply_text, output_dir)
+    with role_runtime.lock, _synthesis_lock:
+        result = _synthesize_reply(reply_text, output_dir)
+        role_runtime.last_tts = {"backend": result["backend"], "status": result["status"]}
+        return result
 
 
 def _synthesize_reply(reply_text: str, output_dir: Path) -> dict:
@@ -41,7 +44,7 @@ def _synthesize_reply(reply_text: str, output_dir: Path) -> dict:
         }
 
     output_dir.mkdir(exist_ok=True)
-    if TTS_BACKEND == "gpt_sovits":
+    if role_runtime.current is not None or TTS_BACKEND == "gpt_sovits":
         result = _synthesize_gpt_sovits(reply_text, output_dir)
         if result["status"] == "ok" or not TTS_FALLBACK_TO_SAPI:
             return result
@@ -123,9 +126,13 @@ $synth.Dispose()
 
 
 def _synthesize_gpt_sovits(reply_text: str, output_dir: Path) -> dict:
-    if not GPT_SOVITS_REFERENCE_WAV:
+    role = role_runtime.current
+    if role is not None and not role_runtime.voice_ready:
+        return {"audio_url": "", "status": "unverified_weights", "backend": "gpt_sovits", "detail": "权重状态未确认，拒绝合成"}
+    reference_wav = role.reference_wav if role else GPT_SOVITS_REFERENCE_WAV
+    if not reference_wav:
         return {"audio_url": "", "status": "not_configured", "backend": "gpt_sovits", "detail": "PRP_GPT_SOVITS_REFERENCE_WAV is empty"}
-    reference_path = Path(GPT_SOVITS_REFERENCE_WAV)
+    reference_path = Path(reference_wav)
     if not reference_path.is_file():
         return {"audio_url": "", "status": "not_configured", "backend": "gpt_sovits", "detail": f"reference wav not found: {reference_path}"}
 
@@ -133,10 +140,10 @@ def _synthesize_gpt_sovits(reply_text: str, output_dir: Path) -> dict:
     wav_path = output_dir / f"reply_{timestamp}_16000hz.wav"
     params = {
         "text": reply_text,
-        "text_lang": _gpt_sovits_language_code(GPT_SOVITS_TEXT_LANGUAGE),
+        "text_lang": _gpt_sovits_language_code(role.text_language if role else GPT_SOVITS_TEXT_LANGUAGE),
         "ref_audio_path": str(reference_path),
-        "prompt_text": GPT_SOVITS_PROMPT_TEXT,
-        "prompt_lang": _gpt_sovits_language_code(GPT_SOVITS_PROMPT_LANGUAGE),
+        "prompt_text": role.reference_text if role else GPT_SOVITS_PROMPT_TEXT,
+        "prompt_lang": _gpt_sovits_language_code(role.prompt_language if role else GPT_SOVITS_PROMPT_LANGUAGE),
         "media_type": "wav",
         "streaming_mode": "false",
     }

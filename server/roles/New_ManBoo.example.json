@@ -1,0 +1,20 @@
+{
+  "id": "New_ManBoo",
+  "display_name": "New_ManBoo（糯糯）",
+  "character_name": "糯糯",
+  "persona_prompt_file": "server/prompts/New_ManBoo.txt",
+  "gpt_weights": "LOCAL_MODELS/New_ManBoo-e5.ckpt",
+  "sovits_weights": "LOCAL_MODELS/New_ManBoo_e4_s80.pth",
+  "gpt_sovits_version": "v2ProPlus",
+  "reference_wav": "LOCAL_AUDIO/reference.wav",
+  "reference_text": "填写参考音频逐字原文",
+  "prompt_language": "zh",
+  "text_language": "zh",
+  "phrase_voice_revision": "New_ManBoo-e5-e4_s80-v1",
+  "weight_pair": {
+    "id": "New_ManBoo",
+    "gpt_sha256": "填写64位SHA256",
+    "sovits_sha256": "填写64位SHA256",
+    "version": "v2ProPlus"
+  }
+}

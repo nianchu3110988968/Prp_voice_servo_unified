@@ -13,6 +13,7 @@ from xml.etree import ElementTree as ET
 
 import requests
 import server_config as config
+from services import role_runtime
 from services.dialogue_service import parse_llm_json
 
 MAX_AUDIO_BYTES = 512 * 1024
@@ -122,15 +123,13 @@ def read_entries(path: Path) -> tuple[list[Entry], str]:
 
 
 def voice_signature() -> str:
-    """Bind to declared voice revision, reference bytes, local YAML and TTS settings.
-
-    A remote API hot-swap cannot be detected here: users must rebuild after it.
-    """
+    """Bind cache to the active role and reference bytes."""
     settings = {key: str(getattr(config, key)) for key in (
         "TTS_BACKEND", "GPT_SOVITS_URL", "GPT_SOVITS_REFERENCE_WAV", "GPT_SOVITS_PROMPT_TEXT",
         "GPT_SOVITS_PROMPT_LANGUAGE", "GPT_SOVITS_TEXT_LANGUAGE", "PHRASE_VOICE_REVISION")}
-    for key, path in (("reference_sha", Path(config.GPT_SOVITS_REFERENCE_WAV)),
-                      ("local_yaml_sha", config.SERVER_ROOT / "configs/gpt_sovits_v2proplus.yaml")):
+    if role_runtime.current:
+        settings["role"] = role_runtime.current.public()
+    for key, path in (("reference_sha", Path(config.GPT_SOVITS_REFERENCE_WAV)),):
         settings[key] = digest(path.read_bytes()) if path.is_file() else "missing"
     return digest(json.dumps(settings, sort_keys=True, ensure_ascii=False).encode())
 
@@ -148,10 +147,21 @@ def validate_audio(path: Path) -> None:
 
 class PhraseLibrary:
     def __init__(self, workbook: Path, cache_dir: Path):
-        self.workbook, self.cache_dir = workbook, cache_dir
+        self.workbook, self._cache_root = workbook, cache_dir
         self._build_lock = threading.Lock()
 
+    @property
+    def cache_dir(self):
+        role = role_runtime.current
+        return self._cache_root / role.cache_key if role else self._cache_root
+
+    @cache_dir.setter
+    def cache_dir(self, value):
+        self._cache_root = value
+
     def ready(self) -> tuple[list[Entry], dict]:
+        if role_runtime.current and not role_runtime.voice_ready:
+            raise LibraryError("权重状态未确认，禁用预制缓存")
         manifest = self.cache_dir / "manifest.json"
         if not manifest.is_file():
             return [], {}
@@ -169,7 +179,8 @@ class PhraseLibrary:
         validate_audio(path)
         if digest(path.read_bytes()) != sha:
             raise LibraryError("预制音频校验失败")
-        return f"/phrase-audio/{sha}.wav"
+        namespace = role_runtime.current.url_token + "/" if role_runtime.current else ""
+        return f"/phrase-audio/{namespace}{sha}.wav"
 
     def rebuild(self, synthesize) -> dict:
         if not self._build_lock.acquire(blocking=False):

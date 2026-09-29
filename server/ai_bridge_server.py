@@ -6,6 +6,9 @@ import wave
 import re
 import threading
 import asyncio
+import os
+from services import role_runtime
+from services.role_config import load_role, list_roles
 
 from fastapi import FastAPI, HTTPException, Request, Response
 from fastapi.responses import FileResponse
@@ -41,6 +44,7 @@ phrase_jobs = PhraseJobs()
 # Preserve the existing single ordered ASR/dialogue/history lane. Long TTS jobs
 # leave this lane after a cache hit, while file GETs remain responsive.
 interaction_lock = threading.Lock()
+warmup_status = {"asr": "pending", "llm": "pending"}
 
 
 @app.on_event("shutdown")
@@ -52,12 +56,22 @@ def close_phrase_jobs():
 def warm_up_models() -> None:
     from server_config import MODEL_WARMUP_ENABLED
 
+    role_id = os.getenv("PRP_ROLE_ID", "New_ManBoo")
+    # Configuration errors fail fast. A model-service failure may use the existing
+    # SAPI fallback, but must never silently use unconfirmed remote weights.
+    role_runtime.activate(load_role(role_id))
+    try:
+        role_runtime.switch_role(role_id)
+    except Exception as exc:
+        log_line("[服务端] 音色未就绪：" + str(exc))
     if not MODEL_WARMUP_ENABLED:
+        warmup_status.update(asr="skipped", llm="skipped")
         log_line("[服务端] 模型预热已关闭")
         return
     started = time.perf_counter()
     asr_result = warm_up_asr()
     llm_result = warm_up_dialogue_model()
+    warmup_status.update(asr=asr_result["status"], llm=llm_result["status"])
     elapsed = time.perf_counter() - started
     log_line(f"[服务端] 模型预热：ASR={asr_result['status']} | LLM={llm_result['status']} | 耗时={elapsed:.1f}s")
     for label, result in (("ASR", asr_result), ("LLM", llm_result)):
@@ -104,6 +118,13 @@ def run_ai_pipeline(wav_path: Path, audio_stats: dict | None = None, trace: Requ
     if cache and trace:
         # Immutable snapshots per request; no worker reads mutable global history.
         synthesizer = synthesize_reply
+        request_role = role_runtime.current
+
+        def synthesize_snapshot(text, directory):
+            with role_runtime.lock:
+                if role_runtime.current is not request_role:
+                    return {"audio_url": "", "status": "cancelled_role_changed", "backend": "none", "detail": "角色已切换"}
+                return synthesizer(text, directory)
         output_dir = RECORDINGS_DIR
         ready_to_run = threading.Event()
         early_ms = -1
@@ -113,7 +134,7 @@ def run_ai_pipeline(wav_path: Path, audio_stats: dict | None = None, trace: Requ
             # reads it. Also ensures the one hit/text log precedes background logs.
             if not ready_to_run.wait(5):
                 raise RuntimeError("first response preparation failed")
-            tts, tts_ms = measure_stage("tts", lambda: synthesizer(dialogue["reply_text"], output_dir), trace)
+            tts, tts_ms = measure_stage("tts", lambda: synthesize_snapshot(dialogue["reply_text"], output_dir), trace)
             result = pipeline_response(wav_path, audio_stats, asr_result, dialogue, tts,
                                        asr_ms, dialogue_ms, tts_ms, pipeline_start)
             result["timings_ms"].update(prepared_timings or {})
@@ -190,7 +211,7 @@ def pipeline_response(wav_path, audio_stats, asr_result, dialogue, tts_result,
 
 
 def ordered_pipeline(*args, **kwargs):
-    with interaction_lock:
+    with role_runtime.lock, interaction_lock:
         return run_ai_pipeline(*args, **kwargs)
 
 
@@ -213,6 +234,8 @@ async def get_voice_job(job_id: str, request: Request, http_response: Response):
 
 @app.get("/phrase-audio/{file_name}")
 def get_phrase_audio(file_name: str):
+    if role_runtime.current:
+        raise HTTPException(status_code=404, detail="role cache requires namespace")
     if not re.fullmatch(r"[0-9a-f]{64}\.wav", file_name):
         raise HTTPException(status_code=404, detail="audio not found")
     path = phrase_library.cache_dir / file_name
@@ -229,14 +252,53 @@ def rebuild_phrase_library(request: Request):
     if request.headers.get("x-prp-maintenance") != "phrase-library":
         raise HTTPException(status_code=403, detail="maintenance header required")
     try:
-        return phrase_library.rebuild(synthesize_reply)
+        with role_runtime.lock:
+            return phrase_library.rebuild(synthesize_reply)
     except Exception as exc:
         raise HTTPException(status_code=400, detail=str(exc)) from exc
 
 
 @app.get("/health")
 def health():
-    return {"status": "ok"}
+    return {"status": "ok", "service": "prp-ai-bridge", "role_api": 1,
+            "warmup": dict(warmup_status), **role_runtime.status()}
+
+
+
+
+@app.get("/roles")
+def get_roles(request: Request):
+    require_role_maintenance(request)
+    return {"available": list_roles(), **role_runtime.status()}
+
+
+def require_role_maintenance(request):
+    if (not request.client or request.client.host not in {"127.0.0.1", "::1"}
+            or request.headers.get("origin") or request.headers.get("x-prp-maintenance") != "roles"):
+        raise HTTPException(status_code=403, detail="local role maintenance only")
+
+
+@app.post("/roles/switch/{role_id}")
+def switch_role(role_id: str, request: Request):
+    require_role_maintenance(request)
+    try:
+        return role_runtime.switch_role(role_id)
+    except Exception as exc:
+        raise HTTPException(status_code=409, detail=str(exc)) from exc
+
+
+@app.get("/phrase-audio/{role_token}/{file_name}")
+def get_role_phrase_audio(role_token: str, file_name: str):
+    # Do not wait behind background synthesis: this GET is the cache-first path.
+    role = role_runtime.current
+    if not role or not role_runtime.voice_ready or role.url_token != role_token:
+        raise HTTPException(status_code=404, detail="inactive role cache")
+    if not re.fullmatch(r"[0-9a-f]{64}\.wav", file_name):
+        raise HTTPException(status_code=404, detail="audio not found")
+    path = config.PHRASE_CACHE_DIR / role.cache_key / file_name
+    if not path.is_file():
+        raise HTTPException(status_code=404, detail="audio not found")
+    return FileResponse(path, media_type="audio/wav")
 
 
 @app.get("/config")
@@ -266,6 +328,7 @@ def get_config():
     )
 
     return {
+        **role_runtime.status(),
         "asr_backend": ASR_BACKEND,
         "asr_model_name": ASR_MODEL_NAME,
         "asr_beam_size": ASR_BEAM_SIZE,
@@ -297,7 +360,7 @@ def get_config():
 
 @app.get("/debug/dialogue")
 def debug_dialogue(text: str):
-    with interaction_lock:
+    with role_runtime.lock, interaction_lock:
         return generate_healing_reply(text)
 
 

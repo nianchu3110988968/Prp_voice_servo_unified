@@ -18,6 +18,21 @@ docs/assets/project_structure_map_snapshot_20260915.png
 - 如果某文件只是旧示例、占位、调试脚本或历史产物，需要明确标注，不能写成当前正式入口。
 - 如果根目录 README 与当前源码冲突，以当前源码、`docs/README.md` 和 `docs/工作留档/task_progress.md` 为准。
 
+## 2026-09-29 多角色与桌面启动器（离线测试/编译及exe打包烟测通过，真实联调待验证）
+
+- `server/roles/*.example.json`：可提交角色模板；同目录 `*.local.json` 为唯一现行本地角色数据源，不提交。New_ManBoo保持当前糯糯人格和已登记权重/参考组合。
+- `server/services/role_config.py`：字段/ID/路径/UTF-8提示词/权重对SHA256验证；不反序列化或训练模型。
+- `server/services/role_runtime.py`：当前角色、成对热切换、失败回滚与主TTS隔离、历史清空；交互/TTS/预制生成共享事务锁。
+- `server/prompts/New_ManBoo.txt`：默认角色独立人格；保留历史nuonuo_v1.txt。`dialogue_service.py`仅保留通用安全/JSON协议，不固定角色身份或外貌。
+- `tts_service.py`动态读取当前参考参数；`phrase_library.py`按角色ID/配置摘要隔离目录，参考内容参与指纹；旧缓存保留，不自动批量合成。
+- `ai_bridge_server.py`提供本机维护头保护的角色接口、预热/实际TTS状态，旧角色后台任务在切换后取消，响应协议继续兼容ESP32。
+- `server/launcher_core.py`：标准库服务监督器、11434/9880/8000健康复用、顺序就绪检查、仅停止持有句柄的自有进程，PID记录只作审计。
+- `server/launcher_app.py`：Tkinter角色选择、完整启动、仅切换、健康检查、停止与持续日志；配置在外部项目中，打包不带模型/录音。
+- `server/configs/launcher.example.json`：运行时安装位置模板；本地 `launcher.local.json` 不提交。`server/.runtime/` 保存派生YAML/PID记录，不是手工配置源。
+- `server/tools/role_service.py`：可见终端前台启动兼容入口；原两份PowerShell启动脚本保留并委托此入口。旧手写GPT-SoVITS YAML保留，不参与新入口启动。
+- `server/tests/test_roles_launcher.py`：临时文件/模拟HTTP与进程的配置、回滚、身份、缓存和归属测试；`tools/verify_roles_launcher.ps1`在用户可见终端串联服务端测试与platformio run。
+- `tools/build_launcher.ps1`：PyInstaller构建并打开真实Tk窗口检查退出；不自动启动模型服务。测试/打包/真实联调/硬件状态以进度记录为准。
+
 ## 当前目录地图
 
 2026-09-28～29 自定义通道与尾部单路调试（源码`2026-09-28-servo-map-v1`；9月29日编译/离线回归PASS、COM7烧录成功，串口版本与完整欢迎音已确认；舵机未实测）：

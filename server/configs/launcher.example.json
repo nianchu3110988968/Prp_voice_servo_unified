@@ -1,0 +1,9 @@
+{
+  "project_root": ".",
+  "default_role": "New_ManBoo",
+  "gpt_sovits_root": "LOCAL_GPT_SOVITS",
+  "bridge_python": "python",
+  "ollama_executable": "ollama",
+  "device": "cuda",
+  "is_half": true
+}

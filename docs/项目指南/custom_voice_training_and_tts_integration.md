@@ -1,5 +1,7 @@
 # 自定义音色训练与接入说明
 
+> 现行启动与多角色配置以第9节和重启指南为准。第7～8节是保留的历史音色/训练记录，不是当前启动参数。
+
 > 2026-09-15 整理后：唯一当前数据在 `E:\Projects2026\Prp_voice_servo_unified\voice_data\manbo`，实验名统一 `manbo`。39段切片与最后提交中文已保留；旧manbo模型、缓存和日语批次已移入回收站，新实验尚未格式化/训练。操作入口见 `E:\Projects2026\Prp_voice_servo_unified\docs\项目指南\GPT-SoVITS网页训练教学.md`。本文旧实验路径和旧运行状态仅为历史，第7节本人参考语音零样本链路与官方底模保留。
 
 ## 1. 目标与链路
@@ -43,19 +45,7 @@ python tools\convert_reference_audio.py `
 
 本次录音对应的参考文本就是用户提供的整段荣宅讲解文字。参考文本必须与音频中实际说出的内容完全一致。40 秒左右的整段录音可用于初步推理；正式训练时应再按句切分成 3 至 10 秒的小片段并逐条标注。
 
-在启动服务端的 PowerShell 窗口中设置：
-
-```powershell
-$env:PRP_TTS_BACKEND='gpt_sovits'
-$env:PRP_GPT_SOVITS_URL='http://127.0.0.1:9880/tts'
-$env:PRP_GPT_SOVITS_REFERENCE_WAV='E:\voice_models\reference.wav'
-$env:PRP_GPT_SOVITS_PROMPT_TEXT='参考音频中实际说的文字'
-$env:PRP_GPT_SOVITS_PROMPT_LANGUAGE='zh'
-$env:PRP_GPT_SOVITS_TEXT_LANGUAGE='zh'
-$env:PRP_TTS_FALLBACK_TO_SAPI='true'
-```
-
-环境变量只对当前 PowerShell 窗口及其启动的服务进程有效。修改后必须停止旧 uvicorn 进程并重新启动服务端；不需要重启电脑或重新烧录 ESP32。
+角色参考音频、原文和语言统一填写到 `server/roles/<id>.local.json`。不再设置独立的参考音频环境变量；原PowerShell入口与桌面启动器读取同一角色档案。
 
 当前安装的 GPT-SoVITS 使用 `api_v2.py`，接口参数名为 `text_lang` 和 `prompt_lang`，语言代码使用 `zh`。项目适配器会兼容把“中文”等名称转换成 API 代码。
 
@@ -86,7 +76,7 @@ Invoke-RestMethod 'http://127.0.0.1:8000/debug/tts?text=你好，我会一直陪
 
 ## 5. 实现位置
 
-- `server/server_config.py`：TTS 后端、GPT-SoVITS 地址、参考音频和语言配置。
+- `server/roles/*.local.json`、`services/role_config.py`：现行角色、人格、权重对、参考音频/原文与语言唯一数据源；`server_config.py`保留旧导入兼容和非角色服务参数。
 - `server/services/tts_service.py`：统一入口、GPT-SoVITS 请求、WAV 格式转换和 SAPI 回退。
 - `server/ai_bridge_server.py`：`/config` 配置回显和 `/debug/tts` 调试接口。
 
@@ -270,45 +260,29 @@ nuonuo_soft_v2
 nuonuo_story_v1
 ```
 
-### 9.1 临时热切换
+### 9.1 统一角色档案
 
-GPT-SoVITS API 支持在 9880 运行期间切换权重，不必重新烧录 ESP32：
+每个角色一份 `server/roles/<id>.local.json`，复制 `New_ManBoo.example.json` 填写；不要提交真实本地路径、模型或音频。字段包括id、display_name、character_name、persona_prompt_file、gpt_weights、sovits_weights、gpt_sovits_version、reference_wav、reference_text、prompt_language、text_language、phrase_voice_revision，以及weight_pair。
 
-```powershell
-$gpt = [uri]::EscapeDataString('E:\AI\GPTSoVITS\GPT-SoVITS-v2pro-20250604\GPT_weights_v2ProPlus\模型文件.ckpt')
-$sovits = [uri]::EscapeDataString('E:\AI\GPTSoVITS\GPT-SoVITS-v2pro-20250604\SoVITS_weights_v2ProPlus\模型文件.pth')
+ID必须字母开头，只包含字母、数字、下划线和短横线，最长64字符，与文件名一致。人格文件是 `server/prompts/` 下的UTF-8文本，每角色独立；New_ManBoo沿用当前糯糯人格和现行权重/参考组合。更换人格不再修改对话服务。通用安全约束与JSON协议仍由服务端维护。
 
-Invoke-RestMethod "http://127.0.0.1:9880/set_gpt_weights?weights_path=$gpt"
-Invoke-RestMethod "http://127.0.0.1:9880/set_sovits_weights?weights_path=$sovits"
-```
+`weight_pair` 包含明确配对id、version、gpt_sha256、sovits_sha256；在可见PowerShell用 `Get-FileHash -Algorithm SHA256 -LiteralPath <权重路径>` 获取哈希，写成小写。配对由提供者确认同实验/兼容版本后登记，不按文件名自动猜测。加载时验证两份哈希，防止单文件替换或写错路径；哈希是已登记配对的完整性检查，不是模型架构/音色质量鉴定，不反序列化第三方checkpoint。实际兼容性仍由API加载与试听验收。
 
-两个接口都应返回：
+所有文件必须存在，提示词/参考原文不能为空。相对路径从项目根目录解析。运行时安装目录、Python、Ollama程序位置在 `server/configs/launcher.local.json`，与音色数据分开。脚本只从角色档案派生忽略的 `server/.runtime/gpt_sovits.generated.yaml`；原手写YAML保留，不再参与新入口启动。
 
-```json
-{"message":"success"}
-```
+### 9.2 一次切换与失败恢复
 
-热切换只对当前 9880 进程有效，重启服务后会恢复 YAML 中配置的权重。
+使用桌面启动器“仅切换角色”，由新版AI bridge的本机维护接口调用 `/set_gpt_weights` 和 `/set_sovits_weights`。只有两者success后才激活新人格/参考配置、清空历史；失败则重载原两份权重。恢复失败保持原角色身份，禁止主TTS与词库命中，按已有开关回退SAPI。不要绕过启动器在网页或其他客户端修改9880权重；上游API没有可独立核验的当前权重查询接口，不能检测外部偷偷切换。
 
-### 9.2 持久切换
+切换与交互、预制生成及TTS互斥。切换前已开始的请求可完成；尚未开始合成的旧角色后台任务返回cancelled_role_changed，不使用新角色音色。已下发到ESP32的音频不能撤回，切换宜在一轮交互结束后进行。
 
-要让电脑重启后仍默认使用指定模型，修改：
+实际后端显示最近一次TTS结果，尚未合成为not_tested；成功回退显示gpt_sovits_fallback_windows_sapi，不能把配置为GPT-SoVITS当作已经使用该音色。首次启动仍预热原ASR/Ollama，不修改ASR算法。
 
-```text
-E:\Projects2026\Prp_voice_servo_unified\server\configs\gpt_sovits_v2proplus.yaml
-```
+### 9.3 缓存与新音色验收
 
-将 `custom` 下的两个字段改为目标权重：
+词库缓存按角色ID和配置摘要（含phrase_voice_revision、权重哈希、人格/参考字段）分目录，参考文件内容也参与清单指纹。音色更改后旧缓存不命中；切回完全相同档案可复用对应缓存。不自动删除、不自动批量合成；手动运行原prepare_phrase_library.py生成，备用音色不会发布。新增角色前需检查Excel标准回复是否含旧角色名字；共用词库文本不会自动重写。
 
-```yaml
-custom:
-  t2s_weights_path: GPT_weights_v2ProPlus/目标模型.ckpt
-  vits_weights_path: SoVITS_weights_v2ProPlus/目标模型.pth
-```
-
-保存后重启 9880。仅切换 GPT/SoVITS 权重时，ESP32 无需烧录；若还要切换参考音频和参考文本，则需要让 AI bridge 使用对应的参考配置并重启 8000。
-
-第一批训练完成后，建议在项目中建立模型注册表和按名称切换脚本，将“权重对、参考音频、参考文本、版本”绑定成一个配置，避免手工混配。
+新角色应先用固定句确认权重加载、参考匹配和实际backend，再听审，最后进行ESP32真实交互。不训练、不自动烧录、不把离线测试或exe启动退出当成模型/硬件验收。
 
 ## 10. RVC 模型能否接入
 

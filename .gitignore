@@ -47,3 +47,10 @@ docs/响应词对话/~$*
 /legacy/
 /archive/
 /.local_migration/
+
+# Local role/runtime configuration and launcher artifacts.
+server/roles/*.local.json
+server/configs/*.local.json
+server/.runtime/
+dist/
+*.spec
