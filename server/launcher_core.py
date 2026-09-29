@@ -3,6 +3,7 @@ from pathlib import Path
 import json
 import os
 import socket
+import shutil
 import subprocess
 import sys
 import threading
@@ -10,6 +11,7 @@ import time
 import urllib.request
 import urllib.error
 from services.role_config import ROOT, load_role
+from services.bridge_identity import mismatch
 
 PORTS = {"ollama": 11434, "gpt_sovits": 9880, "bridge": 8000}
 
@@ -35,7 +37,7 @@ def port_open(port):
         return False
 
 
-def probe(name):
+def probe(name, root=ROOT, expected_python=None):
     if not port_open(PORTS[name]):
         return {"state": "stopped"}
     try:
@@ -48,6 +50,10 @@ def probe(name):
         else:
             data = request_json("http://127.0.0.1:8000/health")
             valid = data.get("service") == "prp-ai-bridge" and data.get("role_api") == 2
+            if valid:
+                detail = mismatch(data.get("bridge_identity"), root, expected_python)
+                if detail:
+                    return {"state": "occupied_stale_or_foreign", "detail": detail, "data": data}
         return {"state": "healthy" if valid else "occupied_unknown", "data": data}
     except Exception as exc:
         return {"state": "occupied_unhealthy", "detail": str(exc)}
@@ -57,6 +63,28 @@ def read_settings(root=ROOT):
     root = Path(root).resolve()
     settings = json.loads((root / "server/configs/launcher.local.json").read_text(encoding="utf-8-sig"))
     settings["project_root"] = str(root)
+    configured = settings["bridge_python"]
+    candidate = Path(configured)
+    if candidate.is_absolute() or candidate.parent != Path("."):
+        python = candidate if candidate.is_absolute() else root / candidate
+    else:
+        resolved = shutil.which(configured)
+        if not resolved:
+            raise ValueError("找不到AI bridge Python：" + configured)
+        python = Path(resolved)
+    if not python.is_file():
+        raise ValueError("AI bridge Python不存在：" + str(python))
+    # Scoop/Windows PATH entries may be launch shims, not sys.executable.
+    # Ask the selected interpreter once, then pin its actual path for this App.
+    result = subprocess.run([str(python), "-I", "-X", "utf8", "-c", "import sys; print(sys.executable)"],
+                            cwd=root, capture_output=True, text=True, encoding="utf-8", timeout=15,
+                            creationflags=subprocess.CREATE_NO_WINDOW if os.name == "nt" else 0)
+    if result.returncode:
+        raise ValueError("AI bridge Python无法启动：" + str(python))
+    actual = Path(result.stdout.strip())
+    if not actual.is_absolute() or not actual.is_file():
+        raise ValueError("AI bridge Python未返回有效解释器路径：" + str(python))
+    settings["bridge_python"] = str(actual.resolve())
     return settings
 
 
@@ -105,6 +133,9 @@ class Supervisor:
         self.mutex = threading.RLock()
         self.audit_path = Path(settings["project_root"]) / "server/.runtime/owned-processes.json"
 
+    def probe(self, name):
+        return probe(name, self.settings["project_root"], self.settings.get("bridge_python"))
+
     def audit(self):
         self.audit_path.parent.mkdir(parents=True, exist_ok=True)
         self.audit_path.write_text(json.dumps({name: {"pid": p.pid, "running": p.poll() is None}
@@ -119,13 +150,14 @@ class Supervisor:
             self.log("[" + name + "] 日志结束")
 
     def ensure(self, name, role):
-        status = probe(name)
+        status = self.probe(name)
         if status["state"] == "healthy":
             self.log(name + "：复用现有健康服务；只能健康检查，无法取得其历史控制台输出（不取得停止权限）")
             return status
         if status["state"] != "stopped":
-            raise RuntimeError(name + "端口被未知或未就绪服务占用，请查看原窗口；不会终止它")
+            raise RuntimeError(name + "：" + status.get("detail", "端口被未知或未就绪服务占用，请查看原窗口；不会终止它"))
         args, cwd, env = command_for(name, self.settings, role)
+        self.log(name + "：工作目录=" + str(cwd) + "；启动参数=" + json.dumps(args, ensure_ascii=False))
         # Piped output is continuously displayed in the owning App, not a hidden log file.
         process = subprocess.Popen(args, cwd=cwd, env=env, stdout=subprocess.PIPE,
                                    stderr=subprocess.STDOUT, text=True, encoding="utf-8", errors="replace",
@@ -140,7 +172,7 @@ class Supervisor:
                 raise RuntimeError("启动已取消")
             if process.poll() is not None:
                 raise RuntimeError(name + "退出，代码=" + str(process.returncode))
-            status = probe(name)
+            status = self.probe(name)
             if status["state"] == "healthy":
                 return status
             self.cancel.wait(0.5)
@@ -152,10 +184,10 @@ class Supervisor:
             from services.profile_config import load_combination
             role = (load_combination(role_id, voice_id, Path(self.settings["project_root"])) if voice_id
                     else load_role(role_id, Path(self.settings["project_root"])))
-            states = {name: probe(name) for name in PORTS}
+            states = {name: self.probe(name) for name in PORTS}
             for name, state in states.items():
                 if state["state"] not in {"stopped", "healthy"}:
-                    raise RuntimeError(name + "端口已有未知/旧版/不健康服务，请在原窗口处理")
+                    raise RuntimeError(name + "：" + state.get("detail", "端口已有未知/旧版/不健康服务，请在原窗口处理"))
             self.ensure("ollama", role)
             self.ensure("gpt_sovits", role)
             bridge = self.ensure("bridge", role)["data"]
@@ -171,14 +203,14 @@ class Supervisor:
     def switch(self, role_id):
         with self.mutex:
             load_role(role_id, Path(self.settings["project_root"]))
-            if probe("bridge")["state"] != "healthy" or probe("gpt_sovits")["state"] != "healthy":
+            if self.probe("bridge")["state"] != "healthy" or self.probe("gpt_sovits")["state"] != "healthy":
                 raise RuntimeError("仅切换需要已运行的新版AI bridge和GPT-SoVITS；请先完整启动")
             result = request_json("http://127.0.0.1:8000/roles/switch/" + role_id, "POST", timeout=780)
             self.log("角色切换成功：" + role_id + "；Ollama和ASR保持运行，短期历史已清空")
             return result
 
     def health(self):
-        result = {name: probe(name) for name in PORTS}
+        result = {name: self.probe(name) for name in PORTS}
         self.log("健康检查：" + " | ".join(name + "=" + item["state"] for name, item in result.items()))
         return result
 
@@ -207,7 +239,7 @@ class Supervisor:
 
     def profile_request(self, route):
         with self.mutex:
-            if probe("bridge")["state"] != "healthy":
+            if self.probe("bridge")["state"] != "healthy":
                 raise RuntimeError("需要新版AI bridge；请在原窗口停止旧服务后完整启动")
             result = request_json("http://127.0.0.1:8000/profiles/" + route, "POST", timeout=780)
             self.log("配置切换完成：" + route)
@@ -218,6 +250,9 @@ class Supervisor:
         import uuid
         if not text.strip() or len(text) > 2000:
             raise ValueError("测试文本需为1～2000字符")
+        status = self.probe("bridge")
+        if status["state"] != "healthy":
+            raise RuntimeError(status.get("detail", "需要当前项目的新版AI bridge，请先完整启动"))
         request_id = "desktop-" + uuid.uuid4().hex[:16]
         started = time.perf_counter()
         if kind == "chain":

@@ -24,6 +24,7 @@ from server_config import AUDIO_NORMALIZE_TARGET_PEAK
 import server_config as config
 from services.phrase_library import PhraseLibrary, semantic_match
 from services.phrase_jobs import PhraseJobs
+from services.bridge_identity import startup_identity
 
 
 def configure_stdio_encoding() -> None:
@@ -35,6 +36,8 @@ def configure_stdio_encoding() -> None:
 configure_stdio_encoding()
 
 APP_ROOT = Path(__file__).resolve().parent
+# Capture once: hashing disk on each health request would disguise an old process.
+BRIDGE_IDENTITY = startup_identity(APP_ROOT.parent)
 RECORDINGS_DIR = APP_ROOT / "recordings"
 RECORDINGS_DIR.mkdir(exist_ok=True)
 
@@ -282,6 +285,7 @@ def rebuild_phrase_library(request: Request):
 @app.get("/health")
 def health():
     return {"status": "ok", "service": "prp-ai-bridge", "role_api": 2,
+            "bridge_identity": dict(BRIDGE_IDENTITY),
             "warmup": dict(warmup_status), **role_runtime.status()}
 
 

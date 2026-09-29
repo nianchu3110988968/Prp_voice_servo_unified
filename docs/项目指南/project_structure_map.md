@@ -20,6 +20,13 @@ docs/assets/project_structure_map_snapshot_20260915.png
 
 ## 2026-09-29 多角色与桌面启动器（离线测试/编译及exe打包烟测通过，真实联调待验证）
 
+本次EXE复核修复已由用户在VS Code运行验证脚本并成功返回；新包7模块源码比对与真实Tk窗口PASS，真实模型/硬件仍待测：
+
+- `server/services/bridge_identity.py`：记录bridge启动时的项目目录、业务源码摘要、功能协议和实际Python/PID；启动器对照磁盘，拒绝复用旧实例/其他目录/其他解释器，不按端口杀进程。提示词/动作JSON不纳入代码摘要，其既有动态/显式加载规则保持。
+- `server/tests/test_bridge_identity.py`：旧API、源码变化、跨目录/解释器和正确服务复用的离线回归；不连接硬件或模型。
+- `tools/inspect_launcher.py`：读取EXE内部代码对象并与源码比较，忽略PyInstaller改写的文件名；要求使用同Python小版本。`build_launcher.ps1`在包比对通过后进行真实Tk烟测，不启动服务。
+- `verify_roles_launcher.ps1`的固件步骤固定专用penv Core隔离调用；它和打包脚本的`-Python`参数仅指定测试/打包解释器，不改变PlatformIO Core或生产本地配置。
+
 - `server/personas/New_ManBoo.example.json`及同名本地档案：曼波人格名称和正文入口；`server/roles/`保留组合预设及旧角色兼容，本地JSON不提交。9月29日New_ManBoo名称统一为“曼波”，权重/参考组合不变。
 - `server/services/role_config.py`：字段/ID/路径/UTF-8提示词/权重对SHA256验证；不反序列化或训练模型。
 - `server/services/role_runtime.py`：当前角色、成对热切换、失败回滚与主TTS隔离、历史清空；交互/TTS/预制生成共享事务锁。

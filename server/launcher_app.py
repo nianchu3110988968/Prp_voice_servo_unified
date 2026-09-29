@@ -8,7 +8,7 @@ import sys
 import threading
 import tkinter as tk
 from tkinter import ttk, messagebox
-from launcher_core import Supervisor, read_settings, probe
+from launcher_core import Supervisor, read_settings
 from launcher_console import ConsoleLogs, SerialConsole
 from launcher_imports import show_import
 from services.role_config import ROOT
@@ -57,7 +57,7 @@ class Launcher:
             self.button(row, label, action)
         ttk.Button(row, text="停止托管服务", command=self.stop).pack(side="left", padx=3)
         self.details = self.text_area(controls, 8)
-        ttk.Label(tests, text="使用服务端实际激活的人格/音色；试听只在电脑播放，不发送给ESP32。").pack(anchor="w")
+        ttk.Label(tests, text="使用服务端实际激活的人格/音色；文字测试不经过ASR或词库命中，不验证ESP32下载、起播动作及后台不重复播放。\n试听仅在电脑播放；完整语音验收需使用ESP32。", wraplength=1100).pack(anchor="w")
         self.input = tk.Text(tests, height=3, wrap="word")
         self.input.pack(fill="x")
         self.input.insert("1.0", "你好，今天过得怎么样？")
@@ -234,7 +234,7 @@ class Launcher:
     def poll(self):
         if not self.busy and not self.closing and not self.poll_pending:
             self.poll_pending = True
-            threading.Thread(target=lambda: self.events.put(("observed", probe("bridge"))), daemon=True).start()
+            threading.Thread(target=lambda: self.events.put(("observed", self.supervisor.probe("bridge"))), daemon=True).start()
         if not self.closing:
             self.window.after(5000, self.poll)
 

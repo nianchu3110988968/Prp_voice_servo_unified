@@ -2,6 +2,19 @@
 
 用于切换 agent 或中断后快速接续。每次完成阶段性任务后，用简短语言更新本文件。
 
+## 2026-09-29：启动器实际包检查与旧实例防护（验证脚本成功返回、EXE包比对/窗口通过，已授权烧录未执行）
+
+- 接续HEAD `5e19067`，检查前保留全部既有文档/人格/YAML/Excel/CAD/论文及删除项。用户明确授权本次新版固件烧录；舵机外部电源继续断开，机器控制保持关闭，等待万用表，不做运动实测。
+- 直接只读解析现有EXE的PyInstaller CArchive/PYZ及代码对象，文件12,185,966字节，SHA256 `6db890b0da825e2f4bc866adcd087e3d11e475a921eaf048c8137ab8688c5daf`，打包Python3.13。包内确有双人格/音色选择、日志不自动滚动、独占串口；launcher_app/core/console/imports和role/profile配置解析打包在EXE内，AI bridge/词库/动作业务模块不在包内。EXE默认由自身dist位置定位项目，显式--project-root优先，再读取磁盘launcher.local.json并用外部Python、绝对--app-dir启动当前server。未凭EXE时间判断兼容。
+- 确认缺口：现有包内probe只检查service与role_api=2，可能复用另一个项目或更新前的旧bridge；本地bridge_python为python，PATH入口可能是Scoop shim。已增加bridge_identity启动快照（项目目录、源码SHA256、协议、实际Python/PID），监督器对照当前目录/源码/解释器后才复用或发送文字测试/配置请求；保留健康服务复用及仅停止自有句柄。解释器启动时查询一次sys.executable并固定本窗口路径，不重写本地配置、不安装依赖。后续已打包验证，真实服务与硬件联调仍待进行。
+- 保持文字测试原接口，界面注明不经过ASR/词库、不覆盖ESP32下载/起播/后台丢弃。verify_roles_launcher.ps1改为专用penv的隔离Core调用；验证/打包脚本可显式指定Python。新增inspect_launcher.py在重打包后比较EXE内代码对象与磁盘源码，不仅检查窗口能打开；新增离线旧实例/跨目录/解释器/服务复用回归。
+- 静态核对New_ManBoo人格文件、动作规则/目录路径和音色档案；当前两份权重文件SHA256与登记配对一致。缓存目录按激活组合隔离、参考文件内容及Excel指纹失效、旧URL隔离逻辑保留。当前server/phrase_cache不存在；Excel文件存在（10,254字节），尚未解析其内容或覆盖。只读请求8000的health/config均ECONNREFUSED，当前未确认任何实际激活音色，没有启动服务或生成缓存。
+- 磁盘firmware.bin为1,480,800字节，包含2026-09-29-phrase-motion-v1，SHA256 `fdcfdbcf21e4a0743836fe0f42598fc23748a79bbdab3475f19008e891c1937d`；本轮未改main，未烧录，不能据此推断板上版本。此前编译/主机PASS继续按上轮证据记录。
+- 用户在VS Code执行修正后的逐步退出码检查命令，回传EXE打包、7个模块全部MATCH与真实Tk窗口启动/退出PASS。新EXE为12,189,852字节，SHA256 ce89200090a1dbf5e7224bae9eb3a368882a4ece475defd1f1450173ddd5be80，磁盘哈希再次核对一致。两条macOS串口库ctypes警告未阻止Windows构建，不为消除它们重装依赖。
+- 证据边界：命令在verify_roles_launcher.ps1非零退出时会停止，实际继续进入打包，说明包含服务端回归/源码Tk/platformio run的验证脚本成功返回；用户附件仅为打包尾部，不能据此编造具体测试项数、固件耗时或内存统计。外层launcher_check_20260929_225231.log没有收进子PowerShell测试输出，只记录外层端口结果；不将transcript空白当测试失败，也不为补齐日志重复构建。
+- 当次枚举只有蓝牙COM3/4/5/6/8/9，用户随后确认当时没有接ESP32 USB，并非已发现串口故障。接上后重新枚举并确认实际CH343端口，再用专用Core烧录，核对写入Hash、串口版本和完整“Hi朋友”。端口快照只见Ollama11434/PID228112；9880/8000未监听，不重复启动Ollama。
+- 当前工具无VS Code终端控制，未隐藏执行测试/构建/串口/服务。本次进入启动器修复的选择性提交/推送；源码通过返回码、包内代码与窗口检查不等于真实模型/缓存/语音或舵机验收。尚未烧录，舵机断电/控制关闭，本次烧录授权仍有效。
+
 ## 2026-09-29：命令执行策略遗漏复盘与规范补强
 
 - 用户反馈第一条验证脚本被PowerShell执行策略拒绝。核对225019的transcript确认运行环境为Windows PowerShell5.1，测试/构建/打包/枚举尚未开始；失败不是代码或PlatformIO运行结果。agent重组命令时遗漏既有-ExecutionPolicy Bypass包装，且只检查内部脚本、未检查外层调用，是此次可证据支持的流程原因。
