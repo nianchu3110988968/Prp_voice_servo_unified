@@ -1,5 +1,11 @@
 # 项目结构地图
 
+## 2026-10-09 桃金娘音色首轮训练准备（本机素材，不入 Git）
+
+- `C:\Users\ASUS\Downloads\PRP_410582114\semantic_v3\training.list`：用户确认文字后生成的 34 段、199.55 秒正式首轮训练输入；4 段短于 3 秒的 WAV 保留但未入清单。
+- 同目录 `training_manifest.json`、`full_text.txt`、`TRAINING_START.md`：清单哈希与排除依据、连续文字和 v2ProPlus 网页启动/格式化/训练顺序。
+- `C:\Users\ASUS\Downloads\PRP_410582114\inspection\start_myrtle_training.ps1`：仅在用户可见 VS Code PowerShell 中启动 9874 训练主页，预填 `myrtle_zh_v1` 与本批素材；不自动格式化或训练。训练网页只能由用户自己的外部浏览器操作。
+
 ## 2026-10-08 答辩交互流程图
 
 - `docs/答辩材料/README.md`：图片用途、讲解词及验证边界。
