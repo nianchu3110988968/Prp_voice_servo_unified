@@ -1,5 +1,7 @@
 # PRP 项目文档索引
 
+- `答辩材料/README.md`：两分钟答辩交互流程图（高清PNG、矢量SVG）与约30秒配套讲解。
+
 本目录按用途分为三类，后续新增文档优先放入对应文件夹。
 
 本地统一目录导航：`E:\Projects2026\Prp_voice_servo_unified\项目入口.md`。原Projects2026/Prp与college资料已分别归档到本根目录下的legacy与archive；历史文档旧绝对路径仅用于追溯，不能作为现行入口。

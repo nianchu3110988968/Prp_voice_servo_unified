@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2400" height="1350" viewBox="0 0 2400 1350"><rect width="2400" height="1350" fill="white"/>
+<text x="90" y="92" font-family="Microsoft YaHei, sans-serif" font-size="60" font-weight="700" fill="#172B43" text-anchor="start" dominant-baseline="central">一句话，如何变成机器人的回应？</text>
+<text x="94" y="172" font-family="Microsoft YaHei, sans-serif" font-size="29" font-weight="400" fill="#62758A" text-anchor="start" dominant-baseline="central">毛绒陪伴机器人  /  普通对话主流程</text>
+<rect x="1920" y="80" width="390" height="65" rx="30" fill="#EDF4FC" stroke="none" stroke-width="2"/>
+<text x="2115" y="112" font-family="Microsoft YaHei, sans-serif" font-size="24" font-weight="700" fill="#2864B4" text-anchor="middle" dominant-baseline="central">语音输入 → 语音与动作输出</text>
+<rect x="70" y="270" width="400" height="750" rx="30" fill="#F1F6FC" stroke="none" stroke-width="2"/>
+<rect x="510" y="270" width="1080" height="750" rx="30" fill="#F0F8F6" stroke="none" stroke-width="2"/>
+<rect x="1630" y="270" width="700" height="750" rx="30" fill="#F1F6FC" stroke="none" stroke-width="2"/>
+<text x="270" y="324" font-family="Microsoft YaHei, sans-serif" font-size="35" font-weight="700" fill="#2864B4" text-anchor="middle" dominant-baseline="central">机器人端 · 听</text>
+<text x="1050" y="324" font-family="Microsoft YaHei, sans-serif" font-size="35" font-weight="700" fill="#16877E" text-anchor="middle" dominant-baseline="central">电脑端 · 理解与生成</text>
+<text x="1980" y="324" font-family="Microsoft YaHei, sans-serif" font-size="35" font-weight="700" fill="#2864B4" text-anchor="middle" dominant-baseline="central">机器人端 · 说与动</text>
+<text x="270" y="381" font-family="Microsoft YaHei, sans-serif" font-size="25" font-weight="400" fill="#62758A" text-anchor="middle" dominant-baseline="central">ESP32-S3 + 麦克风</text>
+<text x="1050" y="381" font-family="Microsoft YaHei, sans-serif" font-size="25" font-weight="400" fill="#62758A" text-anchor="middle" dominant-baseline="central">AI bridge 协调三个处理模块</text>
+<text x="1980" y="381" font-family="Microsoft YaHei, sans-serif" font-size="25" font-weight="400" fill="#62758A" text-anchor="middle" dominant-baseline="central">ESP32-S3 + 扬声器 / 舵机</text>
+<rect x="100" y="450" width="340" height="250" rx="20" fill="#FFFFFF" stroke="#D7E2ED" stroke-width="2"/>
+<rect x="122" y="474" width="48" height="44" rx="12" fill="#2864B4" stroke="none" stroke-width="2"/>
+<text x="146" y="496" font-family="Microsoft YaHei, sans-serif" font-size="25" font-weight="700" fill="#FFFFFF" text-anchor="middle" dominant-baseline="central">1</text>
+<text x="270.0" y="555" font-family="Microsoft YaHei, sans-serif" font-size="34" font-weight="700" fill="#172B43" text-anchor="middle" dominant-baseline="central">唤醒并说话</text>
+<text x="270.0" y="615" font-family="Microsoft YaHei, sans-serif" font-size="25" font-weight="400" fill="#62758A" text-anchor="middle" dominant-baseline="central">麦克风采集语音</text>
+<text x="270.0" y="657" font-family="Microsoft YaHei, sans-serif" font-size="24" font-weight="400" fill="#62758A" text-anchor="middle" dominant-baseline="central">检测说话结束，上传录音</text>
+<rect x="550" y="450" width="290" height="250" rx="20" fill="#FFFFFF" stroke="#D7E2ED" stroke-width="2"/>
+<rect x="572" y="474" width="48" height="44" rx="12" fill="#16877E" stroke="none" stroke-width="2"/>
+<text x="596" y="496" font-family="Microsoft YaHei, sans-serif" font-size="25" font-weight="700" fill="#FFFFFF" text-anchor="middle" dominant-baseline="central">2</text>
+<text x="695.0" y="555" font-family="Microsoft YaHei, sans-serif" font-size="34" font-weight="700" fill="#172B43" text-anchor="middle" dominant-baseline="central">语音识别</text>
+<text x="695.0" y="615" font-family="Microsoft YaHei, sans-serif" font-size="25" font-weight="400" fill="#62758A" text-anchor="middle" dominant-baseline="central">声音 → 文字</text>
+<text x="695.0" y="657" font-family="Microsoft YaHei, sans-serif" font-size="24" font-weight="400" fill="#62758A" text-anchor="middle" dominant-baseline="central">ASR / Whisper</text>
+<rect x="905" y="450" width="290" height="250" rx="20" fill="#FFFFFF" stroke="#D7E2ED" stroke-width="2"/>
+<rect x="927" y="474" width="48" height="44" rx="12" fill="#16877E" stroke="none" stroke-width="2"/>
+<text x="951" y="496" font-family="Microsoft YaHei, sans-serif" font-size="25" font-weight="700" fill="#FFFFFF" text-anchor="middle" dominant-baseline="central">3</text>
+<text x="1050.0" y="555" font-family="Microsoft YaHei, sans-serif" font-size="34" font-weight="700" fill="#172B43" text-anchor="middle" dominant-baseline="central">生成回复</text>
+<text x="1050.0" y="615" font-family="Microsoft YaHei, sans-serif" font-size="25" font-weight="400" fill="#62758A" text-anchor="middle" dominant-baseline="central">理解内容，生成回答</text>
+<text x="1050.0" y="657" font-family="Microsoft YaHei, sans-serif" font-size="24" font-weight="400" fill="#62758A" text-anchor="middle" dominant-baseline="central">LLM / Ollama</text>
+<rect x="1260" y="450" width="290" height="250" rx="20" fill="#FFFFFF" stroke="#D7E2ED" stroke-width="2"/>
+<rect x="1282" y="474" width="48" height="44" rx="12" fill="#16877E" stroke="none" stroke-width="2"/>
+<text x="1306" y="496" font-family="Microsoft YaHei, sans-serif" font-size="25" font-weight="700" fill="#FFFFFF" text-anchor="middle" dominant-baseline="central">4</text>
+<text x="1405.0" y="555" font-family="Microsoft YaHei, sans-serif" font-size="34" font-weight="700" fill="#172B43" text-anchor="middle" dominant-baseline="central">语音合成</text>
+<text x="1405.0" y="615" font-family="Microsoft YaHei, sans-serif" font-size="25" font-weight="400" fill="#62758A" text-anchor="middle" dominant-baseline="central">回复文字 → 声音</text>
+<text x="1405.0" y="657" font-family="Microsoft YaHei, sans-serif" font-size="24" font-weight="400" fill="#62758A" text-anchor="middle" dominant-baseline="central">TTS / GPT-SoVITS</text>
+<rect x="1670" y="450" width="620" height="250" rx="20" fill="#FFFFFF" stroke="#D7E2ED" stroke-width="2"/>
+<rect x="1692" y="474" width="48" height="44" rx="12" fill="#2864B4" stroke="none" stroke-width="2"/>
+<text x="1716" y="496" font-family="Microsoft YaHei, sans-serif" font-size="25" font-weight="700" fill="#FFFFFF" text-anchor="middle" dominant-baseline="central">5</text>
+<text x="1980.0" y="555" font-family="Microsoft YaHei, sans-serif" font-size="34" font-weight="700" fill="#172B43" text-anchor="middle" dominant-baseline="central">下载并播放回复</text>
+<text x="1980.0" y="615" font-family="Microsoft YaHei, sans-serif" font-size="25" font-weight="400" fill="#62758A" text-anchor="middle" dominant-baseline="central">下载、校验音频，准备播放</text>
+<text x="1980.0" y="657" font-family="Microsoft YaHei, sans-serif" font-size="24" font-weight="400" fill="#62758A" text-anchor="middle" dominant-baseline="central">扬声器发出角色声音</text>
+<polyline points="440,574 550,574" fill="none" stroke="#2864B4" stroke-width="3"/>
+<polygon points="550,574 538.4690660038693,580.0031292820393 538.4690660038693,567.9968707179607" fill="#2864B4"/>
+<text x="495" y="540" font-family="Microsoft YaHei, sans-serif" font-size="21" font-weight="400" fill="#2864B4" text-anchor="middle" dominant-baseline="central">Wi-Fi</text>
+<polyline points="840,574 905,574" fill="none" stroke="#16877E" stroke-width="3"/>
+<polygon points="905,574 893.4690660038693,580.0031292820393 893.4690660038693,567.9968707179607" fill="#16877E"/>
+<polyline points="1195,574 1260,574" fill="none" stroke="#16877E" stroke-width="3"/>
+<polygon points="1260,574 1248.4690660038693,580.0031292820393 1248.4690660038693,567.9968707179607" fill="#16877E"/>
+<polyline points="1550,574 1670,574" fill="none" stroke="#2864B4" stroke-width="3"/>
+<polygon points="1670,574 1658.4690660038693,580.0031292820393 1658.4690660038693,567.9968707179607" fill="#2864B4"/>
+<text x="1610" y="540" font-family="Microsoft YaHei, sans-serif" font-size="21" font-weight="400" fill="#2864B4" text-anchor="middle" dominant-baseline="central">Wi-Fi</text>
+<text x="270" y="812" font-family="Microsoft YaHei, sans-serif" font-size="26" font-weight="400" fill="#62758A" text-anchor="middle" dominant-baseline="central">例如：</text>
+<text x="270" y="867" font-family="Microsoft YaHei, sans-serif" font-size="31" font-weight="700" fill="#172B43" text-anchor="middle" dominant-baseline="central">“我今天有点累。”</text>
+<text x="270" y="956" font-family="Microsoft YaHei, sans-serif" font-size="24" font-weight="400" fill="#62758A" text-anchor="middle" dominant-baseline="central">声音由机器人采集</text>
+<rect x="905" y="830" width="290" height="104" rx="18" fill="#DFEFEB" stroke="none" stroke-width="2"/>
+<text x="1050" y="864" font-family="Microsoft YaHei, sans-serif" font-size="27" font-weight="700" fill="#16877E" text-anchor="middle" dominant-baseline="central">人格设定</text>
+<text x="1050" y="902" font-family="Microsoft YaHei, sans-serif" font-size="24" font-weight="400" fill="#62758A" text-anchor="middle" dominant-baseline="central">决定“怎么回答”</text>
+<rect x="1260" y="830" width="290" height="104" rx="18" fill="#DFEFEB" stroke="none" stroke-width="2"/>
+<text x="1405" y="864" font-family="Microsoft YaHei, sans-serif" font-size="27" font-weight="700" fill="#16877E" text-anchor="middle" dominant-baseline="central">音色配置</text>
+<text x="1405" y="902" font-family="Microsoft YaHei, sans-serif" font-size="24" font-weight="400" fill="#62758A" text-anchor="middle" dominant-baseline="central">决定“用什么声音”</text>
+<text x="1050" y="976" font-family="Microsoft YaHei, sans-serif" font-size="24" font-weight="400" fill="#16877E" text-anchor="middle" dominant-baseline="central">人格与音色可独立配置</text>
+<polyline points="1050,700 1050,760 1610,760 1610,875 1670,875" fill="none" stroke="#B47A20" stroke-width="3" stroke-dasharray="10 8"/>
+<polygon points="1670,875 1658.4690660038693,881.0031292820393 1658.4690660038693,868.9968707179607" fill="#B47A20"/>
+<text x="1320" y="731" font-family="Microsoft YaHei, sans-serif" font-size="24" font-weight="400" fill="#B47A20" text-anchor="middle" dominant-baseline="central">同时选择动作，随回复返回</text>
+<polyline points="2180,700 2180,800" fill="none" stroke="#B47A20" stroke-width="3" stroke-dasharray="10 8"/>
+<polygon points="2180,800 2173.9968707179605,788.4690660038693 2186.0031292820395,788.4690660038693" fill="#B47A20"/>
+<text x="2080" y="751" font-family="Microsoft YaHei, sans-serif" font-size="24" font-weight="400" fill="#B47A20" text-anchor="middle" dominant-baseline="central">起播时触发</text>
+<rect x="1670" y="800" width="620" height="155" rx="20" fill="#FFFAF0" stroke="#D8B978" stroke-width="2" stroke-dasharray="10 7"/>
+<text x="1980" y="843" font-family="Microsoft YaHei, sans-serif" font-size="32" font-weight="700" fill="#B47A20" text-anchor="middle" dominant-baseline="central">⑥ 配合肢体动作</text>
+<text x="1980" y="895" font-family="Microsoft YaHei, sans-serif" font-size="25" font-weight="400" fill="#62758A" text-anchor="middle" dominant-baseline="central">ESP32 → 舵机驱动板 → 四肢 / 尾部</text>
+<text x="1980" y="983" font-family="Microsoft YaHei, sans-serif" font-size="23" font-weight="400" fill="#B47A20" text-anchor="middle" dominant-baseline="central">虚线：动作联动软件已实现，整机待验证</text>
+<rect x="70" y="1080" width="2260" height="112" rx="24" fill="#172B43" stroke="none" stroke-width="2"/>
+<text x="1200" y="1136" font-family="Microsoft YaHei, sans-serif" font-size="37" font-weight="700" fill="#FFFFFF" text-anchor="middle" dominant-baseline="central">机器人负责“听、说、动”，电脑负责“识别、生成回复、合成声音”。</text>
+<text x="90" y="1255" font-family="Microsoft YaHei, sans-serif" font-size="24" font-weight="400" fill="#62758A" text-anchor="start" dominant-baseline="central">说明：展示普通对话的核心链路；动作经过开关、允许列表与忙碌状态检查，符合条件才执行。</text>
+</svg>
