@@ -1,5 +1,10 @@
 # 项目结构地图
 
+## 2026-10-09 按需权限沟通规则
+
+- 全局技能 `C:\Users\ASUS\.codex\skills\request-scoped-access\SKILL.md`：发现工具、连接或权限障碍时提出具体、最小范围的接入/授权请求；`agents/openai.yaml` 允许自动选用。权威文件在用户技能目录，不复制到项目。
+- 全局 `C:\Users\ASUS\.codex\AGENTS.md` 已加入触发入口；项目适用记录见 `docs/工作规范/agent_working_memory.md`。不改变可见终端、外部浏览器及硬件授权边界。
+
 ## 2026-10-09 桃金娘音色首轮训练准备（本机素材，不入 Git）
 
 - `C:\Users\ASUS\Downloads\PRP_410582114\semantic_v3\training.list`：用户确认文字后生成的 34 段、199.55 秒正式首轮训练输入；4 段短于 3 秒的 WAV 保留但未入清单。
