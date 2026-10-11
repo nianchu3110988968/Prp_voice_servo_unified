@@ -20,6 +20,7 @@
 #include <string.h>
 #include "bsp_board.h"
 #include "audio_playback_gate.h"
+#include "audio_volume.h"
 #include "driver/i2s_std.h"
 #include "soc/soc_caps.h"
 #include "driver/gpio.h"
@@ -65,6 +66,18 @@ static i2s_chan_handle_t tx_handle = nullptr;
 // I2S 发送通道状态标志
 static bool tx_channel_enabled = false;
 static uint32_t tx_sample_rate_hz = SAMPLE_RATE;
+static AudioVolume playback_volume;
+static std::atomic<bool> playback_ready{false};
+
+esp_err_t bsp_audio_set_volume(int percent)
+{
+    if (percent < 0 || percent > 100) return ESP_ERR_INVALID_ARG;
+    if (!playback_ready.load(std::memory_order_acquire)) return ESP_ERR_INVALID_STATE;
+    return playback_volume.set(percent) ? ESP_OK : ESP_ERR_INVALID_ARG;
+}
+
+int bsp_audio_get_volume(void) { return playback_volume.get(); }
+bool bsp_audio_volume_ready(void) { return playback_ready.load(std::memory_order_acquire); }
 
 /**
  * @brief 初始化 I2S 接口用于 INMP441 麦克风
@@ -255,6 +268,11 @@ int bsp_get_feed_channel(void)
  */
 esp_err_t bsp_audio_init(uint32_t sample_rate, int channel_format, int bits_per_chan)
 {
+    // All playback sources are PCM16; reject other formats before touching TX.
+    if (!sample_rate || bits_per_chan != 16 || (channel_format != 1 && channel_format != 2))
+        return ESP_ERR_INVALID_ARG;
+    AudioPlaybackGuard guard;
+    if (!guard.acquired() || tx_handle != nullptr) return ESP_ERR_INVALID_STATE;
     esp_err_t ret = ESP_OK;
 
     // 创建 I2S 发送通道配置
@@ -316,6 +334,8 @@ esp_err_t bsp_audio_init(uint32_t sample_rate, int channel_format, int bits_per_
     // 设置通道状态标志
     tx_channel_enabled = true;
     tx_sample_rate_hz = sample_rate;
+    vTaskDelay(pdMS_TO_TICKS(I2S_TX_AMP_WAKE_MS));
+    playback_ready.store(true, std::memory_order_release);
 
     ESP_LOGI(TAG, "I2S 音频播放初始化成功");
     return ESP_OK;
@@ -343,7 +363,7 @@ esp_err_t bsp_play_audio_with_start(const uint8_t *audio_data, size_t data_len,
     return audio_playback_run([&]() -> esp_err_t {
         esp_err_t ret = ESP_OK;
 
-        if (tx_handle == nullptr)
+        if (!playback_ready.load(std::memory_order_acquire) || tx_handle == nullptr)
         {
             ESP_LOGE(TAG, "I2S 发送通道未初始化");
             return ESP_ERR_INVALID_STATE;
@@ -372,31 +392,23 @@ esp_err_t bsp_play_audio_with_start(const uint8_t *audio_data, size_t data_len,
         return ESP_OK;
     }, [&]() -> esp_err_t {
         // 将音频数据写入 I2S 发送通道（起播回调已在同一播放权内执行）
-        size_t bytes_written = 0;
-        esp_err_t ret = i2s_channel_write(tx_handle, audio_data, data_len, &bytes_written, portMAX_DELAY);
-
-        if (ret != ESP_OK)
-        {
-            ESP_LOGE(TAG, "写入 I2S 音频数据失败: %s", esp_err_to_name(ret));
-            return ret;
-        }
-
-        // 检查写入的数据长度是否符合预期
-        if (bytes_written != data_len)
-        {
-            ESP_LOGW(TAG, "预期写入 %d 字节，实际写入 %d 字节", data_len, bytes_written);
-            return ESP_FAIL;
-        }
+        esp_err_t ret = pcm16_write_attenuated(audio_data, data_len,
+            []() { return playback_volume.get(); },
+            [](const uint8_t *data, size_t length, size_t *written) {
+                return i2s_channel_write(tx_handle, data, length, written, portMAX_DELAY);
+            });
 
         // The final samples may still be queued in DMA when write returns. Wait for
-        // one complete DMA ring plus a small margin. Auto-clear then sends zeros.
+        // one complete DMA ring plus a small margin, also after a partial failure.
+        // Keep playback ownership until then. Auto-clear sends zeros afterward.
         const uint32_t drain_ms =
             (I2S_TX_DMA_DESC_NUM * I2S_TX_DMA_FRAME_NUM * 1000U + tx_sample_rate_hz - 1U) /
                 tx_sample_rate_hz +
             I2S_TX_DRAIN_MARGIN_MS;
         vTaskDelay(pdMS_TO_TICKS(drain_ms));
 
-        return ESP_OK;
+        if (ret != ESP_OK) ESP_LOGE(TAG, "写入 I2S 音频数据失败: %s", esp_err_to_name(ret));
+        return ret;
     }, on_start, context);
 }
 

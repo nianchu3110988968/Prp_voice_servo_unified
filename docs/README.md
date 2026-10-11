@@ -55,3 +55,5 @@
 ## 2026-09-29 独立人格与音色控制台
 
 桌面入口操作见[项目重启后服务启动指南](项目指南/项目重启后服务启动指南.md)，档案导入见[自定义音色指南](项目指南/custom_voice_training_and_tts_integration.md)，训练准备见[网页训练教学](项目指南/GPT-SoVITS网页训练教学.md)。验证状态以工作留档/task_progress.md为准。
+
+- `项目指南/audio_volume_protocol.md`：ESP32播放音量与UI设备回执；软件检查/构建已通过，板端烧录及实听待验收。

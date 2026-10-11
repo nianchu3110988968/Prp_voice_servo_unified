@@ -1,5 +1,26 @@
 # 任务进度记录
 
+## 2026-10-12：C音量软件检查与构建通过，终端接入复核成功（待烧录/回执/实听）
+
+- 本窗口通过已授权本机MCP HTTP接口initialize/tools/list，重新确认Pylon0.6.0、当前Prp_voice_servo_unified会话与PRP Visible PowerShell的Shell集成。可见终端实际返回PS5.1.26100.9444/正确目录/退出状态0；未重发缺输出命令，使用缓冲确认，保留其他窗口的终端任务。
+- 新发现并复核.pio/volume_control/result_20261012_005603_609.json和同名verify日志：00:56—00:59已完成音量主机检查、真实BSP模拟、原AudioOnly回归及专用PIO构建，结果PASS。76份源码/配置/测试文件与当前磁盘逐一SHA256一致；firmware.bin=c917b7dcc2e4798ae799d7149ba1bae21e9ee579e053f18e3a29629365961012，版本2026-10-12-volume-v1。日志未保存全部原生命令逐行输出，依据是验证入口每步退出码门禁后写出的PASS及产物哈希，不虚报构建耗时/RAM/Flash统计。
+- 不重复已经通过的音量、音频、UI、词库或动作检查，不再构建。本轮只更新状态、准备上传入口与选择性Git归档。测试基于包含私有欢迎音的完整工作区；提交只纳C音量增量，不宣称选择性提交的干净检出已另行构建。
+- tools/upload_verified_volume.ps1由已验证旧上传入口派生，固定本次PASS证据/volume-v1，76份文件与固件哈希、实时串口枚举、nobuild+upload和逐步退出码检查；新入口仅静态核对，未调用upload、不占串口。旧rl-ack-v1备份与回退信息保留。
+- Git已在可见终端确认起始HEAD=f83fc60，索引当时为空，身份与私有origin符合规范。本窗口没有旧归档补丁可直接复用；按当前HEAD重新构造C文件及共享文档的选择性内容。私有欢迎音include差异、服务/UI/资源/答辩及其他窗口改动保留，不全量暂存。提交/推送结果见后续记录。
+- 阶段未完成：新版未烧录，设备实际版本/get/set回执、三类音频0/50/100及非法输入/恢复100实听仍待做。当前串口所有者/PWM/外部5V未实时核验，未重启服务或开动作。下一步明确确认本轮烧录及外部5V断开、ESP USB供电/串口释放后上传已验证映像，再验收；不把软件PASS当作硬件交付。
+
+## 2026-10-12：C音量控制源码与UI协议已准备（未运行、未构建、未烧录，阶段未完成）
+
+- 本窗口按收尾任务书独占固件音量修改；不扩展动作、TTS/ASR或UI。已与UI执行窗口协调（聊天ID 01a12bd8-767d-7d83-a2c7-651962689771），对方最新进度确认按协议接入，不改固件。权威接口为docs/项目指南/audio_volume_protocol.md：volume get <id> / volume set <id> <0..100>，VOLUME JSON/prp-volume-v1，关联ID与设备回执决定成功；超时未确认，重查而非重发。旧固件无回执时禁用控件，静音不停止舵机。
+- main/audio_volume.h新增原子100%默认状态和只读PCM16小端分块衰减，0静音、100原幅度、不写Flash；统一bsp_board.cc入口覆盖欢迎音/动态/缓存回复，不改源音频或录音。240采样块系数快照，部分写入精确续写、零进度/超量/错误退出，出错也持有播放权等待DMA排空，初始化及重新启用保留功放准备。原起播门与动作准入保留，静音仍执行原回调。
+- main/main.cc增加版本2026-10-12-volume-v1和严格范围/语法检查的设备回执；串口分片拼接至LF，超长行丢弃，避免截断前缀执行。bsp_board.h提供设置/查询/就绪API。静态文件比较确认麦克风函数和已有舵机串口分支与编辑前一致，私有欢迎音include保留；不声称动态线程/硬件验证通过。
+- tests/firmware/audio_volume_test.cc准备全PCM16值0/1/50/99/100检查、非法协议值、未对齐只读输入、原子并发、分块/奇数字节部分写入、错误/回调检查；audio_volume_bsp_test.cc与tests/audio_volume_stubs/编译真实BSP模拟功放/失败排空/回调/RX隔离。tools/verify_audio_volume.ps1在VS Code可见PowerShell串联上述检查、原AudioOnly回归和一次专用PIO构建，记录Git差异摘要、源码/固件哈希与未烧录标记。入口仅静态复核，未执行；不把测试代码存在当作PASS。
+- 已通过文件API保留旧固件及编辑前源码到.pio/volume_control/before_20261012/，旧firmware.bin SHA256=d82c168982703c5f168d129c82d6898e45c49e1b25dccb0b15a2db15e1202b67，与10月11日构建/烧录证据一致。rollback_manifest.json含旧bin/ELF/bootloader/分区/参数哈希；旧flash参数是历史构建相对路径，不能直接执行，不提供未经确认的回退烧录。所有备份及本地证据不入Git。
+- 本轮工具无VS Code可见终端控制接口，未隐藏运行测试、构建、Git或串口；已核对PIO专用Python、Scoop Git、vswhere绝对路径存在，脚本带UTF-8 BOM、子进程Bypass与逐步退出码，PIO run -e参数已对照安装源码。静态证据在.pio/volume_control/static_review_20261012.json。
+- 当前板端本轮未读取，最新历史确认版本仍为2026-10-11-rl-ack-v1；新版回执/三类音频实听均无证据。服务/PWM/外部5V/串口当前归属未实时确认；本窗口没有占用或改变这些资源。UI、答辩、归档及其他窗口改动保留。
+- 本地提交：未执行；远程推送：未执行。原因是当前实现及验证入口尚未运行，本阶段未完成，且Git同样需可见终端；不得用旧HEAD作为本轮提交。下一步只在空闲VS Code终端运行verify_audio_volume.ps1，取得检查与构建结果后再选择性提交/推送；随后确认本轮烧录与供电/串口条件、板端版本/回执及三类音频验收，不先扩大动作测试。
+
+
 ## 2026-10-12：B资源盘点、预归集及Git收尾完成（最终归档仍待C/D）
 
 - 已在具备Shell集成的PRP Visible PowerShell完成选择性Git归档：提交0f7938e563a6a1c887cf4922e1189df9bb33994f，4份文档/42行新增；每份暂存Git对象哈希与审阅计划一致，git diff --cached --check通过，origin/main推送成功。没有提交资源清单、音频、权重、真实配置或其他窗口改动。

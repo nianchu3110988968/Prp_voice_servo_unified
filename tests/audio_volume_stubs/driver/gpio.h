@@ -1,0 +1,2 @@
+#pragma once
+enum { GPIO_NUM_4=4, GPIO_NUM_5=5, GPIO_NUM_6=6, GPIO_NUM_7=7, GPIO_NUM_15=15, GPIO_NUM_16=16 };

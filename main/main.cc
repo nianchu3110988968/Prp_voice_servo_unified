@@ -55,6 +55,7 @@ extern "C"
 #include "ai_client.h"
 #include "audio_reply_player.h"
 #include "audio_recorder.h"
+#include "audio_volume_protocol.h"
 #include "phrase_background.h"
 #include "network_config.h"
 #include "servo_controller.h" // 舵机控制器类
@@ -65,7 +66,7 @@ extern "C"
 
 static const char *TAG = "主控";
 static const char *FIRMWARE_NAME = "PRP voice-servo AI bridge";
-static const char *FIRMWARE_VERSION = "2026-10-11-rl-ack-v1";
+static const char *FIRMWARE_VERSION = "2026-10-12-volume-v1";
 
 // 系统状态定义
 typedef enum
@@ -251,24 +252,65 @@ static void start_local_audio_test(bool with_motion)
     }
 }
 
+static void handle_volume_command(const char *line)
+{
+    const AudioVolumeCommand command = parse_audio_volume_command(line);
+    const char *error = command.error;
+    if (!error && !bsp_audio_volume_ready()) error = "not_ready";
+    if (!error && command.set) {
+        const esp_err_t ret = bsp_audio_set_volume(command.percent);
+        if (ret != ESP_OK) error = ret == ESP_ERR_INVALID_ARG ? "invalid_value" : "not_ready";
+    }
+    const int actual = bsp_audio_get_volume();
+    // ESP logging emits this complete line under its log lock; no user text in JSON.
+    ESP_LOGI(TAG, "VOLUME {\"protocol\":\"prp-volume-v1\",\"id\":\"%s\",\"op\":\"%s\",\"ok\":%s,\"error\":\"%s\",\"percent\":%d,\"muted\":%s,\"ready\":%s,\"persistent\":false,\"firmware\":\"%s\"}",
+             command.id, command.set ? "set" : "get", error ? "false" : "true",
+             error ? error : "", actual, actual == 0 ? "true" : "false",
+             bsp_audio_volume_ready() ? "true" : "false", FIRMWARE_VERSION);
+}
+
 static void serial_command_task(void *arg)
 {
     (void)arg;
     char line[96];
+    char fragment[96];
+    size_t line_used = 0;
+    bool discard_long_line = false;
 
     ESP_LOGI(TAG, "Serial commands ready: test audio, machine control/log, motion <name>, servo <name> <angle>, AI bridge status/retry");
 
     while (1)
     {
-        if (fgets(line, sizeof(line), stdin) == NULL)
+        if (fgets(fragment, sizeof(fragment), stdin) == NULL)
         {
             vTaskDelay(pdMS_TO_TICKS(50));
             continue;
         }
 
+        // Never execute a valid-looking prefix of an oversized command.
+        const bool complete_line = strchr(fragment, '\n') != nullptr;
+        if (discard_long_line) {
+            discard_long_line = !complete_line;
+            continue;
+        }
+        const size_t fragment_len = strlen(fragment);
+        if (line_used + fragment_len >= sizeof(line)) {
+            line_used = 0;
+            discard_long_line = !complete_line;
+            ESP_LOGW(TAG, "Serial command too long; discarded until newline");
+            continue;
+        }
+        memcpy(line + line_used, fragment, fragment_len + 1);
+        line_used += fragment_len;
+        if (!complete_line) continue; // Preserve fragmented input until LF arrives.
+        line_used = 0;
         trim_line(line);
 
-        if (strcmp(line, "start log machine") == 0)
+        if (strncmp(line, "volume ", 7) == 0 || strcmp(line, "volume") == 0)
+        {
+            handle_volume_command(line);
+        }
+        else if (strcmp(line, "start log machine") == 0)
         {
             machine_log_enabled = true;
             robot_motions.setLogEnabled(true);

@@ -69,6 +69,12 @@ int bsp_get_feed_channel(void);
  */
 esp_err_t bsp_audio_init(uint32_t sample_rate, int channel_format, int bits_per_chan);
 
+// PCM16 playback attenuation only: 0=mute, 100=original, reset=100, no Flash writes.
+// Success confirms the device coefficient; queued DMA samples are unchanged.
+esp_err_t bsp_audio_set_volume(int percent);
+int bsp_audio_get_volume(void);
+bool bsp_audio_volume_ready(void);
+
 /**
  * @brief Play audio data through I2S output
  *

@@ -289,3 +289,17 @@ E:/Projects2026/Prp_voice_servo_unified
 - server/logs/launcher/：本机运行日志（忽略，不自动删除）；server/prompts/导入正文忽略，既有版本化提示词保留。
 - server/tests/test_profiles_console.py：拆分配置、切换/回滚、缓存隔离、轮转和串口模拟。
 - tools/verify_roles_launcher.ps1：离线测试、源码Tk烟测、PIO编译；tools/build_launcher.ps1：EXE构建及开关烟测。
+
+## 2026-10-12 C音量控制（待软件运行/构建/板端验收）
+
+- main/audio_volume.h：原子运行音量与PCM16只读分块衰减；main/audio_volume_protocol.h：串口输入校验；bsp_board.cc/.h接入统一输出，main.cc增加设备回执/版本与串口分片保护。
+- docs/项目指南/audio_volume_protocol.md：C/D冻结接口、请求关联、设备确认、失败/超时与旧固件状态、静音不停止动作、回退/验收边界。
+- tests/firmware/audio_volume_test.cc、audio_volume_bsp_test.cc及tests/audio_volume_stubs/：纯软件与真实BSP模拟回归；tools/verify_audio_volume.ps1：仅VS Code可见终端测试和构建，不上传/占串口/启动服务。
+- .pio/volume_control/：本地静态核验、before_20261012旧固件/编辑前源码、未来运行transcript/PASS哈希证据，不纳入Git。结果以task_progress.md为准，当前未运行。
+- E:\Projects2026\PRP项目成果整理\00_总览与清单\C_音量阶段交接.md：本窗口交接副本，开发根与协议权威文件仍在原项目，不代表最终工程归档已同步。
+
+## 2026-10-12 C音量软件验收与上传准备
+
+- .pio/volume_control/result_20261012_005603_609.json：已有音量/BSP/音频回归及构建PASS，76份文件与固件指纹复核一致；本轮不重复运行。
+- tools/upload_verified_volume.ps1：本次volume-v1已验证映像上传入口，仅在用户明确确认后于VS Code可见终端执行；当前尚未运行/烧录。
+- 板端回执与三类实听待验收，不能将旧源码准备记录或软件PASS写成最终交付。
