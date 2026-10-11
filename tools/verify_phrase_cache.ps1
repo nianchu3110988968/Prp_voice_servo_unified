@@ -1,6 +1,6 @@
 # Visible VS Code terminal only. Offline, build-only, no upload or service restart.
 [CmdletBinding()]
-param([switch]$AudioOnly, [switch]$OutputCheck)
+param([switch]$AudioOnly, [switch]$OutputCheck, [string]$Python = 'C:\Users\ASUS\scoop\apps\python313\current\python.exe')
 $ErrorActionPreference = 'Stop'
 $projectRoot = Split-Path $PSScriptRoot -Parent
 $hostBuild = Join-Path $projectRoot '.pio\phrase_cache_host'
@@ -80,9 +80,9 @@ try {
     if ($OutputCheck) {
         # ASCII source with Unicode escapes also works when PS5 reads this .ps1
         # without a BOM. The child emits actual Chinese UTF-8 on both streams.
-        Invoke-VisibleNative 'python' @('-X', 'utf8', '-c', 'import sys; print("\u4e2d\u6587\u6807\u51c6\u8f93\u51fa\uff1a\u4f60\u597d"); print("\u4e2d\u6587\u6807\u51c6\u9519\u8bef\uff1a\u6d4b\u8bd5\u901a\u8fc7", file=sys.stderr)') 'Output check failed.'
+        Invoke-VisibleNative $Python @('-X', 'utf8', '-c', 'import sys; print("\u4e2d\u6587\u6807\u51c6\u8f93\u51fa\uff1a\u4f60\u597d"); print("\u4e2d\u6587\u6807\u51c6\u9519\u8bef\uff1a\u6d4b\u8bd5\u901a\u8fc7", file=sys.stderr)') 'Output check failed.'
         try {
-            Invoke-VisibleNative 'python' @('-c', 'import sys; sys.exit(3)') 'Expected exit-code probe'
+            Invoke-VisibleNative $Python @('-c', 'import sys; sys.exit(3)') 'Expected exit-code probe'
             throw 'Nonzero exit code was not detected.'
         }
         catch {
@@ -93,14 +93,16 @@ try {
     }
     if (-not $AudioOnly) {
         Write-Host '[1/3] Offline phrase library/pipeline/job tests (fake models only)'
-        Invoke-VisibleNative 'python' @('-X', 'utf8', '-m', 'unittest', 'discover', '-s', 'server/tests', '-p', 'test_phrase*.py', '-v') 'Phrase library tests failed.'
+        Invoke-VisibleNative $Python @('-X', 'utf8', '-m', 'unittest', 'discover', '-s', 'server/tests', '-p', 'test_phrase*.py', '-v') 'Phrase library tests failed.'
         Write-Host '[2/3] Existing logging tests + platformio run + observer host tests'
-        & (Join-Path $PSScriptRoot 'verify_voice_logging.ps1') | Out-Host
+        & powershell.exe -NoProfile -ExecutionPolicy Bypass -File (Join-Path $PSScriptRoot 'verify_voice_logging.ps1') -Python $Python | Out-Host
+        if ($LASTEXITCODE -ne 0) { throw 'Logging/firmware verification failed; stop before audio host tests.' }
     }
     if (-not (Get-Command cl.exe -ErrorAction SilentlyContinue)) {
         $vsWhere = 'C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe'
         if (-not (Test-Path -LiteralPath $vsWhere)) { throw 'MSVC not found; host tests NOT run.' }
         $vsRoot = & $vsWhere -latest -products '*' -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath
+        if ($LASTEXITCODE -ne 0) { throw 'MSVC discovery failed.' }
         if (-not $vsRoot) { throw 'MSVC C++ toolchain not found; host tests NOT run.' }
         Import-Module (Join-Path $vsRoot 'Common7\Tools\Microsoft.VisualStudio.DevShell.dll')
         Enter-VsDevShell -VsInstallPath $vsRoot -SkipAutomaticLocation -DevCmdArguments '-arch=x64 -host_arch=x64' | Out-Null

@@ -268,6 +268,107 @@ int main() {
     assert(robot.tryStartVoiceMotion("happy"));
     assert(robot.disableOutputs() == ESP_OK);
     start = writes.size(); run_queued(); assert(writes.size() == start);
+    assert(robot.disableOutputs() == ESP_OK);
+    assert(!robot.requestAcknowledge());
+    assert(!robot.setDemoVoiceEnabled(true));
+    assert(robot.enableSingleServoAtHome(SERVO_REAR_LEFT) == ESP_OK);
+    assert(!robot.requestAcknowledge()); // A debug session never becomes a demo implicitly.
+    assert(robot.disableOutputs() == ESP_OK);
+    start = writes.size();
+    assert(robot.enableMotionDemo() == ESP_OK);
+    assert_only_outputs_since(start, servoChannelMask(SERVO_REAR_LEFT));
+    assert(active_mask() == servoChannelMask(SERVO_REAR_LEFT));
+    assert(pulse_count(SERVO_REAR_LEFT) == angle_count(90));
+    assert(robot.enableMotionDemo() == ESP_ERR_INVALID_STATE);
+    assert(robot.enableOutputsAtHome() == ESP_ERR_INVALID_STATE);
+    assert(robot.enableSingleServoAtHome(SERVO_TAIL) == ESP_ERR_INVALID_STATE);
+    assert(!robot.tryStartVoiceMotion("acknowledge")); // Voice defaults off, even for valid ID.
+    uint32_t ticket = 0, demo_generation = 0;
+    assert(!robot.getVoiceTicket(&ticket));
+    assert(robot.getDemoGeneration(&demo_generation));
+    start = writes.size();
+    robot.actionHappy(); robot.actionShy(); robot.actionCurious(); robot.actionReset();
+    for (const auto &limit : SERVO_LIMITS) assert(!robot.requestServoAngle(limit.channel, 90));
+    run_queued(); assert(writes.size() == start);
+
+    // Repeat complete trajectories; every actual write is rl in the measured small range.
+    for (int repeat = 0; repeat < 3; ++repeat) {
+        start = writes.size();
+        const int64_t began = fake_time_us;
+        assert(robot.requestAcknowledge());
+        assert(!robot.requestAcknowledge()); // Never build a queue of repeated acknowledgements.
+        run_queued();
+        assert(writes.size() == start + 4);
+        assert(fake_time_us - began == 900000);
+        const int expected[] = {89, 88, 89, 90};
+        for (size_t i = 0; i < 4; ++i) {
+            const auto &w = writes[start + i];
+            assert(w.ok && w.reg == 0x06 + 4 * SERVO_REAR_LEFT);
+            assert((w.data[2] | ((w.data[3] & 15) << 8)) == angle_count(expected[i]));
+        }
+        assert_only_outputs_since(start, servoChannelMask(SERVO_REAR_LEFT));
+        assert(pulse_count(SERVO_REAR_LEFT) == angle_count(90));
+    }
+    assert(robot.setDemoVoiceEnabled(true) && robot.getVoiceTicket(&ticket));
+    for (const char *id : {"none", "happy", "shy", "curious", "comfort", "dance"})
+        assert(!robot.tryStartVoiceMotion(id, &ticket));
+    assert(robot.tryStartVoiceMotion("acknowledge", &ticket));
+    assert(!robot.tryStartVoiceMotion("acknowledge", &ticket));
+    run_queued();
+    start = writes.size();
+    assert(robot.tryStartVoiceMotion("acknowledge", &ticket));
+    fake_time_us += 40001; run_queued(); assert(writes.size() == start);
+    time_read_step_us = 25000;
+    assert(robot.tryStartVoiceMotion("acknowledge", &ticket));
+    run_queued(); assert(writes.size() == start);
+    time_read_step_us = 0;
+    assert(robot.setDemoVoiceEnabled(false));
+    assert(robot.setDemoVoiceEnabled(true));
+    assert(!robot.tryStartVoiceMotion("acknowledge", &ticket)); // Reply from before rearm.
+
+    // Stop at each hold, including the final home hold; no return-home write after stop.
+    for (size_t phase = 0; phase < 4; ++phase) {
+        start = writes.size();
+        std::function<void()> stop_at_phase;
+        stop_at_phase = [&] {
+            if (writes.size() < start + phase + 1) { delay_hook = stop_at_phase; return; }
+            assert(robot.disableOutputs() == ESP_OK);
+            restart = writes.size();
+        };
+        delay_hook = stop_at_phase;
+        assert(robot.requestAcknowledge()); run_queued();
+        assert(writes.size() == restart && active_mask() == 0);
+        assert(!robot.tryStartDemoMotion(demo_generation));
+        assert(robot.enableMotionDemo() == ESP_OK);
+        assert(!robot.tryStartDemoMotion(demo_generation)); // Old audio callback after restart.
+        assert(!robot.getVoiceTicket(&ticket));
+        assert(robot.getDemoGeneration(&demo_generation));
+    }
+    // Local onset follows the same busy/40ms rule without opening the real voice gate.
+    start = writes.size();
+    *mutexes.back() = true;
+    assert(!robot.tryStartDemoMotion(demo_generation));
+    *mutexes.back() = false;
+    assert(robot.tryStartDemoMotion(demo_generation));
+    assert(writes.size() == start);
+    assert(!robot.tryStartDemoMotion(demo_generation));
+    fake_time_us += 40001; run_queued(); assert(writes.size() == start);
+    assert(robot.requestAcknowledge());
+    fail_after = 0; run_queued();
+    assert(active_mask() == 0 && !robot.requestAcknowledge());
+    assert(robot.enableOutputsAtHome() == ESP_OK);
+    assert(!robot.requestAcknowledge() && !robot.tryStartVoiceMotion("acknowledge"));
+    assert(robot.disableOutputs() == ESP_OK);
+    // Fail shutdown, home staging and each per-channel enable write in demo startup.
+    for (int failure = 0; failure <= 18; ++failure) {
+        reset_fake(); RobotMotions candidate;
+        assert(candidate.init() == ESP_OK);
+        start = writes.size(); fail_after = failure;
+        assert(candidate.enableMotionDemo() == ESP_FAIL);
+        assert(active_mask() == 0 && !candidate.requestAcknowledge());
+        assert_only_outputs_since(start, servoChannelMask(SERVO_REAR_LEFT));
+    }
+    puts("acknowledge tests: PASS (rl-only enable/targets/repeat/stop-all-phases/fault/rearm/local-onset/voice-gate)");
     puts("voice motion tests: PASS (disabled/single-only/busy/expired rejected, no delayed queue, stop invalidates)");
     puts("servo channel host tests: PASS (15/11/7/3/0 map, masks, tail-only, bounds, broadcast, failures, stop/restart)");
 }

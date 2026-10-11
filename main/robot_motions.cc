@@ -92,7 +92,16 @@ esp_err_t RobotMotions::enableSingleServoAtHome(uint8_t channel) {
     return enableChannelsAtHome(servoChannelMask(channel), channel);
 }
 
-esp_err_t RobotMotions::enableChannelsAtHome(uint16_t channel_mask, int single_channel) {
+esp_err_t RobotMotions::enableMotionDemo() {
+    // This demo is based on the observed rl=90 upright, 85 toward head range.
+    // Do not silently follow a future calibration change to a different home.
+    const ServoLimit *limit = findServoLimit(SERVO_REAR_LEFT);
+    if (!limit || limit->home_angle != 90 || limit->min_angle > 88 || limit->max_angle < 90)
+        return ESP_ERR_INVALID_STATE;
+    return enableChannelsAtHome(servoChannelMask(SERVO_REAR_LEFT), SERVO_REAR_LEFT, true);
+}
+
+esp_err_t RobotMotions::enableChannelsAtHome(uint16_t channel_mask, int single_channel, bool demo) {
     if (!ready_ || command_queue_ == nullptr) {
         return ESP_ERR_INVALID_STATE;
     }
@@ -102,6 +111,9 @@ esp_err_t RobotMotions::enableChannelsAtHome(uint16_t channel_mask, int single_c
     if (control_enabled_) return ESP_ERR_INVALID_STATE;
     control_enabled_ = false;
     single_channel_ = -1;
+    demo_mode_ = false;
+    demo_voice_enabled_ = false;
+    ++voice_epoch_;
     ++generation_;
     xQueueReset(command_queue_);
     pending_commands_ = 0;
@@ -124,6 +136,7 @@ esp_err_t RobotMotions::enableChannelsAtHome(uint16_t channel_mask, int single_c
     ret = pwm_.setOutputsEnabled(true, channel_mask);
     if (ret == ESP_OK) {
         single_channel_ = single_channel;
+        demo_mode_ = demo;
         control_enabled_ = true;
         if (single_channel_ < 0) ESP_LOGI(TAG, "servo PWM outputs enabled at home pose");
         else ESP_LOGI(TAG, "单路调试：仅通道%d启用，其余15路PWM关闭", single_channel_);
@@ -139,6 +152,9 @@ esp_err_t RobotMotions::disableOutputs() {
     OutputLock lock(output_mutex_);
     control_enabled_ = false;
     single_channel_ = -1;
+    demo_mode_ = false;
+    demo_voice_enabled_ = false;
+    ++voice_epoch_;
     ++generation_;
     xQueueReset(command_queue_);
     pending_commands_ = 0;
@@ -173,17 +189,63 @@ void RobotMotions::actionReset() {
     enqueueCommand(CommandType::Reset);
 }
 
-bool RobotMotions::tryStartVoiceMotion(const char *motion) {
+bool RobotMotions::requestAcknowledge() {
+    return enqueueCommand(CommandType::Acknowledge);
+}
+
+bool RobotMotions::getDemoGeneration(uint32_t *generation) {
+    if (!ready_ || !generation) return false;
+    OutputLock lock(output_mutex_);
+    if (!control_enabled_ || !demo_mode_ || pending_commands_ != 0) return false;
+    *generation = generation_;
+    return true;
+}
+
+bool RobotMotions::tryStartDemoMotion(uint32_t generation) {
+    if (!ready_ || !command_queue_ || xSemaphoreTake(output_mutex_, 0) != pdTRUE) return false;
+    bool accepted = false;
+    if (control_enabled_ && demo_mode_ && generation == generation_ && pending_commands_ == 0) {
+        MotionCommand command = {CommandType::Acknowledge, 0, 0, generation_, esp_timer_get_time() + 40000};
+        accepted = xQueueSend(command_queue_, &command, 0) == pdTRUE;
+        if (accepted) ++pending_commands_;
+    }
+    xSemaphoreGive(output_mutex_);
+    return accepted;
+}
+
+bool RobotMotions::setDemoVoiceEnabled(bool enabled) {
+    if (!ready_) return false;
+    OutputLock lock(output_mutex_);
+    if (!control_enabled_ || !demo_mode_) return false;
+    if (demo_voice_enabled_ != enabled) ++voice_epoch_;
+    demo_voice_enabled_ = enabled;
+    return true;
+}
+
+bool RobotMotions::getVoiceTicket(uint32_t *ticket) {
+    if (!ready_ || !ticket) return false;
+    OutputLock lock(output_mutex_);
+    if (!control_enabled_ || (demo_mode_ ? !demo_voice_enabled_ : single_channel_ >= 0)) return false;
+    *ticket = voice_epoch_;
+    return true;
+}
+
+bool RobotMotions::tryStartVoiceMotion(const char *motion, const uint32_t *ticket) {
     if (!ready_ || !command_queue_ || !motion) return false;
     CommandType type;
-    if (strcmp(motion, "happy") == 0) type = CommandType::Happy;
+    if (strcmp(motion, "acknowledge") == 0) type = CommandType::Acknowledge;
+    else if (strcmp(motion, "happy") == 0) type = CommandType::Happy;
     else if (strcmp(motion, "shy") == 0) type = CommandType::Shy;
     else if (strcmp(motion, "comfort") == 0 || strcmp(motion, "curious") == 0)
         type = CommandType::Curious; // Existing physical mapping, not a new pose.
     else return false;
     if (xSemaphoreTake(output_mutex_, 0) != pdTRUE) return false;
     bool accepted = false;
-    if (control_enabled_ && single_channel_ < 0 && pending_commands_ == 0) {
+    const bool mode_allowed = type == CommandType::Acknowledge
+        ? (demo_mode_ && demo_voice_enabled_)
+        : (!demo_mode_ && single_channel_ < 0);
+    if (control_enabled_ && mode_allowed && pending_commands_ == 0 &&
+        (!ticket || *ticket == voice_epoch_)) {
         // A delayed scheduler must drop this action, not perform it mid-sentence.
         MotionCommand command = {type, 0, 0, generation_, esp_timer_get_time() + 40000};
         accepted = xQueueSend(command_queue_, &command, 0) == pdTRUE;
@@ -232,7 +294,13 @@ bool RobotMotions::enqueueCommand(CommandType type, uint8_t channel, int angle) 
 
     OutputLock lock(output_mutex_);
     if (!control_enabled_) return false;
-    if (single_channel_ >= 0 &&
+    if (demo_mode_) {
+        if (type != CommandType::Acknowledge || pending_commands_ != 0) {
+            ESP_LOGW(TAG, "演示模式仅接受空闲时的 acknowledge；未执行旧动作/回位/任意角度");
+            return false;
+        }
+    } else if (type == CommandType::Acknowledge) return false;
+    if (!demo_mode_ && single_channel_ >= 0 &&
         (type != CommandType::SetServo || !singleServoRequestAllowed(channel, angle))) return false;
     MotionCommand command = {type, channel, angle, generation_, 0};
     if (xQueueSend(command_queue_, &command, 0) != pdTRUE) {
@@ -246,6 +314,9 @@ bool RobotMotions::enqueueCommand(CommandType type, uint8_t channel, int angle) 
 void RobotMotions::executeCommand(const MotionCommand &command) {
     if (!currentMotionAllowed()) return;
     switch (command.type) {
+    case CommandType::Acknowledge:
+        executeAcknowledge();
+        break;
     case CommandType::Reset:
         executeReset();
         break;
@@ -265,6 +336,29 @@ void RobotMotions::executeCommand(const MotionCommand &command) {
         setAngle(command.channel, command.angle);
         break;
     }
+}
+
+bool RobotMotions::waitMotion(uint32_t milliseconds) {
+    while (milliseconds > 0) {
+        if (!currentMotionAllowed()) return false;
+        const uint32_t slice = milliseconds < 20 ? milliseconds : 20;
+        vTaskDelay(pdMS_TO_TICKS(slice));
+        milliseconds -= slice;
+    }
+    return currentMotionAllowed();
+}
+
+void RobotMotions::executeAcknowledge() {
+    // rl only, 90 -> 89 (150ms) -> 88 (300ms) -> 89 (150ms) -> 90 (300ms).
+    // 900ms total; nominal PWM targets, not measured mechanical timing.
+    const int targets[] = {89, 88, 89, 90};
+    const uint32_t holds_ms[] = {150, 300, 150, 300};
+    for (size_t i = 0; i < 4; ++i) {
+        if (!writeServoAngle(SERVO_REAR_LEFT, targets[i])) return;
+        if (i == 0) ESP_LOGI(TAG, "acknowledge started: rl channel=%u, 90->88->90, 900ms", SERVO_REAR_LEFT);
+        if (!waitMotion(holds_ms[i])) return;
+    }
+    ESP_LOGI(TAG, "acknowledge complete: rl=90 held; other outputs remain FULL OFF");
 }
 
 void RobotMotions::executeShy() {
@@ -411,6 +505,9 @@ bool RobotMotions::writeServoAngle(uint8_t channel, int angle) {
         // Stop this session on a bus failure; never continue a partly applied pose.
         control_enabled_ = false;
         single_channel_ = -1;
+        demo_mode_ = false;
+        demo_voice_enabled_ = false;
+        ++voice_epoch_;
         ++generation_;
         xQueueReset(command_queue_);
         pending_commands_ = 0;
@@ -424,6 +521,7 @@ bool RobotMotions::writeServoAngle(uint8_t channel, int angle) {
 }
 
 bool RobotMotions::singleServoRequestAllowed(uint8_t channel, int angle) const {
+    if (demo_mode_) return channel == SERVO_REAR_LEFT && angle >= 88 && angle <= 90;
     if (single_channel_ < 0) return true;
     const ServoLimit *limit = findServoLimit(channel);
     return channel == single_channel_ && limit != nullptr &&

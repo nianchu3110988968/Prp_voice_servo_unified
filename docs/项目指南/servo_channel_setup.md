@@ -1,5 +1,7 @@
 # 五路通道配置与尾部单路调试
 
+> 2026-10-11现行任务：已准备rl/7单腿acknowledge及专用演示模式，rl-ack-v1于22:19通过离线回归和构建，尚未烧录/实测。下一步及完整验证命令以voice_motion_selection.md页首为准；下方旧逐路/尾部计划不是首个联动前置条件，不复制历史裸platformio或固定COM7命令。最新四腿与电压观察见servo_calibration_record.md。
+
 源码版本：`2026-09-28-servo-map-v1`。当前编译/烧录/实测结果以 `../工作留档/task_progress.md` 为准；写入源码不代表板上已生效。
 
 现装五路的逐路测量与校准表统一记录在 `../工作留档/servo_calibration_record.md`；空白项表示未测，不能用本指南中的默认角度补填。

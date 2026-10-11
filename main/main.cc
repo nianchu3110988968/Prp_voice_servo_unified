@@ -61,10 +61,11 @@ extern "C"
 #include "robot_motions.h"
 #include "touch_inputs.h"
 #include "wifi_manager.h"
+#include <atomic>
 
 static const char *TAG = "主控";
 static const char *FIRMWARE_NAME = "PRP voice-servo AI bridge";
-static const char *FIRMWARE_VERSION = "2026-09-29-phrase-motion-v1";
+static const char *FIRMWARE_VERSION = "2026-10-11-rl-ack-v1";
 
 // 系统状态定义
 typedef enum
@@ -107,7 +108,7 @@ static ServoController servo_controller;
 static RobotMotions robot_motions;
 static TouchInputs touch_inputs;
 static bool machine_log_enabled = false;
-static bool machine_control_enabled = false;
+static std::atomic<bool> machine_control_enabled{false};
 // Serial-only single-output session. Never opens voice/AI/touch motion gates.
 static bool single_servo_debug_enabled = false;
 static bool ai_bridge_ready = false;
@@ -207,6 +208,49 @@ static void handle_serial_servo_command(const char *line)
     ESP_LOGI(TAG, "Servo command queued: %s channel=%u angle=%d", name, channel, angle);
 }
 
+struct LocalAudioTest {
+    bool with_motion;
+    uint32_t generation;
+};
+static LocalAudioTest local_audio_test = {};
+static std::atomic<bool> local_audio_test_busy{false};
+
+static void local_demo_onset(void *context)
+{
+    auto *test = static_cast<LocalAudioTest *>(context);
+    bool accepted = robot_motions.tryStartDemoMotion(test->generation);
+    ESP_LOGI(TAG, "本地音频起播 acknowledge：%s", accepted ? "已投递" : "跳过（停止/忙碌/会话已变）");
+}
+
+static void local_audio_test_task(void *)
+{
+    ESP_LOGI(TAG, "Local audio self-test started: built-in welcome prompt, no server involved");
+    esp_err_t ret = bsp_play_audio_with_start(welcome, welcome_len,
+        local_audio_test.with_motion ? local_demo_onset : nullptr, &local_audio_test);
+    ESP_LOGI(TAG, "Local audio self-test completed: %s", esp_err_to_name(ret));
+    local_audio_test_busy.store(false);
+    vTaskDelete(nullptr);
+}
+
+static void start_local_audio_test(bool with_motion)
+{
+    // Never block the serial task with audio: end machine control must remain readable.
+    if (local_audio_test_busy.exchange(true)) {
+        ESP_LOGW(TAG, "本地音频测试忙碌，未排队");
+        return;
+    }
+    local_audio_test = {with_motion, 0};
+    if (with_motion && !robot_motions.getDemoGeneration(&local_audio_test.generation)) {
+        local_audio_test_busy.store(false);
+        ESP_LOGW(TAG, "需要空闲的 start motion demo 会话；未播放/未动作");
+        return;
+    }
+    if (xTaskCreate(local_audio_test_task, "local_audio_test", 4096, nullptr, 4, nullptr) != pdPASS) {
+        local_audio_test_busy.store(false);
+        ESP_LOGE(TAG, "本地音频测试任务创建失败；未播放/未动作");
+    }
+}
+
 static void serial_command_task(void *arg)
 {
     (void)arg;
@@ -262,6 +306,24 @@ static void serial_command_task(void *arg)
                 }
             }
         }
+        else if (strcmp(line, "start motion demo") == 0)
+        {
+            esp_err_t ret = robot_motions.enableMotionDemo();
+            if (ret == ESP_OK) {
+                machine_control_enabled = true;
+                ESP_LOGI(TAG, "动作演示已启用：仅rl/7，90度保持；旧动作/任意角度禁止，语音动作默认关闭");
+            } else ESP_LOGW(TAG, "动作演示启用失败：%s；先停止旧会话，核对PWM关闭", esp_err_to_name(ret));
+        }
+        else if (strcmp(line, "motion acknowledge") == 0)
+        {
+            ESP_LOGI(TAG, "acknowledge：%s", robot_motions.requestAcknowledge() ? "已投递" : "拒绝（非演示模式/忙碌）");
+        }
+        else if (strcmp(line, "start voice motion") == 0 || strcmp(line, "end voice motion") == 0)
+        {
+            bool enable = strcmp(line, "start voice motion") == 0;
+            bool changed = robot_motions.setDemoVoiceEnabled(enable);
+            ESP_LOGI(TAG, "演示语音动作门：%s", changed ? (enable ? "开启，仅acknowledge" : "关闭，不中断当前动作") : "拒绝（非演示模式）");
+        }
         else if (strncmp(line, "start servo debug ", 18) == 0 || strcmp(line, "start servo debug") == 0)
         {
             char name[8] = {};
@@ -294,7 +356,8 @@ static void serial_command_task(void *arg)
                 }
             }
         }
-        else if (strcmp(line, "end machine control") == 0 || strcmp(line, "end servo debug") == 0)
+        else if (strcmp(line, "end machine control") == 0 || strcmp(line, "end servo debug") == 0 ||
+                 strcmp(line, "end motion demo") == 0)
         {
             machine_control_enabled = false;
             single_servo_debug_enabled = false;
@@ -309,18 +372,9 @@ static void serial_command_task(void *arg)
                          esp_err_to_name(output_ret));
             }
         }
-        else if (strcmp(line, "test audio") == 0)
+        else if (strcmp(line, "test audio") == 0 || strcmp(line, "test motion audio") == 0)
         {
-            ESP_LOGI(TAG, "Local audio self-test started: built-in welcome prompt, no server involved");
-            esp_err_t audio_ret = bsp_play_audio(welcome, welcome_len);
-            if (audio_ret == ESP_OK)
-            {
-                ESP_LOGI(TAG, "Local audio self-test completed: I2S write succeeded");
-            }
-            else
-            {
-                ESP_LOGE(TAG, "Local audio self-test failed: %s", esp_err_to_name(audio_ret));
-            }
+            start_local_audio_test(strcmp(line, "test motion audio") == 0);
         }
         else if (strcmp(line, "motion reset") == 0 || strcmp(line, "motion shy") == 0 ||
                  strcmp(line, "motion happy") == 0 || strcmp(line, "motion curious") == 0)
@@ -411,9 +465,17 @@ static void handle_touch_event()
     }
 }
 
+struct VoiceMotionContext {
+    const char *motion;
+    uint32_t ticket;
+    bool armed;
+};
+
 static void dispatch_ai_motion(void *context)
 {
-    const char *motion = static_cast<const char *>(context);
+    auto *request = static_cast<VoiceMotionContext *>(context);
+    if (!request || !request->armed) return;
+    const char *motion = request->motion;
     if (motion == NULL || motion[0] == '\0' || strcmp(motion, "none") == 0)
     {
         return;
@@ -428,7 +490,7 @@ static void dispatch_ai_motion(void *context)
         return;
     }
 
-    if (!robot_motions.tryStartVoiceMotion(motion) && machine_log_enabled)
+    if (!robot_motions.tryStartVoiceMotion(motion, &request->ticket) && machine_log_enabled)
     {
         ESP_LOGI(TAG, "AI动作未启动（禁用/忙碌/无效），语音继续：%s", motion);
     }
@@ -466,6 +528,8 @@ static ai_interaction_result_t run_ai_bridge_interaction(int audio_chunksize, ui
     }
 
     audio_recording_t recording = {};
+    VoiceMotionContext motion_context = {};
+    motion_context.armed = robot_motions.getVoiceTicket(&motion_context.ticket);
     voice_trace_t trace;
     voice_trace_init(&trace);
 #if AI_RECORD_ENDPOINT_ENABLED
@@ -515,9 +579,10 @@ static ai_interaction_result_t run_ai_bridge_interaction(int audio_chunksize, ui
         ESP_LOGI(TAG, "[%s] 首包：语音识别=%dms | 大模型响应时间=%dms | 后台合成待完成（耗时稍后输出）",
                  trace.request_id, response.asr_ms, response.dialogue_ms);
     const char *trace_result = "no_audio";
+    motion_context.motion = response.motion;
     if (response.audio_url[0] != '\0')
     {
-        esp_err_t play_ret = audio_reply_play_from_url(response.audio_url, &trace, dispatch_ai_motion, response.motion);
+        esp_err_t play_ret = audio_reply_play_from_url(response.audio_url, &trace, dispatch_ai_motion, &motion_context);
         if (response.phrase_hit && play_ret != ESP_OK && trace.playback_start_us < 0)
         {
             // If the cached GET failed, wait on the already running real TTS,
@@ -528,7 +593,7 @@ static ai_interaction_result_t run_ai_bridge_interaction(int audio_chunksize, ui
             if (play_ret == ESP_OK)
             {
                 trace.cached_playback = false;
-                play_ret = audio_reply_play_from_url(fallback.audio_url, &trace, dispatch_ai_motion, response.motion);
+                play_ret = audio_reply_play_from_url(fallback.audio_url, &trace, dispatch_ai_motion, &motion_context);
             }
             phrase_background_release();
             background_slot = false;

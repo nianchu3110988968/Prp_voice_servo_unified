@@ -11,6 +11,12 @@ public:
     esp_err_t init();
     esp_err_t enableOutputsAtHome();
     esp_err_t enableSingleServoAtHome(uint8_t channel);
+    // Dedicated, unloaded rear-left demo; never enables the other four joints.
+    esp_err_t enableMotionDemo();
+    bool requestAcknowledge();
+    bool getDemoGeneration(uint32_t *generation);
+    bool tryStartDemoMotion(uint32_t generation);
+    bool setDemoVoiceEnabled(bool enabled);
     esp_err_t disableOutputs();
     bool isReady() const;
     void setLogEnabled(bool enabled);
@@ -19,7 +25,8 @@ public:
     void actionCurious();
     void actionReset();
     // Called at audio onset. Never waits for old motion or a locked I2C path.
-    bool tryStartVoiceMotion(const char *motion);
+    bool getVoiceTicket(uint32_t *ticket);
+    bool tryStartVoiceMotion(const char *motion, const uint32_t *ticket = nullptr);
     bool requestServoAngle(uint8_t channel, int angle);
 
 private:
@@ -29,6 +36,7 @@ private:
         Happy,
         Curious,
         SetServo,
+        Acknowledge,
     };
 
     struct MotionCommand {
@@ -47,6 +55,8 @@ private:
     void executeHappy();
     void executeCurious();
     void executeReset();
+    void executeAcknowledge();
+    bool waitMotion(uint32_t milliseconds);
     void moveToPose(const int target_angles[SERVO_LIMIT_COUNT]);
     void setAngle(uint8_t channel, int angle);
     bool writeServoAngle(uint8_t channel, int angle);
@@ -54,7 +64,7 @@ private:
     int limitAngle(uint8_t channel, int angle) const;
     size_t servoIndex(uint8_t channel) const;
     const ServoLimit *findServoLimit(uint8_t channel) const;
-    esp_err_t enableChannelsAtHome(uint16_t channel_mask, int single_channel);
+    esp_err_t enableChannelsAtHome(uint16_t channel_mask, int single_channel, bool demo = false);
     bool singleServoRequestAllowed(uint8_t channel, int angle) const; // Under output_mutex_.
 
     Pca9685Controller pwm_;
@@ -62,6 +72,9 @@ private:
     SemaphoreHandle_t output_mutex_ = nullptr;
     bool control_enabled_ = false; // Protected by output_mutex_.
     int single_channel_ = -1; // -1: whole robot; otherwise only this output is allowed.
+    bool demo_mode_ = false; // Protected by output_mutex_; only acknowledge is allowed.
+    bool demo_voice_enabled_ = false; // Off on every enable/stop; explicit opt-in after bench validation.
+    uint32_t voice_epoch_ = 0; // Invalidates replies captured before a stop/rearm.
     uint32_t generation_ = 0; // Invalidates dequeued/in-progress commands on stop/start.
     uint32_t executing_generation_ = 0; // Only accessed by the motion task.
     int64_t executing_deadline_us_ = 0;

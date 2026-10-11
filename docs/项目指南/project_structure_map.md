@@ -1,5 +1,15 @@
 # 项目结构地图
 
+## 2026-10-11 左后腿轻摆与语音联动准备（22:19离线回归/构建通过，未烧录）
+
+- 现行步骤/900ms动作定义见voice_motion_selection.md页首；先托举单路动作和运动音频，再固定回复联动及模型选择，无须先完成步态/尾部/整机校准。
+- main/robot_motions.h/.cc：新增acknowledge、rl-only演示模式、逐段可中断等待、模式隔离、默认关闭的语音准入门及录音会话票据；复用PCA FULL OFF与停止代次，不更改robot_config.h原通道或限位。
+- main/main.cc：版本rl-ack-v1，串口独立动作/本地音频共存入口；本地音频异步任务保留串口停止能力，真实回复/前台补播携带票据，后台下载继续不动作。保留另一窗口已有本地欢迎音变更。
+- server/services/motion_policy.py、server/configs/motion_catalog.json：新增acknowledge与中文“轻摆回应”，默认禁用；旧ID配置保留但演示模式拒绝旧动作。未改当前模型/音色/Excel/缓存或启动器。
+- tests/firmware/servo_channels_test.cc扩展单路轨迹/停止/回调失效/故障回归；server/tests/test_phrase_acknowledge.py新增允许列表/中文ID/固定及模型动作测试；原audio_download_test.cc继续验证准备后起播及失败/后台边界。
+- tools/verify_servo_channels.ps1串联原验证链；verify_phrase_cache.ps1、verify_voice_logging.ps1统一专用测试Python和子PowerShell退出传播。成功产物位于忽略的.pio/servo_channels_host，含transcript、源码/固件SHA256与未烧录未实测标志；本轮22:19已生成PASS记录并复核17份源码与固件SHA一致；实物与运行服务仍待验证。
+
+
 ## 2026-10-11 五路装机校准记录（静态准备，未运动）
 
 - `docs/工作留档/servo_calibration_record.md`：汇总现装15/11/7/3/0接线和已有硬件证据，列出供电/极性/共地/OE/机械路径的最少缺口，并作为五路home、方向、安全范围、干涉、电压电流及结果的唯一逐路记录表。

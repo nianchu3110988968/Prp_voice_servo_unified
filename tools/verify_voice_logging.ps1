@@ -1,12 +1,14 @@
 # Run manually from a visible VS Code PowerShell terminal. No servers or flashing.
 [CmdletBinding()]
-param()
+param([string]$Python = 'C:\Users\ASUS\scoop\apps\python313\current\python.exe')
 $ErrorActionPreference = 'Stop'
 $projectRoot = Split-Path $PSScriptRoot -Parent
 Push-Location $projectRoot
 try {
     Write-Host '[1/3] Offline server tests (no real models, no service requests)'
-    & python -X utf8 -m unittest discover -s server/tests -p test_latency_trace.py -v
+    if (-not (Test-Path -LiteralPath $Python -PathType Leaf)) { throw "Test Python not found: $Python" }
+    Write-Host "[Tests] Python: $Python"
+    & $Python -X utf8 -m unittest discover -s server/tests -p test_latency_trace.py -v
     if ($LASTEXITCODE -ne 0) { throw 'Server log tests failed; stop before firmware build.' }
 
     Write-Host '[2/3] platformio run (build only; no upload)'
@@ -28,6 +30,7 @@ try {
         $vsWhere = 'C:\Program Files (x86)\Microsoft Visual Studio\Installer\vswhere.exe'
         if (-not (Test-Path -LiteralPath $vsWhere)) { throw 'MSVC not found; host tests NOT run.' }
         $vsRoot = & $vsWhere -latest -products '*' -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath
+        if ($LASTEXITCODE -ne 0) { throw 'MSVC discovery failed.' }
         if (-not $vsRoot) { throw 'MSVC C++ toolchain not found; host tests NOT run.' }
         Import-Module (Join-Path $vsRoot 'Common7\Tools\Microsoft.VisualStudio.DevShell.dll')
         Enter-VsDevShell -VsInstallPath $vsRoot -SkipAutomaticLocation -DevCmdArguments '-arch=x64 -host_arch=x64' | Out-Null

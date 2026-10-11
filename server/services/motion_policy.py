@@ -6,9 +6,9 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 CATALOG_FILE = ROOT / "configs" / "motion_catalog.json"
 RULES_FILE = ROOT / "prompts" / "motion_selection.txt"
-FIRMWARE_IDS = frozenset({"none", "happy", "shy", "comfort", "curious"})
+FIRMWARE_IDS = frozenset({"none", "happy", "shy", "comfort", "curious", "acknowledge"})
 ALIASES = {"自动": "auto", "不动作": "none", "无": "none", "开心": "happy",
-           "害羞": "shy", "安慰": "comfort", "好奇": "curious"}
+           "害羞": "shy", "安慰": "comfort", "好奇": "curious", "轻摆回应": "acknowledge"}
 _last_error = None
 
 
@@ -17,7 +17,7 @@ def parse_setting(value: str) -> str:
     value = value.strip().lower()
     value = ALIASES.get(value, value) or "auto"
     if value not in FIRMWARE_IDS | {"auto"}:
-        raise ValueError("动作只能填自动、不动作、开心、害羞、安慰、好奇或对应英文ID")
+        raise ValueError("动作只能填自动、不动作、开心、害羞、安慰、好奇、轻摆回应或对应英文ID")
     return value
 
 
