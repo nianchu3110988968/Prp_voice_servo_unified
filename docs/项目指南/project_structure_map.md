@@ -1,5 +1,12 @@
 # 项目结构地图
 
+## 2026-10-12 D独立Windows陪伴台（软件/EXE通过，设备联调待做）
+
+- desktop_ui/app.py、backend.py：独立Tk首页/诊断，复用已有HTTP与旧SerialConsole，音量由真实关联回执确认；tests/test_backend.py为11项离线测试。
+- desktop_ui/scripts/start.ps1、verify.ps1、build.ps1、common.ps1：可见终端入口、哈希门禁、完整EXE路径占用/只读/独占预检及失败传播。新产物dist/PRPCompanion/PRPCompanion.exe，旧PRPLauncher保留。
+- desktop_ui/README.md、VALIDATION.md与项目指南/windows_companion.md：实际运行方式、证据及未验证边界；design/仅为设计。协议由audio_volume_protocol.md维护。
+- .pio/desktop_ui：01:28布局复验、01:32打包、实际运行截图与占用拒绝/退出证据；仅本地。收尾05_Windows用户界面分设计、真实截图、验证记录、独立应用；不改变工程运行根。
+
 ## 2026-10-12 VS Code 可见终端接入
 
 - docs/项目指南/vscode_terminal_interface.md：已安装的Pylon MCP固定版本、直接协议验收、专用终端、会话刷新与撤销指南。

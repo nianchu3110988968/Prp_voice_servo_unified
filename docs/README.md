@@ -1,5 +1,7 @@
 # PRP 项目文档索引
 
+- `项目指南/windows_companion.md`：独立PRP陪伴台；11项离线、真实源码中文/应用字号/退出、新EXE打包与只读展示通过；设备音量/串口/配置切换待验收。设计与运行截图分开，旧控制台保留。
+
 ## 2026-10-12 VS Code 可见终端接口
 
 - `项目指南/vscode_terminal_interface.md`：Pylon MCP 已安装、配置和直接协议终端验收通过；专用终端 PRP Visible PowerShell。旧 Codex 会话需重新加载后核对工具可用性，禁止默认终端无集成时盲目重发命令。
