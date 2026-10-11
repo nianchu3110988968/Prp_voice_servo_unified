@@ -1,5 +1,13 @@
 # 项目结构地图
 
+## 2026-10-11 舵机接续核查索引（不改变接口）
+
+- 权威进度见task_progress.md同日“舵机接续核查”：当前映射15/11/7/3/0、单路隔离/FULL OFF/停止代次机制与BSP起播回调已静态核对；home/机械方向与限位未校准，comfort仍复用curious。
+- 运行证据更新：server/logs/launcher/2026-10-08-serial.log在23:13:54确认板上仍为servo-map-v1；10月11日日志无版本行。磁盘manbo-welcome-v1构建产物不等于已烧录。旧台架物理通道0的运动证据不能转成新映射尾部或整机验收。
+- 本地生产匹配报告.pio/diagnostics/phrase_check_20261009_004517_238519.json完整62/62通过（qwen3.5:4b），修正旧“只有候选HTTP实验”的状态；不覆盖ASR/TTS/缓存播放/硬件，也不代表当前全套服务回归通过。
+- servo_channel_setup.md中的旧“源码未再改变”、voice_motion_selection.md中的qwen2.5默认和本图旧“欢迎音未编译”均须结合最新进度阅读；不复制历史命令中的裸platformio/固定COM7。当前继续使用专用penv的-I -X utf8 -m platformio，在VS Code可见终端执行；未确认电源/机械条件前不使能。
+- 未新增模块或修改协议；对话窗口继续负责匹配/服务，本窗口先负责断电接线核查和逐路校准。若后续涉及共享动作ID/允许列表/提示词/Excel/缓存签名/音频回调，修改前说明文件、行为影响、冲突避免和兼容验证。
+
 ## 2026-10-09 按需权限沟通规则
 
 - 全局技能 `C:\Users\ASUS\.codex\skills\request-scoped-access\SKILL.md`：发现工具、连接或权限障碍时提出具体、最小范围的接入/授权请求；`agents/openai.yaml` 允许自动选用。权威文件在用户技能目录，不复制到项目。
