@@ -1,5 +1,9 @@
 # PRP 项目文档索引
 
+## 2026-10-12 VS Code 可见终端接口
+
+- `项目指南/vscode_terminal_interface.md`：Pylon MCP 已安装、配置和直接协议终端验收通过；专用终端 PRP Visible PowerShell。旧 Codex 会话需重新加载后核对工具可用性，禁止默认终端无集成时盲目重发命令。
+
 - `答辩材料/README.md`：两分钟答辩交互流程图（高清PNG、矢量SVG）与约30秒配套讲解。
 
 本目录按用途分为三类，后续新增文档优先放入对应文件夹。

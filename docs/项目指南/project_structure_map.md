@@ -1,5 +1,11 @@
 # 项目结构地图
 
+## 2026-10-12 VS Code 可见终端接入
+
+- docs/项目指南/vscode_terminal_interface.md：已安装的Pylon MCP固定版本、直接协议验收、专用终端、会话刷新与撤销指南。
+- .pio/vscode_interface_setup/：VSIX、审阅配置片段和原始验收回执，全部仅本地。实际配置位于用户VS Code/Codex目录；配置备份含私有内容，不入工程或Git。
+- 新增协作工具不改变main/server/desktop_ui运行链路；PRP Visible PowerShell为本次已验证的可见终端。
+
 ## 2026-10-11 中途停止观察入口
 
 - `tools/check_motion_stop.py`：用户VS Code可见终端独占已释放的CH343串口，核对固件/完整状态应答、先FULL OFF、仅rl启用；3秒观察倒计时后本地音频起播轻摆，started回执后约250ms发送停止，板端时差须小于900ms且早于音频完成。finally关闭PWM、释放端口；证据保存到忽略目录`.pio/motion_stop_test/`。不重试运动，不构建/烧录/启动服务。
