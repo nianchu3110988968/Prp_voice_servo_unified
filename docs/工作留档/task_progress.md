@@ -1,5 +1,12 @@
 # 任务进度记录
 
+## 2026-10-12：C音量软件阶段已选择性提交并推送（硬件阶段未完成）
+
+- 本地提交fccc9f4c1f2a8aafed90ffbe14f94a69c1d5a73e已成功，20个文件，包含播放层、协议、专用测试/上传入口及C文档增量；origin/main推送成功并确认同一提交。期间B窗口更新HEAD至90f1496，按该新基线重新生成选择性内容，没有套旧补丁。
+- 提交后索引为空；main/main.cc仅保留原私有欢迎音include的未提交差异，bsp_board.cc/.h无剩余本窗口代码差异。网络配置、音频、模型、.pio、UI和其他窗口内容未混入。源码工作区与已验证产物保持，未重跑测试/构建、未烧录。
+- upload_verified_volume.ps1已在VS Code PowerShell用Parser::ParseFile检查，语法无错误；未运行上传。软件PASS/哈希证据和旧回退备份见上节。需用户明确确认volume-v1烧录并确认外部舵机5V断开、ESP USB供电、串口释放后再上传；之后核对新版设备回执及三类实听。整体音量阶段未完成。
+
+
 ## 2026-10-12：C音量软件检查与构建通过，终端接入复核成功（待烧录/回执/实听）
 
 - 本窗口通过已授权本机MCP HTTP接口initialize/tools/list，重新确认Pylon0.6.0、当前Prp_voice_servo_unified会话与PRP Visible PowerShell的Shell集成。可见终端实际返回PS5.1.26100.9444/正确目录/退出状态0；未重发缺输出命令，使用缓冲确认，保留其他窗口的终端任务。
