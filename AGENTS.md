@@ -13,3 +13,4 @@
 
 - 在用户VS Code可见PowerShell中运行本项目已审阅的.ps1时，必须使用`powershell.exe -NoProfile -ExecutionPolicy Bypass -File "脚本绝对路径"`，不能退回裸`& .\xxx.ps1`；`& { ... }`不能解除执行策略限制，不修改全局执行策略。
 - 发出整个命令块前必须核对外层Shell/执行策略、路径/引号、中文编码、实际Python/Core以及逐步退出码；优先复用已验证入口，不让用户承担已知环境问题的重复试错。项目具体检查表与本次原因见`docs/工作规范/agent_working_memory.md`的“终端命令交付前检查”和“执行策略遗漏复盘”。
+- PlatformIO Core 6.2.0的串口JSON枚举参数为`device list --json-output`，不是`--json`。交付CLI命令前逐个子命令核对本机版本的help或已安装源码参数定义，不能从其他命令推断选项；仅修正上传脚本参数时不重复固件构建。

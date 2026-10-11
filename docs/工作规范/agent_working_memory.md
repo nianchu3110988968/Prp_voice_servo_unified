@@ -57,6 +57,13 @@
 
 ## 已发生问题与复盘
 
+### PlatformIO串口枚举选项遗漏核对（2026-10-11）
+
+- upload_verified_motion.ps1误用device list --json，用户在Core6.2.0收到“No such option”，流程停在枚举串口，尚未调用上传。原因是agent只核对了nobuild上传支持，没有逐项核对新引入的串口枚举选项。
+- 已读取本机platformio/device/list/command.py，确认@click.option("--json-output")且默认仅serial时返回对象数组；字段port/description/hwid与脚本解析一致。修正为--json-output，保留専用Python、隔离/UTF-8、Bypass包装及每步退出检查；run的-e/-t/--upload-port同步按本机源码复核。
+- 将精确选项加入项目AGENTS；今后逐个子命令核对help/安装源码，不从其他CLI猜测参数。仅重跑失败的上传准备及后续上传，不重复已通过的构建/测试；烧录授权及外部5V断开确认继续有效。
+
+
 ### 新测试必须对齐当前模型返回契约（2026-10-11）
 
 - 新acknowledge测试模拟返回遗漏非空intent，导致生产semantic_match拒绝；其余30项通过，验证链在构建前正确停止。补齐测试数据，不放宽生产校验或删除动作断言。

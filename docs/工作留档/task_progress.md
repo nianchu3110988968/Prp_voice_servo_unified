@@ -1,5 +1,26 @@
 # 任务进度记录
 
+## 2026-10-11 22:30：rl-ack-v1烧录成功（板端版本/音频待核对）
+
+- 用户在VS Code运行修正后的upload_verified_motion.ps1，实时枚举并选定CH343 COM7（非蓝牙端口）；上传终端回传Hash of data verified、Hard resetting via RTS pin及SUCCESS，26.15s。upload_20261011_223054.json确认upload_exit_code=0、版本2026-10-11-rl-ack-v1、固件SHA256 d82c168982703c5f168d129c82d6898e45c49e1b25dccb0b15a2db15e1202b67，与构建证据一致。
+- 本次使用nobuild+upload上传已验证产物，未重复编译。外部舵机5V按用户此前确认保持断开；没有开启机器控制或发送运动命令。上传成功不等于板端启动版本已读到、扬声器实测或运动验收；JSON的board_version_observed/hardware_tested仍为false。
+- 上传脚本现已实际运行通过，包括新版--json-output串口枚举和上传成功路径。准备选择性提交脚本与本轮授权/故障复盘/成功记录；固件功能提交58750a9已在origin/main，其他窗口改动继续保留。
+- 下一步保持外部5V断开，通过原启动器唯一串口连接COM7/115200，逐条发送status ai bridge、end machine control、test audio。确认板端rl-ack-v1、FULL OFF成功、完整本地欢迎音后，再进入托举单腿运动的现场条件与授权确认；不再要求重复烧录或构建。
+
+## 2026-10-11 22:29：上传前串口枚举参数错误（已修正，尚未烧录）
+
+- 用户可见终端执行upload_verified_motion.ps1，Core6.2.0拒绝device list --json并提示--json-output；脚本在枚举阶段非零退出，未调用upload。固件/源码检查此前未报错，已有22:19构建成功结论仍有效，不重编译。
+- agent核对本机已安装PlatformIO命令源码后，将枚举参数修正为--json-output；返回数组及字段与原解析一致，并核对上传run选项。同步AGENTS与工作记忆复盘，修正仅静态核对，待用户重跑同一完整Bypass入口。先前明确烧录授权和外部5V断开确认不失效，不重复请求授权。
+- 本轮未启动服务/串口监视器、未发送运动命令；上传脚本及新增文档增量尚未归档，待实际上传结果后选择性提交/推送。固件功能提交58750a9已在origin/main。
+
+## 2026-10-11：rl-ack-v1烧录已授权，待可见终端执行
+
+- 用户明确回复“可以烧录，现在已经断开外部5V”；本轮烧录授权已取得，不再重复请求。仅授权上传新固件，不扩展成舵机运动授权；ESP32保留USB供电。最新serial日志22:25:26显示串口已断开，实际端口仍重新枚举，不沿用COM7假设。
+- 重新核算成功记录中的17份源码指纹与firmware.bin，均一致；待上传SHA256仍为d82c168982703c5f168d129c82d6898e45c49e1b25dccb0b15a2db15e1202b67。实现阶段本地提交58750a9已成功推送origin/main；其他窗口未提交改动保留。
+- 新增tools/upload_verified_motion.ps1：固定PIO专用Python/隔离模式，核对PASS记录、rl-ack-v1版本及源码/固件SHA，重新枚举串口并交用户选定，使用nobuild+upload上传现成产物，逐项退出码和上传前后哈希检查；不打开监视器、不启动服务、不发送运动命令。支持保存本地上传transcript/JSON，上传成功与板上版本观察/硬件验收分开。
+- 已只读核对本机PlatformIO/espressif32构建脚本支持nobuild+upload。当前仍无VS Code集成终端控制接口，入口仅静态审阅，尚未执行；本次没有重复编译或在隐藏终端烧录。用户在原空闲VS Code PowerShell运行入口并选择当前ESP32串口后回传结果，再检查版本、FULL OFF及本地音频。脚本与本条留档待实际执行验证后归档。
+
+
 ## 2026-10-11 22:19：轻摆动作离线回归与固件构建通过（未烧录/实测）
 
 - 用户在VS Code可见PowerShell重跑verify_servo_channels.ps1；词库/动作31项全部通过（0.775s），日志/trace、音频下载与起播、PCA/舵机主机回归均PASS。新动作测试涵盖rl单路掩码、四段目标/900ms名义时长、重复与各段停止、启动各I2C步骤失败、旧动作隔离、故障、忙碌/过期及旧回调/语音票据失效。fake_error属于预期故障注入，不是实际硬件报错。
